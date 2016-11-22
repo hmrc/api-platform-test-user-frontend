@@ -1,3 +1,4 @@
+@import uk.gov.hmrc.testuser.config.FrontendAppConfig
 @(title: String,
   sidebarLinks: Option[Html] = None,
   contentHeader: Option[Html] = None,
@@ -17,7 +18,7 @@
 }
 
 
-@govuk_wrapper(appConfig = uk.gov.hmrc.apiplatformtestuser.FrontendAppConfig,
+@govuk_wrapper(appConfig = FrontendAppConfig,
                title = title,
                mainClass = mainClass,
                bodyClasses = bodyClasses,
