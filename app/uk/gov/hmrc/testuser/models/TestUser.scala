@@ -16,7 +16,25 @@
 
 package uk.gov.hmrc.testuser.models
 
+import uk.gov.hmrc.domain._
 
-case class TestIndividual(username: String, password: String)
+sealed trait TestUser {
+  val label: String
+}
 
-case class TestOrganisation(username: String, password: String)
+case class TestIndividual(username: String, password: String, saUtr: SaUtr, nino: Nino) extends TestUser {
+  override val label = "Individual"
+}
+
+case class TestOrganisation(username: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
+  override val label = "Organisation"
+}
+
+object UserType extends Enumeration {
+  type UserType = Value
+  val INDIVIDUAL = Value("INDIVIDUAL")
+  val ORGANISATION = Value("ORGANISATION")
+
+  def from(userType: String) = UserType.values.find(e => e.toString == userType.toUpperCase)
+
+}

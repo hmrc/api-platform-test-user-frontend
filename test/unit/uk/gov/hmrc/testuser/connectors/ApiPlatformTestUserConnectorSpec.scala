@@ -18,6 +18,7 @@ package unit.uk.gov.hmrc.testuser.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.Json.toJson
+import uk.gov.hmrc.domain._
 import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{WithFakeApplication, UnitSpec}
 import uk.gov.hmrc.testuser.config.WSHttp
@@ -38,7 +39,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
   "createIndividual" should {
     "return a generated individual" in new Setup {
-      val testIndividual = TestIndividual("user", "password")
+      val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
 
       stubFor(post(urlEqualTo("/individual")).willReturn(aResponse().withStatus(201).withBody(toJson(testIndividual).toString())))
 
@@ -57,7 +58,8 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
   "createOrganisation" should {
     "return a generated organisation" in new Setup {
-      val testOrganisation = TestOrganisation("user", "password")
+      val testOrganisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555","EIA000"),
+        CtUtr("1555369053"), Vrn("999902541"))
 
       stubFor(post(urlEqualTo("/organisation")).willReturn(aResponse().withStatus(201).withBody(toJson(testOrganisation).toString())))
 

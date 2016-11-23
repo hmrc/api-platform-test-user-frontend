@@ -49,7 +49,7 @@ trait ApiPlatformTestUserConnector {
   }
 }
 
-object ApiPlatformTestUserConnector extends ApiPlatformTestUserConnector with ServicesConfig {
+class ApiPlatformTestUserConnectorImpl extends ApiPlatformTestUserConnector with ServicesConfig {
   override val serviceUrl: String = baseUrl("api-platform-test-user")
   override val http: WSPost = WSHttp
 }

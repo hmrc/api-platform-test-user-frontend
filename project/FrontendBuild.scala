@@ -27,6 +27,7 @@ private object AppDependencies {
   private val pegdownVersion = "1.6.0"
   private val scalaTestPlusVersion = "1.5.1"
   private val wiremockVersion = "1.57"
+  private val mockitoVersion = "1.9.5"
 
   val compile = Seq(
     ws,
@@ -37,7 +38,8 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "logback-json-logger" % logbackJsonLoggerVersion,
     "uk.gov.hmrc" %% "govuk-template" % govukTemplateVersion,
     "uk.gov.hmrc" %% "play-health" % playHealthVersion,
-    "uk.gov.hmrc" %% "play-ui" % playUiVersion)
+    "uk.gov.hmrc" %% "play-ui" % playUiVersion,
+    "org.apache.httpcomponents" % "httpclient" % "4.5.1")
 
   trait TestDependencies {
     lazy val scope: String = "test"
@@ -53,6 +55,7 @@ private object AppDependencies {
         "org.jsoup" % "jsoup" % "1.8.1" % scope,
         "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
         "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
+        "org.mockito" % "mockito-core" % mockitoVersion % scope,
         "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope
       )
     }.test
