@@ -38,11 +38,10 @@ private object AppDependencies {
     "uk.gov.hmrc" %% "logback-json-logger" % logbackJsonLoggerVersion,
     "uk.gov.hmrc" %% "govuk-template" % govukTemplateVersion,
     "uk.gov.hmrc" %% "play-health" % playHealthVersion,
-    "uk.gov.hmrc" %% "play-ui" % playUiVersion,
-    "org.apache.httpcomponents" % "httpclient" % "4.5.1")
+    "uk.gov.hmrc" %% "play-ui" % playUiVersion)
 
   trait TestDependencies {
-    lazy val scope: String = "test"
+    lazy val scope: String = "test, it"
     lazy val test : Seq[ModuleID] = ???
   }
 

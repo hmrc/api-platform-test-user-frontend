@@ -18,8 +18,9 @@ package it.uk.gov.hmrc.testuser
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import it.uk.gov.hmrc.testuser.helpers.{NavigationSugar, Env}
+import it.uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub
 import org.openqa.selenium.WebDriver
 import org.scalatest._
 import org.scalatestplus.play.OneServerPerSuite
@@ -29,28 +30,31 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEac
 with GivenWhenThen with NavigationSugar {
 
   override lazy val port = 9000
-  val stubPort = 11111
-  val stubHost = "localhost"
-
   implicit val webDriver: WebDriver = Env.driver
 
   implicit override lazy val app = GuiceApplicationBuilder().configure(Map(
         "auditing.enabled" -> false,
-        "auditing.traceRequests" -> false)).build()
+        "auditing.traceRequests" -> false,
+        "microservice.services.api-platform-test-user.port" -> ApiPlatformTestUserStub.port)).build()
 
-  var wireMockServer = new WireMockServer(wireMockConfig().port(stubPort))
+  val mocks = Seq(ApiPlatformTestUserStub)
 
-  override def beforeAll() = {
-    wireMockServer.start()
-    WireMock.configureFor(stubHost, stubPort)
+  override protected def beforeEach(): Unit = {
+    mocks.foreach(m => if (!m.server.isRunning) m.server.start())
   }
 
-  override def afterAll() = {
-    wireMockServer.stop()
-  }
-
-  override def beforeEach() = {
+  override protected def afterEach(): Unit = {
     webDriver.manage().deleteAllCookies()
-    WireMock.reset()
+    mocks.foreach(_.mock.resetMappings())
   }
+
+  override protected def afterAll(): Unit = {
+    mocks.foreach(_.server.stop())
+  }
+}
+
+case class MockHost(port: Int) {
+  val server = new WireMockServer(WireMockConfiguration.wireMockConfig().port(port))
+  val mock = new WireMock("localhost", port)
+  val url = s"http://localhost:$port"
 }

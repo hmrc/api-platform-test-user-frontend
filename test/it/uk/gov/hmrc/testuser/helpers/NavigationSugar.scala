@@ -38,24 +38,12 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
     webDriver.findElement(By.id("submit")).click()
   }
 
-  def clickOnElement(selectorId: String)(implicit webDriver: WebDriver) = {
-    webDriver.findElement(By.cssSelector(s"[$selectorId]")).click()
-  }
-
   def clickOnElement(locator: By)(implicit webDriver: WebDriver) = {
     webDriver.findElement(locator).click()
   }
 
   def verifyText(selectorId: String, expected: String)(implicit webDriver: WebDriver) = {
-    webDriver.findElement(By.cssSelector(s"[$selectorId]")).getText contains expected
-  }
-
-  def verifyText(locator: By, expected: String)(implicit webDriver: WebDriver) = {
-    webDriver.findElement(locator).getText contains expected
-  }
-
-  def redirectedTo(page: WebLink)(implicit webDriver: WebDriver) = {
-    assertResult(page.url)(webDriver.getCurrentUrl)
+    webDriver.findElement(By.cssSelector(s"[$selectorId]")).getText shouldBe expected
   }
 
   def on(page: WebPage)(implicit webDriver: WebDriver) = {
@@ -65,14 +53,5 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
     withClue(s"Currently in page: $currentUrl " + find(tagName("h1")).map(_.text).fold(" - ")(h1 => s", with title '$h1' - ")) {
       assert(page.isCurrentPage, s"Page was not loaded: ${page.url}")
     }
-  }
-
-  def loadPage()(implicit webDriver: WebDriver) = {
-    val wait = new WebDriverWait(webDriver, 30)
-    wait.until(
-      new ExpectedCondition[WebElement] {
-        override def apply(d: WebDriver) = d.findElement(By.tagName("body"))
-      }
-    )
   }
 }
