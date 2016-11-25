@@ -1,0 +1,44 @@
+@import uk.gov.hmrc.testuser.models.TestOrganisation
+@(organisation: TestOrganisation)
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="username-label">
+        <strong>Username</strong>
+    </label>
+    <p data-username>@organisation.username</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="password-label">
+        <strong>Password</strong>
+    </label>
+    <p data-password>@organisation.password</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="sautr-label">
+        <strong>Self Assessment UTR</strong>
+    </label>
+    <p data-sautr>@organisation.saUtr</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="ctutr-label">
+        <strong>Corporation Tax UTR</strong>
+    </label>
+    <p data-ctutr>@organisation.ctUtr</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="empref-label">
+        <strong>Employer Reference</strong>
+    </label>
+    <p data-empref>@organisation.empRef</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="vrn-label">
+        <strong>VAT Registration Number</strong>
+    </label>
+    <p data-vrn>@organisation.vrn</p>
+</div>

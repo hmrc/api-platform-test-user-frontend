@@ -1,0 +1,30 @@
+@import uk.gov.hmrc.testuser.models.TestIndividual
+@(individual: TestIndividual)
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="username-label">
+        <strong>Username</strong>
+    </label>
+    <p data-username>@individual.username</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="password-label">
+        <strong>Password</strong>
+    </label>
+    <p data-password>@individual.password</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="sautr-label">
+        <strong>Self Assessment UTR</strong>
+    </label>
+    <p data-sautr>@individual.saUtr</p>
+</div>
+
+<div class="form-field form-field--tall divider--bottom">
+    <label class="label--full-length" id="nino-label">
+        <strong>National Insurance Number (NINO)</strong>
+    </label>
+    <p data-nino>@individual.nino</p>
+</div>

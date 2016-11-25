@@ -1,4 +1,5 @@
-@(appConfig: uk.gov.hmrc.apiplatformtestuser.AppConfig,
+@import uk.gov.hmrc.testuser.config.AppConfig
+@(appConfig: AppConfig,
   title: String,
   mainClass: Option[String] = None,
   mainDataAttributes: Option[Html] = None,
@@ -20,17 +21,12 @@
     <meta name="format-detection" content="telephone=no" />
 }
 
-@headerNavLinks = {
-  <li><a id="homeNavHref" href="http://www.google.com"
-         data-journey-click="primary-navigation:Click:Home">Home</a></li>
-}
-
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = Some("api-platform-test-user-frontend"),
-      navTitleLink = None,
+      navTitle = Some("API Developer Hub"),
+      navTitleLink = Some(Call("GET", "/api-documentation")),
       showBetaLink = false,
-      navLinks = Some(headerNavLinks))
+      navLinks = None)
 }
 
 @afterHeader = {}
@@ -47,11 +43,20 @@
 @footerTop = {}
 @footerLinks = {}
 
+@betaBanner = {
+@uiLayouts.betaBanner(
+    userLoggedIn = false,
+    betaFeedbackUrl = "/contact/beta-feedback",
+    betaFeedbackUnauthenticatedUrl = "/contact/beta-feedback-unauthenticated",
+    showFeedbackLinkInBetaBanner = true,
+    noBorder = true)
+}
+
 @serviceInfo = {
     @uiLayouts.serviceInfo(
-      betaBanner = HtmlFormat.empty,
+      betaBanner = betaBanner,
       includeGridWrapper = false,
-      serviceInfoContent = Some(serviceInfoContent))
+      serviceInfoContent = None)
 }
 
 @mainContentHeader = {

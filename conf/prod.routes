@@ -1,5 +1,5 @@
 # Add all the application routes to the app.routes file
-->         /api-platform-test-user-frontend              app.Routes
+->         /api-test-user             app.Routes
 ->         /                          health.Routes
 ->     	   /template                  template.Routes
 

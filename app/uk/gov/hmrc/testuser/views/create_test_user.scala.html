@@ -1,0 +1,53 @@
+@import uk.gov.hmrc.testuser.models.TestUser
+@import uk.gov.hmrc.testuser.models.TestIndividual
+@import uk.gov.hmrc.testuser.models.TestOrganisation
+@(user: Option[TestUser] = None)(implicit request: Request[_], messages: Messages)
+
+@contentHeader = {
+    <h1>Create test user</h1>
+}
+
+@mainContent = {
+    <p>Users created here can be used in the <a href="/api-documentation/docs/authorisation#user-restricted">
+        OAuth Authorize flow</a>.</p>
+
+    <div class="grid-layout push-half--sides grid-layout--stacked">
+        <div class="grid-layout__column grid-layout__column--2-3">
+
+        @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserControllerImpl.createUser()) {
+
+            @helper.CSRF.formField
+
+            <div class="form-field-group">
+                <fieldset>
+                    <legend class="visuallyhidden">Choose a type</legend>
+                    <label class="block-label" data-type="individual" aria-describedby="individualTypeHint" style="width: 100%;">
+                        <input type="radio" class="top-aligned-input" name="type" id="Individual" value="INDIVIDUAL" checked/>
+                        <strong>Individual</strong>
+                        <span id="individualTypeHint" class="display-block">
+                            Create an Individual tax account.</span>
+                    </label>
+                    <label class="block-label" data-type="organisation" aria-describedby="organisationTypeHint" style="width: 100%;">
+                        <input type="radio" class="top-aligned-input" name="type" id="Organisation" value="ORGANISATION"/>
+                        <strong>Organisation</strong>
+                        <span id="organisationTypeHint" class="display-block">
+                            Create an Company tax account.</span>
+                    </label>
+                </fieldset>
+            </div>
+
+            <button id="submit" class="button button--spaced button--padded" type="submit">Create</button>
+        }
+
+        @user match {
+            case Some(individual : TestIndividual) => { @userdetails.individual(individual)}
+            case Some(organisation : TestOrganisation) => { @userdetails.organisation(organisation)}
+            case _ => {}
+        }
+
+        </div>
+        <div class="grid-layout__column grid-layout__column--1-3"></div>
+    </div>
+}
+
+@govuk_wrapper(appConfig = uk.gov.hmrc.testuser.config.FrontendAppConfig, title = "Create test user", contentHeader = Some(contentHeader), mainContent = mainContent)

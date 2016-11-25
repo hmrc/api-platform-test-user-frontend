@@ -1,3 +1,5 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.apiplatformtestuser.controllers.HelloWorld.helloWorld
+GET        /                @uk.gov.hmrc.testuser.controllers.TestUserControllerImpl.showCreateUserPage()
+
+POST       /                @uk.gov.hmrc.testuser.controllers.TestUserControllerImpl.createUser()
