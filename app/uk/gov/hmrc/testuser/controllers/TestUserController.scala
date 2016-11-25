@@ -39,11 +39,15 @@ trait TestUserController extends FrontendController with I18nSupport {
   }
 
   def createUser() = Action.async { implicit request =>
-    val userType = request.body.asFormUrlEncoded.flatMap(_.get("type").flatMap(_.headOption flatMap UserType.from))
+    val userType = for {
+      form <- request.body.asFormUrlEncoded
+      uType <- form.get("type").flatMap(_.headOption)
+      userType <- UserType.from(uType)
+    } yield userType
 
     userType match {
       case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(user)))
-      case _ => throw new BadRequestException("Invalid request")
+      case _ => Future.failed(new BadRequestException("Invalid request"))
     }
   }
 }
