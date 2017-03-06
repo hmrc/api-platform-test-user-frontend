@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,15 @@ case class TestOrganisation(username: String, password: String, saUtr: SaUtr, em
   override val label = "Organisation"
 }
 
+case class TestAgent(username: String, password: String) extends TestUser {
+  override val label = "Agent"
+}
+
 object UserType extends Enumeration {
   type UserType = Value
   val INDIVIDUAL = Value("INDIVIDUAL")
   val ORGANISATION = Value("ORGANISATION")
+  val AGENT = Value("AGENT")
 
   def from(userType: String) = UserType.values.find(e => e.toString == userType.toUpperCase)
 
