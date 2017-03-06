@@ -1,5 +1,4 @@
 @import uk.gov.hmrc.testuser.models.TestUser
-@import uk.gov.hmrc.testuser.models.TestAgent
 @import uk.gov.hmrc.testuser.models.TestIndividual
 @import uk.gov.hmrc.testuser.models.TestOrganisation
 @(user: TestUser)(implicit request: Request[_], messages: Messages)
@@ -15,7 +14,6 @@
             @user match {
                 case individual : TestIndividual => { @userdetails.individual(individual)}
                 case organisation : TestOrganisation => { @userdetails.organisation(organisation)}
-                case agent : TestAgent => { @userdetails.agent(agent)}
             }
 
             <a href="@uk.gov.hmrc.testuser.controllers.routes.TestUserControllerImpl.showCreateUserPage()">Add a new user</a>
