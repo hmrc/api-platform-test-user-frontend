@@ -34,7 +34,6 @@
         </encoder>
     </appender>
 
-
     <logger name="accesslog" level="INFO" additivity="false">
         <appender-ref ref="ACCESS_LOG_FILE" />
     </logger>
@@ -44,10 +43,8 @@
     </logger>
 
     <logger name="com.google.inject" level="INFO"/>
-
-    <logger name="uk.gov" level="INFO"/>
-
-    <logger name="application" level="DEBUG"/>
+    <logger name="org.asynchttpclient.netty.channel.DefaultChannelPool" level="INFO"/>
+    <logger name="io.netty" level="INFO"/>
 
     <logger name="connector" level="TRACE">
         <appender-ref ref="STDOUT"/>
