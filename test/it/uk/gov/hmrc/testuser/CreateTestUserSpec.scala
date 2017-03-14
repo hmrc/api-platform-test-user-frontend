@@ -45,7 +45,7 @@ class CreateTestUserSpec extends BaseSpec {
       verifyText("data-password", individual.password)
       verifyText("data-sautr", individual.saUtr.utr)
       verifyText("data-nino", individual.nino.value)
-      verifyHasText("header__menu__proposition-links", userNavigationLinks.head.label)
+      verifyHasLink(userNavigationLinks.head.label)
     }
 
     scenario("Create a test organisation") {
