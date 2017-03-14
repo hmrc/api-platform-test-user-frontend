@@ -16,10 +16,13 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json.Json
+case class NavLink(label: String, href: String, truncate: Boolean = false)
 
-object JsonFormatters {
-  implicit val formatTestIndividual = Json.format[TestIndividual]
-  implicit val formatTestOrganisation = Json.format[TestOrganisation]
-  implicit val formatNavLinks = Json.format[NavLink]
+case object StaticNavLinks {
+  def apply() = {
+    Seq(
+      NavLink("Documentation", "/api-documentation/docs/sandbox/introduction"),
+      NavLink("Applications", "/developer/applications"),
+      NavLink("Support", "/developer/support"))
+  }
 }

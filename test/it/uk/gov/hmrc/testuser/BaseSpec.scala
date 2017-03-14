@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import it.uk.gov.hmrc.testuser.helpers.{NavigationSugar, Env}
-import it.uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub
+import it.uk.gov.hmrc.testuser.stubs.{ThirdPartyDeveloperFrontendStub, ApiPlatformTestUserStub}
 import org.openqa.selenium.WebDriver
 import org.scalatest._
 import org.scalatestplus.play.OneServerPerSuite
@@ -35,9 +35,10 @@ with GivenWhenThen with NavigationSugar {
   implicit override lazy val app = GuiceApplicationBuilder().configure(Map(
         "auditing.enabled" -> false,
         "auditing.traceRequests" -> false,
-        "microservice.services.api-platform-test-user.port" -> ApiPlatformTestUserStub.port)).build()
+        "microservice.services.api-platform-test-user.port" -> ApiPlatformTestUserStub.port,
+        "microservice.services.third-party-developer-frontend.port" -> ThirdPartyDeveloperFrontendStub.port)).build()
 
-  val mocks = Seq(ApiPlatformTestUserStub)
+  val mocks = Seq(ApiPlatformTestUserStub, ThirdPartyDeveloperFrontendStub)
 
   override protected def beforeEach(): Unit = {
     mocks.foreach(m => if (!m.server.isRunning) m.server.start())

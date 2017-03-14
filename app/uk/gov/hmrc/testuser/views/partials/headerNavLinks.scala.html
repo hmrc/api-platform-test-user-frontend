@@ -1,0 +1,8 @@
+@import uk.gov.hmrc.testuser.models.NavLink
+@(navLinks: Seq[NavLink], anchorClass: Option[String] = None)
+
+@for(link <- navLinks) {
+    <li @if(link == navLinks.last) {class="hard--right"}>
+       <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}">@{link.label}</a>
+    </li>
+}

@@ -1,7 +1,8 @@
 @import uk.gov.hmrc.testuser.models.TestUser
 @import uk.gov.hmrc.testuser.models.TestIndividual
 @import uk.gov.hmrc.testuser.models.TestOrganisation
-@(user: TestUser)(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.testuser.models.NavLink
+@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
     <h1>Generated @user.label</h1>
@@ -22,4 +23,5 @@
     </div>
 }
 
-@govuk_wrapper(appConfig = uk.gov.hmrc.testuser.config.FrontendAppConfig, title = "Test user", contentHeader = Some(contentHeader), mainContent = mainContent)
+@govuk_wrapper(appConfig = uk.gov.hmrc.testuser.config.FrontendAppConfig, title = "Test user", navLinks = navLinks,
+    contentHeader = Some(contentHeader), mainContent = mainContent)
