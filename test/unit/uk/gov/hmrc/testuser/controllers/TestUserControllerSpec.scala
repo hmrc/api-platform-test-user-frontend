@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,14 @@ import play.api.i18n.MessagesApi
 import play.api.mvc.{AnyContentAsFormUrlEncoded, AnyContent, Action}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.play.http.{Upstream5xxResponse, HeaderCarrier}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.controllers.TestUserController
 import uk.gov.hmrc.testuser.models.UserType.{ORGANISATION, INDIVIDUAL}
-import uk.gov.hmrc.testuser.models.{TestOrganisation, TestIndividual, UserType}
-import uk.gov.hmrc.testuser.services.TestUserService
+import uk.gov.hmrc.testuser.models.{NavLink, TestOrganisation, TestIndividual, UserType}
+import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
+
+import scala.concurrent.Future.failed
 
 class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTest {
 
@@ -39,17 +41,22 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
   val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555","EIA000"),
     CtUtr("1555369053"), Vrn("999902541"))
 
+  val individualRequest = FakeRequest().withFormUrlEncodedBody(("type", "INDIVIDUAL"))
+
   trait Setup {
     implicit val materializer = ActorMaterializer.create(ActorSystem.create())
     private val csrfAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
+    val navLinks = Seq(NavLink("sign-in", "http://sign-in"))
 
     val underTest = new TestUserController {
       override def messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
       override val testUserService: TestUserService = mock[TestUserService]
+      override val navigationService: NavigationService = mock[NavigationService]
     }
 
     given(underTest.testUserService.createUser(refEq(INDIVIDUAL))(any[HeaderCarrier]())).willReturn(individual)
     given(underTest.testUserService.createUser(refEq(ORGANISATION))(any[HeaderCarrier]())).willReturn(organisation)
+    given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]())).willReturn(navLinks)
 
     def execute[T <: play.api.mvc.AnyContent](action: Action[AnyContent], request: FakeRequest[T] = FakeRequest()) = await(csrfAddToken(action)(request))
   }
@@ -60,6 +67,22 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
       val result = execute(underTest.showCreateUserPage())
 
       bodyOf(result) should include ("Create test user")
+    }
+
+    "display the logged in navigation links" in new Setup {
+
+      val result = execute(underTest.showCreateUserPage())
+
+      bodyOf(result) should include (navLinks.head.label)
+    }
+
+    "displays the page without the links when retrieving the links fail" in new Setup {
+      given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
+        .willReturn(failed(Upstream5xxResponse("test error", 500, 500)))
+
+      val result = execute(underTest.showCreateUserPage())
+
+      bodyOf(result) should (include ("Create test user") and not include navLinks.head.label)
     }
   }
 
@@ -80,6 +103,19 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
       bodyOf(result) should include (organisation.username)
     }
 
-  }
+    "display the logged in navigation links" in new Setup {
+      val result = execute(underTest.createUser(), individualRequest)
 
+      bodyOf(result) should include (navLinks.head.label)
+    }
+
+    "displays the page without the links when retrieving the links fail" in new Setup {
+      given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
+        .willReturn(failed(Upstream5xxResponse("test error", 500, 500)))
+
+      val result = execute(underTest.createUser(), individualRequest)
+
+      bodyOf(result) should (include (individual.username) and not include navLinks.head.label)
+    }
+  }
 }

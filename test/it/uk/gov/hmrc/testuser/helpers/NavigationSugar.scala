@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,10 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
 
   def verifyText(selectorId: String, expected: String)(implicit webDriver: WebDriver) = {
     webDriver.findElement(By.cssSelector(s"[$selectorId]")).getText shouldBe expected
+  }
+
+  def verifyHasLink(linkText: String)(implicit webDriver: WebDriver) = {
+    webDriver.findElement(By.linkText(linkText)).isDisplayed shouldBe true
   }
 
   def on(page: WebPage)(implicit webDriver: WebDriver) = {

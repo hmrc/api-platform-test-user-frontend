@@ -18,27 +18,18 @@ package it.uk.gov.hmrc.testuser.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import it.uk.gov.hmrc.testuser.MockHost
-import org.apache.http.HttpStatus.SC_CREATED
-import play.api.libs.json.Json
-import uk.gov.hmrc.testuser.models.{TestOrganisation, TestIndividual}
+import play.api.http.Status.OK
+import play.api.libs.json.Json.{stringify, toJson}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models.NavLink
 
-object ApiPlatformTestUserStub extends MockHost(11111) {
+object ThirdPartyDeveloperFrontendStub extends MockHost(11112) {
 
-  def givenTestIndividualIsGenerated(individual: TestIndividual) = {
-    mock.register(post(urlPathEqualTo("/individual"))
+  def givenTheUserNavigationLinks(navLinks: Seq[NavLink]) = {
+    mock.register(get(urlPathEqualTo("/developer/user-navlinks"))
       .willReturn(aResponse()
-        .withStatus(SC_CREATED)
+        .withStatus(OK)
         .withHeader("Content-Type", "application/json")
-        .withBody(Json.toJson(individual).toString())))
+        .withBody(stringify(toJson(navLinks)))))
   }
-
-  def givenTestOrganisationIsGenerated(organisation: TestOrganisation) = {
-    mock.register(post(urlPathEqualTo("/organisation"))
-      .willReturn(aResponse()
-        .withStatus(SC_CREATED)
-        .withHeader("Content-Type", "application/json")
-        .withBody(Json.toJson(organisation).toString())))
-  }
-
 }

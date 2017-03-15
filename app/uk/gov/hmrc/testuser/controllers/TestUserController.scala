@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 HM Revenue & Customs
+ * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,26 @@ package uk.gov.hmrc.testuser.controllers
 
 import javax.inject.Inject
 
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Action
+import play.api.mvc.{Result, AnyContent, Request, Action}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.play.http.BadRequestException
-import uk.gov.hmrc.testuser.models.UserType
-import uk.gov.hmrc.testuser.models.UserType.{ORGANISATION, INDIVIDUAL}
-import uk.gov.hmrc.testuser.services.{TestUserServiceImpl, TestUserService}
+import uk.gov.hmrc.testuser.models.{NavLink, UserType}
+import uk.gov.hmrc.testuser.services.{NavigationService, TestUserServiceImpl, TestUserService}
 
 import scala.concurrent.Future
 
 trait TestUserController extends FrontendController with I18nSupport {
 
   val testUserService: TestUserService
+  val navigationService: NavigationService
 
-  def showCreateUserPage() = Action.async { implicit request =>
-    Future.successful(Ok(uk.gov.hmrc.testuser.views.html.create_test_user()))
+  def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
+    Future.successful(Ok(uk.gov.hmrc.testuser.views.html.create_test_user(navLinks)))
   }
 
-  def createUser() = Action.async { implicit request =>
+  def createUser() = headerNavigation { implicit request => navLinks =>
     val userType = for {
       form <- request.body.asFormUrlEncoded
       uType <- form.get("type").flatMap(_.headOption)
@@ -46,10 +45,24 @@ trait TestUserController extends FrontendController with I18nSupport {
     } yield userType
 
     userType match {
-      case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(user)))
+      case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(navLinks, user)))
       case _ => Future.failed(new BadRequestException("Invalid request"))
+    }
+  }
+
+  private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
+    Action.async { implicit request =>
+      // We use a non-standard cookie which doesn't get propagated in the header carrier
+      val newHc = request.headers.get(COOKIE).fold(hc) { cookie => hc.withExtraHeaders(COOKIE -> cookie) }
+      navigationService.headerNavigation()(newHc) flatMap { navLinks =>
+        f(request)(navLinks)
+      } recoverWith {
+        case ex =>
+          Logger.error("User navigation links can not be rendered due to service call failure", ex)
+          f(request)(Seq.empty)
+      }
     }
   }
 }
 
-class TestUserControllerImpl @Inject()(override val messagesApi: MessagesApi, override val testUserService: TestUserServiceImpl) extends TestUserController
+class TestUserControllerImpl @Inject()(override val messagesApi: MessagesApi, override val testUserService: TestUserServiceImpl, override val navigationService: NavigationService) extends TestUserController

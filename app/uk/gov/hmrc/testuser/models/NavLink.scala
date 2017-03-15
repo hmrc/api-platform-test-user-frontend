@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser.helpers
+package uk.gov.hmrc.testuser.models
 
-import org.openqa.selenium.WebDriver
-import org.scalatest._
-import org.scalatest.selenium.{Page, WebBrowser}
+case class NavLink(label: String, href: String, truncate: Boolean = false)
 
-case class Link(href: String, text: String)
-
-trait WebLink extends Page with WebBrowser with ShouldMatchers {
-  implicit val webDriver: WebDriver = Env.driver
-
-  override def toString = this.getClass.getSimpleName
-}
-
-trait WebPage extends WebLink {
-
-  def isCurrentPage: Boolean
-
-  def heading = tagName("h1").element.text
-
-  def bodyText = tagName("body").element.text
-
+case object StaticNavLinks {
+  def apply() = {
+    Seq(
+      NavLink("Documentation", "/api-documentation/docs/sandbox/introduction"),
+      NavLink("Applications", "/developer/applications"),
+      NavLink("Support", "/developer/support"))
+  }
 }

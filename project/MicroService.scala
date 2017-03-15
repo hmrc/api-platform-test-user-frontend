@@ -41,15 +41,16 @@ trait MicroService {
       testOptions in Test := Seq(Tests.Filter(unitFilter)),
       routesGenerator := StaticRoutesGenerator
     )
-    .configs(IntegrationTest)
-    .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+    .configs(IntegrationTestWithSASS)
+    .settings(inConfig(IntegrationTestWithSASS)(Defaults.itSettings): _*)
     .settings(
-      Keys.fork in IntegrationTest := false,
-      testOptions in IntegrationTest := Seq(Tests.Filter(itTestFilter)),
-      unmanagedSourceDirectories in IntegrationTest <<= (baseDirectory in IntegrationTest)(base => Seq(base / "test")),
-      addTestReportOption(IntegrationTest, "int-test-reports"),
-      testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-      parallelExecution in IntegrationTest := false)
+      Keys.fork in IntegrationTestWithSASS := false,
+      testOptions in IntegrationTestWithSASS := Seq(Tests.Filter(itTestFilter)),
+      unmanagedSourceDirectories in IntegrationTestWithSASS <<= (baseDirectory in IntegrationTestWithSASS)(base => Seq(base / "test")),
+      unmanagedResourceDirectories in IntegrationTestWithSASS <<= (baseDirectory in IntegrationTestWithSASS)(base => Seq(base / "test", base /"target/web/public/test")),
+      addTestReportOption(IntegrationTestWithSASS, "int-test-reports"),
+      testGrouping in IntegrationTestWithSASS := oneForkedJvmPerTest((definedTests in IntegrationTestWithSASS).value),
+      parallelExecution in IntegrationTestWithSASS := false)
       .settings(resolvers ++= Seq(
         Resolver.bintrayRepo("hmrc", "releases"),
         Resolver.jcenterRepo
@@ -57,6 +58,8 @@ trait MicroService {
 }
 
 private object TestPhases {
+
+  lazy val IntegrationTestWithSASS = config("it") extend Test
 
   def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
     tests map {

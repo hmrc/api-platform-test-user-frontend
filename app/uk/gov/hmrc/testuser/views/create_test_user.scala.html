@@ -1,4 +1,5 @@
-@()(implicit request: Request[_], messages: Messages)
+@import uk.gov.hmrc.testuser.models.NavLink
+@(navLinks: Seq[NavLink])(implicit request: Request[_], messages: Messages)
 
 @contentHeader = {
     <h1>Create test user</h1>
@@ -40,4 +41,5 @@
     </div>
 }
 
-@govuk_wrapper(appConfig = uk.gov.hmrc.testuser.config.FrontendAppConfig, title = "Create test user", contentHeader = Some(contentHeader), mainContent = mainContent)
+@govuk_wrapper(appConfig = uk.gov.hmrc.testuser.config.FrontendAppConfig, title = "Create test user", navLinks = navLinks,
+    contentHeader = Some(contentHeader), mainContent = mainContent)
