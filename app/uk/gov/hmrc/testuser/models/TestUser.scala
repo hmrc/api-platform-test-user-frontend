@@ -22,11 +22,11 @@ sealed trait TestUser {
   val label: String
 }
 
-case class TestIndividual(username: String, password: String, saUtr: SaUtr, nino: Nino) extends TestUser {
+case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: Nino) extends TestUser {
   override val label = "Individual"
 }
 
-case class TestOrganisation(username: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
+case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
   override val label = "Organisation"
 }
 

@@ -41,7 +41,7 @@ class CreateTestUserSpec extends BaseSpec {
       clickOnElement(individualCheckbox)
       clickOnSubmit()
 
-      verifyText("data-username", individual.username)
+      verifyText("data-userid", individual.userId)
       verifyText("data-password", individual.password)
       verifyText("data-sautr", individual.saUtr.utr)
       verifyText("data-nino", individual.nino.value)
@@ -57,7 +57,7 @@ class CreateTestUserSpec extends BaseSpec {
       clickOnElement(organisationCheckbox)
       clickOnSubmit()
 
-      verifyText("data-username", organisation.username)
+      verifyText("data-userid", organisation.userId)
       verifyText("data-password", organisation.password)
       verifyText("data-sautr", organisation.saUtr.utr)
       verifyText("data-ctutr", organisation.ctUtr.utr)
