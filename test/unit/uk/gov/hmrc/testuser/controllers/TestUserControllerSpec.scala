@@ -92,7 +92,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include (individual.username)
+      bodyOf(result) should include (individual.userId)
     }
 
     "create an organisation when type is ORGANISATION" in new Setup {
@@ -100,7 +100,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include (organisation.username)
+      bodyOf(result) should include (organisation.userId)
     }
 
     "display the logged in navigation links" in new Setup {
@@ -115,7 +115,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
 
       val result = execute(underTest.createUser(), individualRequest)
 
-      bodyOf(result) should (include (individual.username) and not include navLinks.head.label)
+      bodyOf(result) should (include (individual.userId) and not include navLinks.head.label)
     }
   }
 }
