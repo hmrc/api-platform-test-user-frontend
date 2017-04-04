@@ -41,7 +41,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     "return a generated individual" in new Setup {
       val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
 
-      stubFor(post(urlEqualTo("/individual")).willReturn(aResponse().withStatus(201).withBody(toJson(testIndividual).toString())))
+      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(201).withBody(toJson(testIndividual).toString())))
 
       val result = await(underTest.createIndividual())
 
@@ -50,7 +50,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
     "fail when api-platform-test-user return an error" in new Setup {
 
-      stubFor(post(urlEqualTo("/individual")).willReturn(aResponse().withStatus(500)))
+      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(500)))
 
       intercept[RuntimeException](await(underTest.createIndividual()))
     }
@@ -61,7 +61,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
       val testOrganisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555","EIA000"),
         CtUtr("1555369053"), Vrn("999902541"))
 
-      stubFor(post(urlEqualTo("/organisation")).willReturn(aResponse().withStatus(201).withBody(toJson(testOrganisation).toString())))
+      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(201).withBody(toJson(testOrganisation).toString())))
 
       val result = await(underTest.createOrganisation())
 
@@ -70,7 +70,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
     "fail when api-platform-test-user return an error" in new Setup {
 
-      stubFor(post(urlEqualTo("/organisation")).willReturn(aResponse().withStatus(500)))
+      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(500)))
 
       intercept[RuntimeException](await(underTest.createOrganisation()))
     }
