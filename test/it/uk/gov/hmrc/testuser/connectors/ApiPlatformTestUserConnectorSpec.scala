@@ -41,7 +41,10 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     "return a generated individual" in new Setup {
       val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
 
-      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(201).withBody(toJson(testIndividual).toString())))
+      val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
+
+      stubFor(post(urlEqualTo("/individuals")).withRequestBody(equalToJson(requestPayload))
+        .willReturn(aResponse().withStatus(201).withBody(toJson(testIndividual).toString())))
 
       val result = await(underTest.createIndividual())
 
@@ -61,7 +64,19 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
       val testOrganisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555","EIA000"),
         CtUtr("1555369053"), Vrn("999902541"))
 
-      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(201).withBody(toJson(testOrganisation).toString())))
+      val requestPayload = s"""{
+                               |  "serviceNames": [
+                               |    "national-insurance",
+                               |    "self-assessment",
+                               |    "mtd-income-tax",
+                               |    "corporation-tax",
+                               |    "paye-for-employers",
+                               |    "submit-vat-returns"
+                               |  ]
+                               |}""".stripMargin
+
+      stubFor(post(urlEqualTo("/organisations")).withRequestBody(equalToJson(requestPayload))
+        .willReturn(aResponse().withStatus(201).withBody(toJson(testOrganisation).toString())))
 
       val result = await(underTest.createOrganisation())
 

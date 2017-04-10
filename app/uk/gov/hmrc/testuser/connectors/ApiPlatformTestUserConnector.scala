@@ -31,7 +31,17 @@ trait ApiPlatformTestUserConnector {
   val http: WSPost
 
   def createIndividual()(implicit hc: HeaderCarrier) = {
-    http.doEmptyPost(s"$serviceUrl/individuals") map { response =>
+    val payload =
+      s"""{
+         |  "serviceNames": [
+         |    "national-insurance",
+         |    "self-assessment",
+         |    "mtd-income-tax"
+         |  ]
+         |}
+       """.stripMargin
+
+    http.doPost(s"$serviceUrl/individuals", payload, Seq("Content-Type" -> "application/json")) map { response =>
       response.status match {
         case CREATED => response.json.as[TestIndividual]
         case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
@@ -40,7 +50,20 @@ trait ApiPlatformTestUserConnector {
   }
 
   def createOrganisation()(implicit hc: HeaderCarrier) = {
-    http.doEmptyPost(s"$serviceUrl/organisations") map { response =>
+    val payload =
+      s"""{
+          |  "serviceNames": [
+          |    "national-insurance",
+          |    "self-assessment",
+          |    "mtd-income-tax",
+          |    "corporation-tax",
+          |    "paye-for-employers",
+          |    "submit-vat-returns"
+          |  ]
+          |}
+       """.stripMargin
+
+    http.doPost(s"$serviceUrl/organisations", payload, Seq("Content-Type" -> "application/json")) map { response =>
       response.status match {
         case CREATED => response.json.as[TestOrganisation]
         case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
