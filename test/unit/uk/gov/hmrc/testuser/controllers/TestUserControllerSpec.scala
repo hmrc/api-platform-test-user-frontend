@@ -18,24 +18,26 @@ package unit.uk.gov.hmrc.testuser.controllers
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import common.LogSuppressing
 import org.mockito.BDDMockito.given
-import org.mockito.Matchers.{refEq, any}
+import org.mockito.Matchers.{any, refEq}
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.OneAppPerTest
+import play.api.Logger
 import play.api.i18n.MessagesApi
-import play.api.mvc.{AnyContentAsFormUrlEncoded, AnyContent, Action}
+import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.play.http.{Upstream5xxResponse, HeaderCarrier}
+import uk.gov.hmrc.play.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.controllers.TestUserController
-import uk.gov.hmrc.testuser.models.UserType.{ORGANISATION, INDIVIDUAL}
-import uk.gov.hmrc.testuser.models.{NavLink, TestOrganisation, TestIndividual, UserType}
+import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation, UserType}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 
 import scala.concurrent.Future.failed
 
-class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTest {
+class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTest with LogSuppressing {
 
   val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"))
   val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555","EIA000"),
@@ -77,12 +79,14 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
-      given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
-        .willReturn(failed(Upstream5xxResponse("test error", 500, 500)))
+      withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
+        given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
+          .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
 
-      val result = execute(underTest.showCreateUserPage())
+        val result = execute(underTest.showCreateUserPage())
 
-      bodyOf(result) should (include ("Create test user") and not include navLinks.head.label)
+        bodyOf(result) should (include("Create test user") and not include navLinks.head.label)
+      }
     }
   }
 
@@ -110,12 +114,14 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTe
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
-      given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
-        .willReturn(failed(Upstream5xxResponse("test error", 500, 500)))
+      withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
+        given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
+          .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
 
-      val result = execute(underTest.createUser(), individualRequest)
+        val result = execute(underTest.createUser(), individualRequest)
 
-      bodyOf(result) should (include (individual.userId) and not include navLinks.head.label)
+        bodyOf(result) should (include(individual.userId) and not include navLinks.head.label)
+      }
     }
   }
 }
