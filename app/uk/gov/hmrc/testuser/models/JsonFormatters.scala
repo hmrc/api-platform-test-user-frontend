@@ -16,10 +16,38 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, JsError, JsSuccess, Writes, _}
+
+object EnumJson {
+
+  def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = new Reads[E#Value] {
+    def reads(json: JsValue): JsResult[E#Value] = json match {
+      case JsString(s) => {
+        try {
+          JsSuccess(enum.withName(s))
+        } catch {
+          case _: NoSuchElementException =>
+            JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not contain '$s'")
+        }
+      }
+      case _ => JsError("String value expected")
+    }
+  }
+
+  def enumWrites[E <: Enumeration]: Writes[E#Value] = new Writes[E#Value] {
+    def writes(v: E#Value): JsValue = JsString(v.toString)
+  }
+
+  def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
+    Format(enumReads(enum), enumWrites)
+  }
+
+}
 
 object JsonFormatters {
   implicit val formatTestIndividual = Json.format[TestIndividual]
   implicit val formatTestOrganisation = Json.format[TestOrganisation]
   implicit val formatNavLinks = Json.format[NavLink]
+  implicit val formatServiceName = EnumJson.enumFormat(ServiceName)
+  implicit val formatCreateUserServicesRequest = Json.format[CreateUserRequest]
 }
