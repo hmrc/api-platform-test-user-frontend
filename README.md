@@ -1,7 +1,7 @@
 api-platform-test-user-frontend
 =================================
 
-[![Build Status](https://travis-ci.org/hmrc/api-platform-test-user-frontend.svg)](https://travis-ci.org/hmrc/api-platform-test-user-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/api-platform-test-user-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/api-platform-test-user-frontend/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/hmrc/releases/api-platform-test-user-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/api-platform-test-user-frontend/_latestVersion)
 
 ## Starting the service locally
 
