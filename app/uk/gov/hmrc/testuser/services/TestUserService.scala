@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.testuser.services
 
-import uk.gov.hmrc.play.http.HeaderCarrier
-import uk.gov.hmrc.testuser.connectors.{ApiPlatformTestUserConnectorImpl, ApiPlatformTestUserConnector}
 import javax.inject.Inject
 
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.testuser.connectors.{ApiPlatformTestUserConnector, ApiPlatformTestUserConnectorImpl}
+import uk.gov.hmrc.testuser.models.UserType.UserType
 import uk.gov.hmrc.testuser.models.{TestUser, UserType}
-import uk.gov.hmrc.testuser.models.UserType.UserType
-import uk.gov.hmrc.testuser.models.UserType.UserType
 
 import scala.concurrent.Future
 

@@ -22,18 +22,18 @@ import play.api.mvc.Request
 import play.api.{Application, Configuration, Play}
 import play.twirl.api.Html
 import uk.gov.hmrc.crypto.ApplicationCrypto
-import uk.gov.hmrc.play.audit.filters.FrontendAuditFilter
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
-import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.play.frontend.bootstrap.DefaultFrontendGlobal
-import uk.gov.hmrc.play.http.logging.filters.FrontendLoggingFilter
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.frontend.config.LoadAuditingConfig
+import uk.gov.hmrc.play.frontend.filters.{FrontendAuditFilter, FrontendLoggingFilter, MicroserviceFilterSupport}
 
 object FrontendGlobal
   extends DefaultFrontendGlobal {
 
-  override val auditConnector = FrontendAuditConnector
+  override val auditConnector = ApplicationAuditConnector
   override val loggingFilter = LoggingFilter
   override val frontendAuditFilter = AuditFilter
 
@@ -63,7 +63,11 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 
   override lazy val applicationPort = None
 
-  override lazy val auditConnector = FrontendAuditConnector
+  override lazy val auditConnector = ApplicationAuditConnector
 
   override def controllerNeedsAuditing(controllerName: String) = ControllerConfiguration.paramsForController(controllerName).needsAuditing
+}
+
+object ApplicationAuditConnector extends AuditConnector with AppName with RunMode {
+  override lazy val auditingConfig = LoadAuditingConfig(s"$env.auditing")
 }

@@ -21,23 +21,23 @@ import akka.stream.ActorMaterializer
 import common.LogSuppressing
 import org.mockito.BDDMockito.given
 import org.mockito.Matchers.{any, refEq}
-import org.scalatest.mock.MockitoSugar
-import org.scalatestplus.play.OneAppPerTest
+import org.scalatest.mockito.MockitoSugar
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.play.http.{HeaderCarrier, Upstream5xxResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.controllers.TestUserController
 import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
-import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation, UserType}
+import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 
 import scala.concurrent.Future.failed
 
-class TestUserControllerSpec extends UnitSpec with MockitoSugar with OneAppPerTest with LogSuppressing {
+class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
 
   val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"))
   val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555","EIA000"),

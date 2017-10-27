@@ -17,13 +17,13 @@
 package unit.uk.gov.hmrc.testuser.services
 
 import org.mockito.BDDMockito.given
-import org.scalatest.mock.MockitoSugar
+import org.scalatest.mockito.MockitoSugar
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.play.http.HeaderCarrier
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
-import uk.gov.hmrc.testuser.models.UserType.{ORGANISATION, INDIVIDUAL}
-import uk.gov.hmrc.testuser.models.{UserType, TestOrganisation, TestIndividual}
+import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.TestUserService
 
 class TestUserServiceSpec extends UnitSpec with MockitoSugar {
