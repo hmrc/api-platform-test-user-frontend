@@ -18,7 +18,6 @@ package uk.gov.hmrc.testuser.connectors
 
 import play.api.http.Status.CREATED
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.play.http.ws.WSPost
 import uk.gov.hmrc.testuser.config.WSHttp
 import uk.gov.hmrc.testuser.models.{CreateUserRequest, TestIndividual, TestOrganisation}
@@ -26,6 +25,7 @@ import uk.gov.hmrc.testuser.models.ServiceName._
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.http.HeaderCarrier
 
 trait ApiPlatformTestUserConnector {
 

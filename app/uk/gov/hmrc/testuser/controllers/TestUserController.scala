@@ -22,11 +22,11 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Result, AnyContent, Request, Action}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
-import uk.gov.hmrc.play.http.BadRequestException
 import uk.gov.hmrc.testuser.models.{NavLink, UserType}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserServiceImpl, TestUserService}
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.BadRequestException
 
 trait TestUserController extends FrontendController with I18nSupport {
 

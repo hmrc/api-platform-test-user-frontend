@@ -19,12 +19,14 @@ package uk.gov.hmrc.testuser.connectors
 import javax.inject.{Singleton, Inject}
 
 import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.http.HeaderCarrier
 import uk.gov.hmrc.testuser.config.WSHttp
 import uk.gov.hmrc.testuser.models.NavLink
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 
 import scala.concurrent.Future
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class ThirdPartyDeveloperFrontendConnector @Inject()() extends ServicesConfig {
