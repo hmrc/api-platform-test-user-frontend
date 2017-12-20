@@ -18,6 +18,8 @@ Run all of the unit tests with `sbt test`
 
 Run all of the integration tests with `sbt it:test`
 
+Run the unit and integration tests with code coverage reporting using `./run_all_tests.sh`
+
 ## Service responsibilities
 
 This is the front-end for the functionality to create test Individuals and Organisations that can subsequently be used for testing of API microservices in the External Test environment.
