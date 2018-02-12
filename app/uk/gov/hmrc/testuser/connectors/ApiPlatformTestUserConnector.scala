@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.connectors
 import play.api.http.Status.CREATED
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.play.http.ws.WSPost
-import uk.gov.hmrc.testuser.config.WSHttp
+import uk.gov.hmrc.testuser.config.{ProxiedApiPlatformWSHttp, WSHttp}
 import uk.gov.hmrc.testuser.models.{CreateUserRequest, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.models.ServiceName._
 import uk.gov.hmrc.testuser.models.JsonFormatters._
@@ -57,6 +57,13 @@ trait ApiPlatformTestUserConnector {
 }
 
 class ApiPlatformTestUserConnectorImpl extends ApiPlatformTestUserConnector with ServicesConfig {
-  override val serviceUrl: String = baseUrl("api-platform-test-user")
-  override val http: WSPost = WSHttp
+  private val serviceKey = "api-platform-test-user"
+
+  override val serviceUrl: String = {
+    val context = getConfString(s"$serviceKey.context", "")
+    if (context.length > 0) s"${baseUrl(serviceKey)}/$context"
+    else baseUrl(serviceKey)
+  }
+
+  override val http: WSPost = ProxiedApiPlatformWSHttp(getConfString(s"$serviceKey.bearer-token", ""))
 }
