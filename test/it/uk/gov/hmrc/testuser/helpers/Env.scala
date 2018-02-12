@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import scala.util.Try
 trait Env {
   val driver: WebDriver = createWebDriver
   lazy val createWebDriver: WebDriver = {
-    val targetBrowser = System.getProperty("browser", "firefox-local").toLowerCase
+    val targetBrowser = System.getProperty("browser", "chrome-local").toLowerCase
     targetBrowser match {
       case "chrome-local" => createChromeDriver()
       case "firefox-local" => createFirefoxDriver()

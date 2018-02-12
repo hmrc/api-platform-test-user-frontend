@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 HM Revenue & Customs
+ * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,13 @@
 package uk.gov.hmrc.testuser.config
 
 import uk.gov.hmrc.http.hooks.HttpHooks
-import uk.gov.hmrc.http.{HttpDelete, HttpGet, HttpPost, HttpPut}
+import uk.gov.hmrc.http.logging.Authorization
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}
-import uk.gov.hmrc.play.config.AppName
-import uk.gov.hmrc.play.http.ws.{WSDelete, WSGet, WSPost, WSPut}
+import uk.gov.hmrc.play.config.{AppName, ServicesConfig}
+import uk.gov.hmrc.play.http.ws._
+import play.api.http.HeaderNames.ACCEPT
 
 trait Hooks extends HttpHooks with HttpAuditing {
   override val hooks = Seq(AuditingHook)
@@ -31,3 +33,21 @@ trait Hooks extends HttpHooks with HttpAuditing {
 trait WSHttp extends HttpGet with WSGet with HttpPut with WSPut with HttpPost with WSPost with HttpDelete with WSDelete with Hooks with AppName
 object WSHttp extends WSHttp
 
+trait ProxiedApiPlatformWSHttp extends WSHttp with WSProxy with AppName with ServicesConfig {
+  override lazy val wsProxyServer = WSProxyConfiguration("proxy")
+
+  val authorization: Authorization
+
+  override def buildRequest[A](url: String)(implicit hc: HeaderCarrier) = {
+    val hcWithBearerAndAccept = hc.copy(authorization = Some(authorization),
+      extraHeaders = hc.extraHeaders :+  (ACCEPT -> "application/hmrc.vnd.1.0+json"))
+
+    super.buildRequest(url)(hcWithBearerAndAccept)
+  }
+}
+
+object ProxiedApiPlatformWSHttp {
+  def apply(bearerToken: String) = new ProxiedApiPlatformWSHttp {
+    override val authorization = Authorization(s"Bearer $bearerToken")
+  }
+}
