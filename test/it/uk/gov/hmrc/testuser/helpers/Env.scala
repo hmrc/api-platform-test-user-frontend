@@ -25,7 +25,7 @@ import scala.util.Try
 trait Env {
   val driver: WebDriver = createWebDriver
   lazy val createWebDriver: WebDriver = {
-    val targetBrowser = System.getProperty("browser", "chrome-local").toLowerCase
+    val targetBrowser = System.getProperty("browser", "firefox-local").toLowerCase
     targetBrowser match {
       case "chrome-local" => createChromeDriver()
       case "firefox-local" => createFirefoxDriver()
