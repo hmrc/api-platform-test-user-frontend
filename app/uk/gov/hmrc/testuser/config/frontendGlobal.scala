@@ -69,5 +69,5 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 }
 
 object ApplicationAuditConnector extends AuditConnector with AppName with RunMode {
-  override lazy val auditingConfig = LoadAuditingConfig(s"$env.auditing")
+  override lazy val auditingConfig = LoadAuditingConfig("auditing")
 }
