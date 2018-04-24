@@ -45,7 +45,7 @@ trait ApiPlatformTestUserConnector {
 
   def createOrganisation()(implicit hc: HeaderCarrier) = {
     val payload = CreateUserRequest(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX,
-      CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS))
+      CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS, MTD_VAT))
 
     http.doPost[CreateUserRequest](s"$serviceUrl/organisations", payload, Seq("Content-Type" -> "application/json")) map { response =>
       response.status match {
