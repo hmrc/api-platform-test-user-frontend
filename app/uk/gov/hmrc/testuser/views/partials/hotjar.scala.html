@@ -16,14 +16,17 @@
 
 @import uk.gov.hmrc.testuser.config.AppConfig
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(implicit appConfig: AppConfig)
 
-@contentHeader = {
-  <h1>@heading</h1>
+@if(appConfig.hotjarEnabled) {
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:@{appConfig.hotjarId},hjsv:5};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
 }
-
-@mainContent = {
-  <p>@message</p>
-}
-
-@govuk_wrapper(title = pageTitle, contentHeader = Some(contentHeader), mainContent = mainContent)
