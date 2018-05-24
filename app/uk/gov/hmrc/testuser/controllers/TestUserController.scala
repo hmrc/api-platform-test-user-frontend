@@ -20,16 +20,18 @@ import javax.inject.Inject
 
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Result, AnyContent, Request, Action}
+import play.api.mvc.{Action, AnyContent, Request, Result}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 import uk.gov.hmrc.testuser.models.{NavLink, UserType}
-import uk.gov.hmrc.testuser.services.{NavigationService, TestUserServiceImpl, TestUserService}
+import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService, TestUserServiceImpl}
+import uk.gov.hmrc.testuser.config.{AppConfig, FrontendAppConfig}
 
 import scala.concurrent.Future
 import uk.gov.hmrc.http.BadRequestException
 
 trait TestUserController extends FrontendController with I18nSupport {
 
+  implicit lazy val appConfig: AppConfig = FrontendAppConfig
   val testUserService: TestUserService
   val navigationService: NavigationService
 
