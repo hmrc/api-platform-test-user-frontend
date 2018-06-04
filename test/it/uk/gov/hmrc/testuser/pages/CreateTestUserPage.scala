@@ -25,7 +25,7 @@ object CreateTestUserPage extends WebPage {
 
   override def isCurrentPage: Boolean = find(cssSelector("h1")).fold(false)(_.text == "Create test user")
 
-  val individualCheckbox: By = By.cssSelector("[data-type='individual']")
+  val individualCheckbox: By = By.id("Individual")
 
-  val organisationCheckbox: By = By.cssSelector("[data-type='organisation']")
+  val organisationCheckbox: By = By.id("Organisation")
 }
