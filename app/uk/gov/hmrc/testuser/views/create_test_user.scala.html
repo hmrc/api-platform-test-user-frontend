@@ -20,52 +20,54 @@
 @(navLinks: Seq[NavLink])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @contentHeader = {
-    <h1>Create test user</h1>
+    <h1 class="heading-large">Create test user</h1>
 }
 
 @mainContent = {
-    <p>
-        This service lets you create test users for testing <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">user-restricted endpoints</a>.
-    </p>
-    <p>
-        You can create individuals or organisations with a default set of service enrolments.
-    </p>
-    <p>
-        If you want to create a wider range of test users, or you're using automated testing,
-        try the <a href="/api-documentation/docs/api/service/api-platform-test-user">Create Test User API</a>.
-    </p>
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <p>
+                This service lets you create test users for testing <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">user-restricted endpoints</a>.
+            </p>
+            <p>
+                You can create individuals or organisations with a default set of service enrolments.
+            </p>
+            <p>
+                If you want to create a wider range of test users, or you're using automated testing,
+                try the <a href="/api-documentation/docs/api/service/api-platform-test-user">Create Test User API</a>.
+            </p>
 
-    <div class="grid-layout push-half--sides grid-layout--stacked">
-        <div class="grid-layout__column grid-layout__column--2-3">
+            @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserControllerImpl.createUser()) {
 
-        @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserControllerImpl.createUser()) {
+                @helper.CSRF.formField
 
-            @helper.CSRF.formField
+                <div class="form-group">
+                    <fieldset>
+                        <legend class="visuallyhidden">Choose a type</legend>
+                        <div class="multiple-choice">
+                            <input type="radio" name="type" id="Individual" value="INDIVIDUAL" checked/>
+                            <label for="Individual" data-type="individual" aria-describedby="individualTypeHint">
+                                <span>Individual</span>
+                                <span id="individualTypeHint" class="form-hint">
+                                    Create an individual test user account
+                                </span>
+                            </label>
+                        </div>
+                        <div class="multiple-choice">
+                            <input type="radio" name="type" id="Organisation" value="ORGANISATION"/>
+                            <label data-type="organisation" aria-describedby="organisationTypeHint">
+                                <span>Organisation</span>
+                                <span id="organisationTypeHint" class="form-hint">
+                                    Create an organisation test user account
+                                </span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
 
-            <div class="form-field-group">
-                <fieldset>
-                    <legend class="visuallyhidden">Choose a type</legend>
-                    <label class="block-label" data-type="individual" aria-describedby="individualTypeHint" style="width: 100%;">
-                        <input type="radio" class="top-aligned-input" name="type" id="Individual" value="INDIVIDUAL" checked/>
-                        <strong>Individual</strong>
-                        <span id="individualTypeHint" class="display-block">
-                            Create an individual test user account
-                        </span>
-                    </label>
-                    <label class="block-label" data-type="organisation" aria-describedby="organisationTypeHint" style="width: 100%;">
-                        <input type="radio" class="top-aligned-input" name="type" id="Organisation" value="ORGANISATION"/>
-                        <strong>Organisation</strong>
-                        <span id="organisationTypeHint" class="display-block">
-                            Create an organisation test user account
-                        </span>
-                    </label>
-                </fieldset>
-            </div>
-
-            <button id="submit" class="button button--spaced button--padded" type="submit">Create</button>
-        }
+                <button id="submit" class="button" type="submit">Create</button>
+            }
         </div>
-        <div class="grid-layout__column grid-layout__column--1-3"></div>
     </div>
 }
 
