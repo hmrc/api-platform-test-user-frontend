@@ -119,5 +119,5 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses = None)(head,
+@hmrcGovUkTemplate(Some(s"$title - HMRC Developer Hub - GOV.UK"), bodyClasses = None)(head,
     bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), true)(content)
