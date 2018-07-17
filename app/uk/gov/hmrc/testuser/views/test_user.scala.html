@@ -21,9 +21,10 @@
 @import uk.gov.hmrc.testuser.config.AppConfig
 
 @(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@title = {Generated @user.label.toLowerCase}
 
 @contentHeader = {
-    <h1 class="heading-large">Generated @user.label</h1>
+    <h1 class="heading-large">@title</h1>
 }
 
 @mainContent = {
@@ -40,5 +41,5 @@
     </div>
 }
 
-@govuk_wrapper(title = "Test user", navLinks = navLinks,
+@govuk_wrapper(title = title.toString, navLinks = navLinks,
     contentHeader = Some(contentHeader), mainContent = mainContent)
