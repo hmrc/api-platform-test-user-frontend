@@ -5,11 +5,13 @@ api-platform-test-user-frontend
 
 ## Starting the service locally
 
-Run it using service manager:
+Run it using the included shell script:
 
-`sm --start API_PLATFORM_TEST_USER_FRONTEND`
+`./run_local_with_dependencies.sh`
 
-Note: This doesn’t start up downstream dependencies e.g api-platform-test-user
+This should start this service and any dependent services.
+
+Once the script has finished, the service will be available on http://localhost:9618/api-test-user
 
 
 ## Running tests

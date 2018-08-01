@@ -19,6 +19,7 @@ package unit.uk.gov.hmrc.testuser.controllers
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.LogSuppressing
+import org.jsoup.Jsoup
 import org.mockito.BDDMockito.given
 import org.mockito.Matchers.{any, refEq}
 import org.scalatest.mockito.MockitoSugar
@@ -67,8 +68,14 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
     "display the Create test user page" in new Setup {
 
       val result = execute(underTest.showCreateUserPage())
+      val page = bodyOf(result)
 
-      bodyOf(result) should include ("Create test user")
+      page should include ("Create test user")
+
+      val document = Jsoup.parse(page)
+
+      document.getElementById("Individual").hasAttr("checked") shouldBe false
+      document.getElementById("Organisation").hasAttr("checked") shouldBe false
     }
 
     "display the logged in navigation links" in new Setup {

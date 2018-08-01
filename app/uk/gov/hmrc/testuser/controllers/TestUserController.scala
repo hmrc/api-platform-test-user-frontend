@@ -17,17 +17,18 @@
 package uk.gov.hmrc.testuser.controllers
 
 import javax.inject.Inject
-
 import play.api.Logger
+import play.api.data.Form
+import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
+import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.testuser.config.{AppConfig, FrontendAppConfig}
 import uk.gov.hmrc.testuser.models.{NavLink, UserType}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService, TestUserServiceImpl}
-import uk.gov.hmrc.testuser.config.{AppConfig, FrontendAppConfig}
 
 import scala.concurrent.Future
-import uk.gov.hmrc.http.BadRequestException
 
 trait TestUserController extends FrontendController with I18nSupport {
 
@@ -36,20 +37,28 @@ trait TestUserController extends FrontendController with I18nSupport {
   val navigationService: NavigationService
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
-    Future.successful(Ok(uk.gov.hmrc.testuser.views.html.create_test_user(navLinks)))
+    Future.successful(Ok(uk.gov.hmrc.testuser.views.html.create_test_user(navLinks, CreateUserForm.form)))
   }
 
   def createUser() = headerNavigation { implicit request => navLinks =>
-    val userType = for {
-      form <- request.body.asFormUrlEncoded
-      uType <- form.get("type").flatMap(_.headOption)
-      userType <- UserType.from(uType)
-    } yield userType
+    def validForm(form: CreateUserForm) = {
+      val userType = for {
+        form <- request.body.asFormUrlEncoded
+        uType <- form.get("type").flatMap(_.headOption)
+        userType <- UserType.from(uType)
+      } yield userType
 
-    userType match {
-      case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(navLinks, user)))
-      case _ => Future.failed(new BadRequestException("Invalid request"))
+      userType match {
+        case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(navLinks, user)))
+        case _ => Future.failed(new BadRequestException("Invalid request"))
+      }
     }
+
+    def invalidForm(invalidForm: Form[CreateUserForm]) = {
+      Future.successful(BadRequest(uk.gov.hmrc.testuser.views.html.create_test_user(navLinks, invalidForm)))
+    }
+
+    CreateUserForm.form.bindFromRequest().fold(invalidForm, validForm)
   }
 
   private def headerNavigation(f: Request[AnyContent] => Seq[NavLink] => Future[Result]): Action[AnyContent] = {
@@ -67,4 +76,16 @@ trait TestUserController extends FrontendController with I18nSupport {
   }
 }
 
-class TestUserControllerImpl @Inject()(override val messagesApi: MessagesApi, override val testUserService: TestUserServiceImpl, override val navigationService: NavigationService) extends TestUserController
+class TestUserControllerImpl @Inject()(override val messagesApi: MessagesApi,
+                                       override val testUserService: TestUserServiceImpl,
+                                       override val navigationService: NavigationService) extends TestUserController
+
+case class CreateUserForm(userType: String)
+
+object CreateUserForm {
+  val form: Form[CreateUserForm] = Form(
+    mapping(
+      "userType" -> nonEmptyText
+    )(CreateUserForm.apply)(CreateUserForm.unapply)
+  )
+}
