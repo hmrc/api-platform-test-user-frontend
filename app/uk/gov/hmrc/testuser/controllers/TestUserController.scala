@@ -42,13 +42,7 @@ trait TestUserController extends FrontendController with I18nSupport {
 
   def createUser() = headerNavigation { implicit request => navLinks =>
     def validForm(form: CreateUserForm) = {
-      val userType = for {
-        form <- request.body.asFormUrlEncoded
-        uType <- form.get("type").flatMap(_.headOption)
-        userType <- UserType.from(uType)
-      } yield userType
-
-      userType match {
+      UserType.from(form.userType.getOrElse("")) match {
         case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(navLinks, user)))
         case _ => Future.failed(new BadRequestException("Invalid request"))
       }
@@ -80,12 +74,12 @@ class TestUserControllerImpl @Inject()(override val messagesApi: MessagesApi,
                                        override val testUserService: TestUserServiceImpl,
                                        override val navigationService: NavigationService) extends TestUserController
 
-case class CreateUserForm(userType: String)
+case class CreateUserForm(userType: Option[String])
 
 object CreateUserForm {
   val form: Form[CreateUserForm] = Form(
     mapping(
-      "userType" -> nonEmptyText
+      "userType" -> optional(text).verifying(FormKeys.createUserTypeNoChoiceKey, s => s.isDefined)
     )(CreateUserForm.apply)(CreateUserForm.unapply)
   )
 }
