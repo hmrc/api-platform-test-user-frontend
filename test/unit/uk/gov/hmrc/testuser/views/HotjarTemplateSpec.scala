@@ -16,7 +16,6 @@
 
 package unit.uk.gov.hmrc.testuser.views
 
-import junit.framework.TestCase
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
@@ -24,9 +23,8 @@ import play.api.i18n.Messages.Implicits.applicationMessages
 import play.api.mvc.Request
 import uk.gov.hmrc.domain.{Nino, SaUtr}
 import uk.gov.hmrc.testuser.config.AppConfig
-import uk.gov.hmrc.testuser.models.NavLink
+import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual}
 import uk.gov.hmrc.testuser.views.html._
-import uk.gov.hmrc.testuser.models.TestIndividual
 
 class HotjarTemplateSpec extends PlaySpec with MockitoSugar with OneAppPerSuite {
 
