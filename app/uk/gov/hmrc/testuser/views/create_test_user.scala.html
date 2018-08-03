@@ -16,10 +16,13 @@
 
 @import uk.gov.hmrc.testuser.config.AppConfig
 @import uk.gov.hmrc.testuser.models.NavLink
+@import uk.gov.hmrc.testuser.controllers.CreateUserForm
+@import uk.gov.hmrc.testuser.views.html.includes._
 
-@(navLinks: Seq[NavLink])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @contentHeader = {
+    @errorSummary(form)
     <h1 class="heading-large">Create test user</h1>
 }
 
@@ -38,14 +41,13 @@
             </p>
 
             @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserControllerImpl.createUser()) {
-
                 @helper.CSRF.formField
-
                 <div class="form-group">
-                    <fieldset>
+                    <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
                         <legend class="visuallyhidden">Choose a type</legend>
+                        @fieldError(form.errors, "userType")
                         <div class="multiple-choice">
-                            <input type="radio" name="type" id="Individual" value="INDIVIDUAL" checked/>
+                            <input type="radio" name="userType" id="Individual" value="INDIVIDUAL"/>
                             <label for="Individual" data-type="individual" aria-describedby="individualTypeHint">
                                 <span>Individual</span>
                                 <span id="individualTypeHint" class="form-hint">
@@ -54,7 +56,7 @@
                             </label>
                         </div>
                         <div class="multiple-choice">
-                            <input type="radio" name="type" id="Organisation" value="ORGANISATION"/>
+                            <input type="radio" name="userType" id="Organisation" value="ORGANISATION"/>
                             <label data-type="organisation" aria-describedby="organisationTypeHint">
                                 <span>Organisation</span>
                                 <span id="organisationTypeHint" class="form-hint">
@@ -71,5 +73,9 @@
     </div>
 }
 
-@govuk_wrapper(title = "Create test user", navLinks = navLinks,
-    contentHeader = Some(contentHeader), mainContent = mainContent)
+@govuk_wrapper(
+    title = "Create test user",
+    navLinks = navLinks,
+    contentHeader = Some(contentHeader),
+    mainContent = mainContent
+)

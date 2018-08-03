@@ -19,9 +19,11 @@ package unit.uk.gov.hmrc.testuser.controllers
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.LogSuppressing
+import org.jsoup.Jsoup
 import org.mockito.BDDMockito.given
 import org.mockito.Matchers.{any, refEq}
 import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded}
@@ -29,11 +31,10 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.testuser.controllers.TestUserController
+import uk.gov.hmrc.testuser.controllers.{FormKeys, TestUserController}
 import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
 
 import scala.concurrent.Future.failed
 
@@ -43,7 +44,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
   val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555","EIA000"),
     CtUtr("1555369053"), Vrn("999902541"))
 
-  val individualRequest = FakeRequest().withFormUrlEncodedBody(("type", "INDIVIDUAL"))
+  val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
   trait Setup {
     implicit val materializer = ActorMaterializer.create(ActorSystem.create())
@@ -67,8 +68,14 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
     "display the Create test user page" in new Setup {
 
       val result = execute(underTest.showCreateUserPage())
+      val page = bodyOf(result)
 
-      bodyOf(result) should include ("Create test user")
+      page should include ("Create test user")
+
+      val document = Jsoup.parse(page)
+
+      document.getElementById("Individual").hasAttr("checked") shouldBe false
+      document.getElementById("Organisation").hasAttr("checked") shouldBe false
     }
 
     "display the logged in navigation links" in new Setup {
@@ -91,20 +98,28 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
   }
 
   "createUser" should {
-    "create an individual when type is INDIVIDUAL" in new Setup {
-      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("type", "INDIVIDUAL"))
+    "create an individual when the user type is INDIVIDUAL" in new Setup {
+      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
       val result = execute(underTest.createUser(), request)
 
       bodyOf(result) should include (individual.userId)
     }
 
-    "create an organisation when type is ORGANISATION" in new Setup {
-      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("type", "ORGANISATION"))
+    "create an organisation when the user type is ORGANISATION" in new Setup {
+      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", "ORGANISATION"))
 
       val result = execute(underTest.createUser(), request)
 
       bodyOf(result) should include (organisation.userId)
+    }
+
+    "display an error message when the user type is not defined" in new Setup {
+      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", ""))
+
+      val result = execute(underTest.createUser(), request)
+
+      bodyOf(result) should include (underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey))
     }
 
     "display the logged in navigation links" in new Setup {
@@ -113,7 +128,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
       bodyOf(result) should include (navLinks.head.label)
     }
 
-    "displays the page without the links when retrieving the links fail" in new Setup {
+    "display the page without the links when retrieving the links fail" in new Setup {
       withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
         given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
           .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
