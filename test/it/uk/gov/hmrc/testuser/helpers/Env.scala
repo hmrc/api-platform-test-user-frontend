@@ -16,9 +16,12 @@
 
 package it.uk.gov.hmrc.testuser.helpers
 
+import java.net.URL
+
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
+import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
 
 import scala.util.Try
 
@@ -28,8 +31,18 @@ trait Env {
     Option(System.getenv("test_driver")).getOrElse("chrome") match {
       case "chrome" => createChromeDriver()
       case "firefox" => createFirefoxDriver()
+      case "remote-chrome" => createRemoteChromeDriver()
+      case "remote-firefox" => createRemoteFirefoxDriver()
       case other => throw new IllegalArgumentException(s"target browser $other not recognised")
     }
+  }
+
+  def createRemoteChromeDriver() = {
+    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.chrome)
+  }
+
+  def createRemoteFirefoxDriver() = {
+    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.firefox)
   }
 
   def createChromeDriver(): WebDriver = {
