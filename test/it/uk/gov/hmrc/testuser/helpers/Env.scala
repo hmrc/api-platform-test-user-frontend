@@ -16,16 +16,16 @@
 
 package it.uk.gov.hmrc.testuser.helpers
 
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
-import org.openqa.selenium.WebDriver
 
-import scala.util.{Properties, Try}
+import scala.util.Try
 
 trait Env {
   val driver: WebDriver = createWebDriver
   lazy val createWebDriver: WebDriver = {
-    Properties.propOrElse("test_driver", "firefox") match {
+    Option(System.getenv("test_driver")).getOrElse("chrome") match {
       case "chrome" => createChromeDriver()
       case "firefox" => createFirefoxDriver()
       case other => throw new IllegalArgumentException(s"target browser $other not recognised")
