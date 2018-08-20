@@ -29,7 +29,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with OneServerPerSuite
 with GivenWhenThen with NavigationSugar {
 
-  override lazy val port = 9000
+  override lazy val port = 6001
   implicit val webDriver: WebDriver = Env.driver
 
   implicit override lazy val app = GuiceApplicationBuilder().configure(Map(

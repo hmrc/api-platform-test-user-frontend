@@ -21,7 +21,7 @@ import org.openqa.selenium.By
 
 object CreateTestUserPage extends WebPage {
 
-  override val url: String = "http://localhost:9000/api-test-user"
+  override val url: String = "http://localhost:6001/api-test-user"
 
   override def isCurrentPage: Boolean = find(cssSelector("h1")).fold(false)(_.text == "Create test user")
 
