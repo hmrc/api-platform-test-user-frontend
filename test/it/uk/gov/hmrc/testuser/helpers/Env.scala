@@ -25,11 +25,10 @@ import scala.util.Try
 trait Env {
   val driver: WebDriver = createWebDriver
   lazy val createWebDriver: WebDriver = {
-    val targetBrowser = Option(System.getenv("test_driver")).getOrElse("firefox")
-    targetBrowser match {
+    Option(System.getenv("test_driver")).getOrElse("chrome") match {
       case "chrome" => createChromeDriver()
       case "firefox" => createFirefoxDriver()
-      case _ => throw new IllegalArgumentException(s"target browser $targetBrowser not recognised")
+      case other => throw new IllegalArgumentException(s"target browser $other not recognised")
     }
   }
 
