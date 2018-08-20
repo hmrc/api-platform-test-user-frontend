@@ -4,14 +4,14 @@ import play.routes.compiler.StaticRoutesGenerator
 import play.sbt.PlayImport._
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.{SbtAutoBuildPlugin, _}
+import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 lazy val appName = "api-platform-test-user-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
-lazy val frontendBootstrapVersion = "8.25.0"
+lazy val frontendBootstrapVersion = "8.27.0"
 lazy val playPartialsVersion = "6.1.0"
 lazy val hmrcTestVersion = "3.0.0"
 lazy val scalaTestVersion = "2.2.6"
@@ -48,7 +48,7 @@ def unitFilter(name: String): Boolean = name startsWith "unit"
 def itTestFilter(name: String): Boolean = name startsWith "it"
 
 lazy val microservice = (project in file("."))
-  .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
   .settings(publishingSettings: _*)
@@ -78,12 +78,15 @@ lazy val microservice = (project in file("."))
     Resolver.bintrayRepo("hmrc", "releases"),
     Resolver.jcenterRepo
   ))
+  .settings(
+    majorVersion := 0
+  )
 
 lazy val IntegrationTestWithSASS = config("it") extend Test
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]) =
   tests map {
-    test => new Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name))))
+    test => Group(test.name, Seq(test), SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name))))
   }
 
 // Coverage configuration
