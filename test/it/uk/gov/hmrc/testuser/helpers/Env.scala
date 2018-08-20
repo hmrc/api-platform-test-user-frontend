@@ -16,9 +16,9 @@
 
 package it.uk.gov.hmrc.testuser.helpers
 
+import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.{FirefoxDriver, FirefoxProfile}
-import org.openqa.selenium.WebDriver
 
 import scala.util.Try
 
@@ -41,7 +41,6 @@ trait Env {
     profile.setAcceptUntrustedCertificates(true)
     new FirefoxDriver(profile)
   }
-
 
   sys addShutdownHook {
     Try(driver.quit())
