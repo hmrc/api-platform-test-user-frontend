@@ -28,7 +28,7 @@ import scala.util.{Properties, Try}
 trait Env {
   val driver: WebDriver = createWebDriver
   lazy val createWebDriver: WebDriver = {
-    Properties.propOrElse("test_driver", "chrome") match {
+    Properties.propOrElse("test_driver", "remote-chrome") match {
       case "chrome" => createChromeDriver()
       case "firefox" => createFirefoxDriver()
       case "remote-chrome" => createRemoteChromeDriver()
