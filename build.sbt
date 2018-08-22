@@ -4,7 +4,7 @@ import play.routes.compiler.StaticRoutesGenerator
 import play.sbt.PlayImport._
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.{SbtAutoBuildPlugin, SbtBuildInfo}
+import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
