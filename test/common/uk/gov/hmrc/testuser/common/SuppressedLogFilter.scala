@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package common
+package uk.gov.hmrc.testuser.common
 
 import ch.qos.logback.classic.{Level, Logger}
 import ch.qos.logback.classic.spi.ILoggingEvent

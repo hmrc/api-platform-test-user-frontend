@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser.connectors
+package uk.gov.hmrc.testuser.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.libs.json.Json.toJson
 import uk.gov.hmrc.domain._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.config.WSHttp
-import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
-import uk.gov.hmrc.http.HeaderCarrier
 
 class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
 

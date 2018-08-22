@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser.helpers
+package uk.gov.hmrc.testuser.helpers
 
 import java.net.URL
 
@@ -27,8 +27,9 @@ import scala.util.{Properties, Try}
 
 trait Env {
   val driver: WebDriver = createWebDriver
+
   lazy val createWebDriver: WebDriver = {
-    Properties.propOrElse("test_driver", "remote-chrome") match {
+    Properties.propOrElse("test_driver", "chrome") match {
       case "chrome" => createChromeDriver()
       case "firefox" => createFirefoxDriver()
       case "remote-chrome" => createRemoteChromeDriver()
