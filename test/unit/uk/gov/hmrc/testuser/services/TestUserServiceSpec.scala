@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.testuser.services
+package uk.gov.hmrc.testuser.services
 
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
@@ -24,7 +24,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
-import uk.gov.hmrc.testuser.services.TestUserService
 
 class TestUserServiceSpec extends UnitSpec with MockitoSugar {
 

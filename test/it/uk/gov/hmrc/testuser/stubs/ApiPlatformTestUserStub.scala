@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser.stubs
+package uk.gov.hmrc.testuser.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import it.uk.gov.hmrc.testuser.MockHost
+import uk.gov.hmrc.testuser.MockHost
 import org.apache.http.HttpStatus.SC_CREATED
 import play.api.libs.json.Json
 import uk.gov.hmrc.testuser.models.{TestOrganisation, TestIndividual}

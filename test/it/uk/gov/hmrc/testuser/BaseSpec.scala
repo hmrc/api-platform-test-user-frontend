@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser
+package uk.gov.hmrc.testuser
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import it.uk.gov.hmrc.testuser.helpers.{NavigationSugar, Env}
-import it.uk.gov.hmrc.testuser.stubs.{ThirdPartyDeveloperFrontendStub, ApiPlatformTestUserStub}
+import uk.gov.hmrc.testuser.helpers.{NavigationSugar, Env}
+import uk.gov.hmrc.testuser.stubs.{ThirdPartyDeveloperFrontendStub, ApiPlatformTestUserStub}
 import org.openqa.selenium.WebDriver
 import org.scalatest._
 import org.scalatestplus.play.OneServerPerSuite

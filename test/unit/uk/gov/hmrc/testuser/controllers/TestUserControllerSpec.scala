@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.testuser.controllers
+package uk.gov.hmrc.testuser.controllers
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import common.LogSuppressing
 import org.jsoup.Jsoup
 import org.mockito.BDDMockito.given
 import org.mockito.Matchers.{any, refEq}
@@ -31,7 +30,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.testuser.controllers.{FormKeys, TestUserController}
+import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}

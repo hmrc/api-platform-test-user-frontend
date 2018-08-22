@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser.pages
+package uk.gov.hmrc.testuser.pages
 
-import it.uk.gov.hmrc.testuser.helpers.WebPage
+import uk.gov.hmrc.testuser.helpers.WebPage
 import org.openqa.selenium.By
 
 object CreateTestUserPage extends WebPage {

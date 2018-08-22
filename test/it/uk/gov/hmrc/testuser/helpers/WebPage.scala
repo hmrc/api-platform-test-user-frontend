@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser.helpers
+package uk.gov.hmrc.testuser.helpers
 
 import org.openqa.selenium.WebDriver
 import org.scalatest._

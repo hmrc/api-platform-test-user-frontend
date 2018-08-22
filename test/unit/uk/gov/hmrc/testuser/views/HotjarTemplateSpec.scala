@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.testuser.views
+package uk.gov.hmrc.testuser.views
 
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar

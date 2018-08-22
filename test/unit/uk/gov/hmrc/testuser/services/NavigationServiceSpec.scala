@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package unit.uk.gov.hmrc.testuser.services
+package uk.gov.hmrc.testuser.services
 
 import org.mockito.BDDMockito.given
 import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ThirdPartyDeveloperFrontendConnector
 import uk.gov.hmrc.testuser.models.NavLink
-import uk.gov.hmrc.testuser.services.NavigationService
 
 import scala.concurrent.Future.failed
-import uk.gov.hmrc.http.HeaderCarrier
 
 class NavigationServiceSpec extends UnitSpec with MockitoSugar {
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package it.uk.gov.hmrc.testuser
+package uk.gov.hmrc.testuser
 
-import it.uk.gov.hmrc.testuser.pages.CreateTestUserPage
-import it.uk.gov.hmrc.testuser.pages.CreateTestUserPage._
-import it.uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
-import it.uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub.{givenTestOrganisationIsGenerated, givenTestIndividualIsGenerated}
+import uk.gov.hmrc.testuser.pages.CreateTestUserPage
+import uk.gov.hmrc.testuser.pages.CreateTestUserPage._
+import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
+import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub.{givenTestOrganisationIsGenerated, givenTestIndividualIsGenerated}
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.testuser.models.{NavLink, TestOrganisation, TestIndividual}
 
