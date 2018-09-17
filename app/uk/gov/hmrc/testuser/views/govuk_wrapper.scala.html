@@ -83,6 +83,12 @@
     </div>
 }
 
+@banner = {
+    <div class="banner">
+        @Some(userBanner)
+    </div>
+}
+
 @betaBanner = {
 @uiLayouts.betaBanner(
     userLoggedIn = false,
@@ -94,10 +100,10 @@
 
 @serviceInfo = {
     @uiLayouts.serviceInfo(
-      betaBanner = betaBanner,
+      betaBanner = banner,
       includeGridWrapper = false,
       includeHMRCBranding = false,
-      serviceInfoContent = Some(userBanner))
+      serviceInfoContent = None)
 }
 
 @mainContentHeader = {
