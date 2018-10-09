@@ -22,14 +22,11 @@
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
-@contentHeader = {
-    @errorSummary(form)
-    <h1 class="heading-xlarge">Create a test user</h1>
-}
-
 @mainContent = {
     <div class="grid-row">
         <div class="column-three-quarters">
+            @errorSummary(form)
+            <h1 class="heading-xlarge">Create a test user</h1>
             <p>
                 Create a test user account for <a href="api-documentation/docs/testing">testing in the sandbox</a> with <a href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>.
             </p>
@@ -122,6 +119,5 @@
 @govuk_wrapper(
     title = titleError + "Create test user",
     navLinks = navLinks,
-    contentHeader = Some(contentHeader),
     mainContent = mainContent
 )
