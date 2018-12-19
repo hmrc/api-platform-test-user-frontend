@@ -88,8 +88,8 @@
                         <legend class="visuallyhidden">Choose a type</legend>
                         @fieldError(form.errors, "userType")
                         <div class="multiple-choice">
-                            <input type="radio" name="userType" id="Individual" value="INDIVIDUAL"/>
-                            <label for="Individual" data-type="individual" aria-describedby="individualTypeHint">
+                            <input type="radio" name="userType" id="Individual" value="INDIVIDUAL" aria-describedby="individualTypeHint"/>
+                            <label for="Individual" data-type="individual">
                                 <span><strong class="bold">Individual</strong></span>
                                 <span id="individualTypeHint" class="form-hint">
                                     <p>Creates a test user with a User ID, Password, Self Assessment UTR and National Insurance number.
@@ -98,8 +98,8 @@
                             </label>
                         </div>
                         <div class="multiple-choice">
-                            <input type="radio" name="userType" id="Organisation" value="ORGANISATION"/>
-                            <label for="Organisation" data-type="organisation" aria-describedby="organisationTypeHint">
+                            <input type="radio" name="userType" id="Organisation" value="ORGANISATION" aria-describedby="organisationTypeHint"/>
+                            <label for="Organisation" data-type="organisation">
                                 <span><strong class="bold">Organisation</strong></span>
                                 <span id="organisationTypeHint" class="form-hint">
                                     <p>Creates a test user with a User ID, Password, Self Assessment UTR, Corporation Tax UTR, Employer Reference and VAT Registration Number.
