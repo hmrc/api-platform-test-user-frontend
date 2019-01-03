@@ -30,12 +30,17 @@
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
-@import partials.hotjar
+@import partials._
+
+@headScripts = {
+    @googleTagManager()
+    @hotjar(appConfig)
+}
 
 @head = {
     @uiLayouts.head(
       linkElem = None,
-      headScripts = Some(hotjar(appConfig)))
+      headScripts = Some(headScripts))
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/main.css")'>
     <meta name="format-detection" content="telephone=no" />
 }
@@ -115,6 +120,8 @@
 @getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @uiLayouts.main_content(
       article = mainContent,
       mainClass = mainClass,
