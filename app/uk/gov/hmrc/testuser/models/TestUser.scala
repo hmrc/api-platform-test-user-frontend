@@ -47,6 +47,7 @@ object ServiceName extends Enumeration {
   val CORPORATION_TAX = Value("corporation-tax")
   val PAYE_FOR_EMPLOYERS = Value("paye-for-employers")
   val SUBMIT_VAT_RETURNS = Value("submit-vat-returns")
+  val MTD_VAT = Value("mtd-vat")
   val MTD_INCOME_TAX = Value("mtd-income-tax")
   val AGENT_SERVICES = Value("agent-services")
 }
