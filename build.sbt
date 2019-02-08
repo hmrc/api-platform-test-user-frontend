@@ -73,6 +73,7 @@ lazy val microservice = (project in file("."))
   .configs(Test)
   .settings(inConfig(Test)(Defaults.testSettings): _*)
   .settings(
+    testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     unmanagedSourceDirectories in Test += baseDirectory.value / "test" / "common",
     unmanagedSourceDirectories in Test += baseDirectory.value / "test" / "unit",
     sourceDirectory := baseDirectory.value / "test" / "unit"
@@ -80,6 +81,7 @@ lazy val microservice = (project in file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
+    testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     fork in IntegrationTest := true,
     unmanagedSourceDirectories in IntegrationTest += baseDirectory.value / "test" / "it",
     sourceDirectory := baseDirectory.value / "test" / "it",
