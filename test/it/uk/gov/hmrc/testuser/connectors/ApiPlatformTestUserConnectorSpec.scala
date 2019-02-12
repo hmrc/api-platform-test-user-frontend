@@ -17,22 +17,28 @@
 package uk.gov.hmrc.testuser.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
+import play.api.http.Status._
 import play.api.libs.json.Json.toJson
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
-import uk.gov.hmrc.testuser.config.WSHttp
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
+
 
 class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
 
   trait Setup {
     implicit val hc = HeaderCarrier()
 
-    val underTest = new ApiPlatformTestUserConnector {
+    val underTest = new ApiPlatformTestUserConnector(
+      fakeApplication.injector.instanceOf[HttpClient],
+      fakeApplication.injector.instanceOf[Configuration],
+      fakeApplication.injector.instanceOf[Environment]
+    ) {
       override val serviceUrl: String = wireMockUrl
-      override val http = WSHttp
     }
   }
 
@@ -43,16 +49,16 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
       val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
 
       stubFor(post(urlEqualTo("/individuals")).withRequestBody(equalToJson(requestPayload))
-        .willReturn(aResponse().withStatus(201).withBody(toJson(testIndividual).toString())))
+        .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testIndividual).toString())))
 
       val result = await(underTest.createIndividual())
 
       result shouldBe testIndividual
     }
 
-    "fail when api-platform-test-user return an error" in new Setup {
+    "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
 
-      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(500)))
+      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(OK)))
 
       intercept[RuntimeException](await(underTest.createIndividual()))
     }
@@ -60,31 +66,32 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
   "createOrganisation" should {
     "return a generated organisation" in new Setup {
-      val testOrganisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555","EIA000"),
+      val testOrganisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555", "EIA000"),
         CtUtr("1555369053"), Vrn("999902541"))
 
-      val requestPayload = s"""{
-                               |  "serviceNames": [
-                               |    "national-insurance",
-                               |    "self-assessment",
-                               |    "mtd-income-tax",
-                               |    "corporation-tax",
-                               |    "paye-for-employers",
-                               |    "submit-vat-returns"
-                               |  ]
-                               |}""".stripMargin
+      val requestPayload =
+        s"""{
+           |  "serviceNames": [
+           |    "national-insurance",
+           |    "self-assessment",
+           |    "mtd-income-tax",
+           |    "corporation-tax",
+           |    "paye-for-employers",
+           |    "submit-vat-returns"
+           |  ]
+           |}""".stripMargin
 
       stubFor(post(urlEqualTo("/organisations")).withRequestBody(equalToJson(requestPayload))
-        .willReturn(aResponse().withStatus(201).withBody(toJson(testOrganisation).toString())))
+        .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testOrganisation).toString())))
 
       val result = await(underTest.createOrganisation())
 
       result shouldBe testOrganisation
     }
 
-    "fail when api-platform-test-user return an error" in new Setup {
+    "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
 
-      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(500)))
+      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(OK)))
 
       intercept[RuntimeException](await(underTest.createOrganisation()))
     }

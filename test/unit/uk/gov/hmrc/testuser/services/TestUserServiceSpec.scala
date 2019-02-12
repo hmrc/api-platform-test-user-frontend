@@ -29,16 +29,15 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
 
   trait Setup {
     implicit val hc = HeaderCarrier()
-    val underTest = new TestUserService {
-      override val apiPlatformTestUserConnector: ApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
-    }
+    val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
+    val underTest = new TestUserService(mockApiPlatformTestUserConnector)
   }
 
   "createUser" should {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
 
       val individual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
-      given(underTest.apiPlatformTestUserConnector.createIndividual()).willReturn(individual)
+      given(mockApiPlatformTestUserConnector.createIndividual()).willReturn(individual)
 
       val result = await(underTest.createUser(INDIVIDUAL))
 
@@ -47,9 +46,9 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
 
     "return a generated organisation when type is ORGANISATION" in new Setup {
 
-      val organisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555","EIA000"),
+      val organisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555", "EIA000"),
         CtUtr("1555369053"), Vrn("999902541"))
-      given(underTest.apiPlatformTestUserConnector.createOrganisation()).willReturn(organisation)
+      given(mockApiPlatformTestUserConnector.createOrganisation()).willReturn(organisation)
 
       val result = await(underTest.createUser(ORGANISATION))
 

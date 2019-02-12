@@ -17,17 +17,14 @@
 package uk.gov.hmrc.testuser.services
 
 import javax.inject.Inject
-
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.testuser.connectors.{ApiPlatformTestUserConnector, ApiPlatformTestUserConnectorImpl}
+import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserType.UserType
 import uk.gov.hmrc.testuser.models.{TestUser, UserType}
 
 import scala.concurrent.Future
 
-trait TestUserService {
-
-  val apiPlatformTestUserConnector: ApiPlatformTestUserConnector
+class TestUserService @Inject()(apiPlatformTestUserConnector: ApiPlatformTestUserConnector) {
 
   def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
     userType match {
@@ -37,5 +34,3 @@ trait TestUserService {
   }
 }
 
-class TestUserServiceImpl @Inject()(override val apiPlatformTestUserConnector: ApiPlatformTestUserConnectorImpl) extends TestUserService {
-}

@@ -31,6 +31,7 @@ import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.common.LogSuppressing
+import uk.gov.hmrc.testuser.config.AppConfig
 import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
@@ -40,7 +41,7 @@ import scala.concurrent.Future.failed
 class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
 
   val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"))
-  val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555","EIA000"),
+  val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555", "EIA000"),
     CtUtr("1555369053"), Vrn("999902541"))
 
   val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
@@ -50,15 +51,18 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
     private val csrfAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
     val navLinks = Seq(NavLink("sign-in", "http://sign-in"))
 
-    val underTest = new TestUserController {
-      override def messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-      override val testUserService: TestUserService = mock[TestUserService]
-      override val navigationService: NavigationService = mock[NavigationService]
-    }
+    val mockTestUserService = mock[TestUserService]
+    val mockNavigationService = mock[NavigationService]
+    val underTest = new TestUserController(
+      app.injector.instanceOf[MessagesApi],
+      mockTestUserService,
+      mockNavigationService,
+      app.injector.instanceOf[AppConfig]
+    )
 
-    given(underTest.testUserService.createUser(refEq(INDIVIDUAL))(any[HeaderCarrier]())).willReturn(individual)
-    given(underTest.testUserService.createUser(refEq(ORGANISATION))(any[HeaderCarrier]())).willReturn(organisation)
-    given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]())).willReturn(navLinks)
+    given(mockTestUserService.createUser(refEq(INDIVIDUAL))(any[HeaderCarrier]())).willReturn(individual)
+    given(mockTestUserService.createUser(refEq(ORGANISATION))(any[HeaderCarrier]())).willReturn(organisation)
+    given(mockNavigationService.headerNavigation()(any[HeaderCarrier]())).willReturn(navLinks)
 
     def execute[T <: play.api.mvc.AnyContent](action: Action[AnyContent], request: FakeRequest[T] = FakeRequest()) = await(csrfAddToken(action)(request))
   }
@@ -69,7 +73,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
       val result = execute(underTest.showCreateUserPage())
       val page = bodyOf(result)
 
-      page should include ("Create test user")
+      page should include("Create test user")
 
       val document = Jsoup.parse(page)
 
@@ -81,12 +85,12 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
 
       val result = execute(underTest.showCreateUserPage())
 
-      bodyOf(result) should include (navLinks.head.label)
+      bodyOf(result) should include(navLinks.head.label)
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
       withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
-        given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
+        given(mockNavigationService.headerNavigation()(any[HeaderCarrier]()))
           .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
 
         val result = execute(underTest.showCreateUserPage())
@@ -102,7 +106,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include (individual.userId)
+      bodyOf(result) should include(individual.userId)
     }
 
     "create an organisation when the user type is ORGANISATION" in new Setup {
@@ -110,7 +114,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include (organisation.userId)
+      bodyOf(result) should include(organisation.userId)
     }
 
     "display an error message when the user type is not defined" in new Setup {
@@ -118,18 +122,18 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include (underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey))
+      bodyOf(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey))
     }
 
     "display the logged in navigation links" in new Setup {
       val result = execute(underTest.createUser(), individualRequest)
 
-      bodyOf(result) should include (navLinks.head.label)
+      bodyOf(result) should include(navLinks.head.label)
     }
 
     "display the page without the links when retrieving the links fail" in new Setup {
       withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
-        given(underTest.navigationService.headerNavigation()(any[HeaderCarrier]()))
+        given(mockNavigationService.headerNavigation()(any[HeaderCarrier]()))
           .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
 
         val result = execute(underTest.createUser(), individualRequest)
