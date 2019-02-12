@@ -19,7 +19,9 @@ package uk.gov.hmrc.testuser.connectors
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status.OK
 import play.api.libs.json.Json.{stringify, toJson}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
@@ -29,7 +31,11 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends UnitSpec with WiremockSug
   trait Setup {
     implicit val hc = HeaderCarrier()
 
-    val underTest = new ThirdPartyDeveloperFrontendConnector {
+    val underTest = new ThirdPartyDeveloperFrontendConnector(
+      fakeApplication.injector.instanceOf[HttpClient],
+      fakeApplication.injector.instanceOf[Configuration],
+      fakeApplication.injector.instanceOf[Environment]
+    ) {
       override lazy val serviceUrl = wireMockUrl
     }
   }

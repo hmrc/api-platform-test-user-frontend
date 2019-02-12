@@ -81,7 +81,7 @@
 
             <h2 class="heading-large">Choose a type</h2>
 
-            @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserControllerImpl.createUser()) {
+            @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
                 @helper.CSRF.formField
                 <div class="form-group">
                     <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
