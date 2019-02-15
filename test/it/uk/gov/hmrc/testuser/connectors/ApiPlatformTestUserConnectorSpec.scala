@@ -22,7 +22,6 @@ import play.api.libs.json.Json.toJson
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
@@ -34,7 +33,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     implicit val hc = HeaderCarrier()
 
     val underTest = new ApiPlatformTestUserConnector(
-      fakeApplication.injector.instanceOf[HttpClient],
+      fakeApplication.injector.instanceOf[ProxiedHttpClient],
       fakeApplication.injector.instanceOf[Configuration],
       fakeApplication.injector.instanceOf[Environment]
     ) {
