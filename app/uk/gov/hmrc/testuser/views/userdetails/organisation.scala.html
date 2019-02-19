@@ -20,33 +20,4 @@
 <p>Use these credentials in the <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
     OAuth Authorize flow</a> to generate an OAuth access token for this organisation.</p>
 
-<div class="form-group">
-    <label class="form-label-bold" id="userid-label">User ID</label>
-    <p data-userid>@organisation.userId</p>
-</div>
-<hr>
-<div class="form-group">
-    <label class="form-label-bold" id="password-label">Password</label>
-    <p data-password>@organisation.password</p>
-</div>
-<hr>
-<div class="form-group">
-    <label class="form-label-bold" id="sautr-label">Self Assessment UTR</label>
-    <p data-sautr>@organisation.saUtr</p>
-</div>
-<hr>
-<div class="form-group">
-    <label class="form-label-bold" id="ctutr-label">Corporation Tax UTR</label>
-    <p data-ctutr>@organisation.ctUtr</p>
-</div>
-<hr>
-<div class="form-group">
-    <label class="form-label-bold" id="empref-label">Employer Reference</label>
-    <p data-empref>@organisation.empRef</p>
-</div>
-<hr>
-<div class="form-group">
-    <label class="form-label-bold" id="vrn-label">VAT Registration Number</label>
-    <p data-vrn>@organisation.vrn</p>
-</div>
-<hr>
+@organisation.fields.map(f => field(f))

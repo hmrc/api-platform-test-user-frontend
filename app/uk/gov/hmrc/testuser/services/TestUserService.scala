@@ -19,20 +19,30 @@ package uk.gov.hmrc.testuser.services
 import javax.inject.Inject
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
-import uk.gov.hmrc.testuser.models.{TestUser, UserTypes}
-import uk.gov.hmrc.testuser.models.ServiceNames._
-import uk.gov.hmrc.testuser.models.UserTypes.UserType
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION, UserType}
+import uk.gov.hmrc.testuser.models.{Service, TestUser, UserTypes}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class TestUserService @Inject()(apiPlatformTestUserConnector: ApiPlatformTestUserConnector) {
+class TestUserService @Inject()(apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
   def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
+    for {
+      services <- apiPlatformTestUserConnector.getServices()
+      testUser <- createUserWithServices(userType, services)
+    } yield testUser
+
+  }
+
+  private def createUserWithServices(userType: UserType, services: Seq[Service])(implicit hc: HeaderCarrier) = {
     userType match {
-      case UserTypes.INDIVIDUAL => apiPlatformTestUserConnector.createIndividual(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX))
-      case UserTypes.ORGANISATION => apiPlatformTestUserConnector.createOrganisation(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX,
-            CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS))
+      case INDIVIDUAL => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(INDIVIDUAL, services))
+      case UserTypes.ORGANISATION => apiPlatformTestUserConnector.createOrganisation(serviceKeysForUserType(ORGANISATION, services))
     }
+  }
+
+  private def serviceKeysForUserType(userType: UserType, services: Seq[Service]) = {
+    services.filter(s => s.allowedUserTypes.contains(userType)).map(s => s.key)
   }
 }
 

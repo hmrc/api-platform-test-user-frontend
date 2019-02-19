@@ -18,4 +18,4 @@ package uk.gov.hmrc.testuser.models
 
 import uk.gov.hmrc.testuser.models.UserTypes.UserType
 
-case class Service(key: String, name: String, allowedUserType: Seq[UserType])
+case class Service(key: String, name: String, allowedUserTypes: Seq[UserType])

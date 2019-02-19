@@ -26,8 +26,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.{Service, TestIndividual, TestOrganisation, UserTypes}
-import uk.gov.hmrc.testuser.models.ServiceNames._
-import uk.gov.hmrc.testuser.models.UserTypes.INDIVIDUAL
 
 
 class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
@@ -53,7 +51,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
       stubFor(post(urlEqualTo("/individuals")).withRequestBody(equalToJson(requestPayload))
         .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testIndividual).toString())))
 
-      val result = await(underTest.createIndividual(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX)))
+      val result = await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
       result shouldBe testIndividual
     }
@@ -62,7 +60,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
       stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(OK)))
 
-      intercept[RuntimeException](await(underTest.createIndividual(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX))))
+      intercept[RuntimeException](await(underTest.createIndividual(Seq( "national-insurance", "self-assessment", "mtd-income-tax"))))
     }
   }
 
@@ -77,17 +75,13 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
            |    "national-insurance",
            |    "self-assessment",
            |    "mtd-income-tax",
-           |    "corporation-tax",
-           |    "paye-for-employers",
-           |    "submit-vat-returns"
            |  ]
            |}""".stripMargin
 
       stubFor(post(urlEqualTo("/organisations")).withRequestBody(equalToJson(requestPayload))
         .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testOrganisation).toString())))
 
-      val result = await(underTest.createOrganisation(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX,
-            CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS)))
+      val result = await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
       result shouldBe testOrganisation
     }
@@ -96,8 +90,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
       stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(OK)))
 
-      intercept[RuntimeException](await(underTest.createOrganisation(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX,
-            CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS))))
+      intercept[RuntimeException](await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
     }
   }
 

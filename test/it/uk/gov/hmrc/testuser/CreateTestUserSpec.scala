@@ -19,9 +19,9 @@ package uk.gov.hmrc.testuser
 import uk.gov.hmrc.testuser.pages.CreateTestUserPage
 import uk.gov.hmrc.testuser.pages.CreateTestUserPage._
 import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
-import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub.{givenTestOrganisationIsGenerated, givenTestIndividualIsGenerated}
+import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub._
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.testuser.models.{NavLink, TestOrganisation, TestIndividual}
+import uk.gov.hmrc.testuser.models._
 
 class CreateTestUserSpec extends BaseSpec {
 
@@ -29,11 +29,14 @@ class CreateTestUserSpec extends BaseSpec {
   val organisation = TestOrganisation("organisation", "pws2", SaUtr("1555369053"), EmpRef("555","EIA000"),
     CtUtr("1555369054"), Vrn("999902541"))
   val userNavigationLinks = Seq(NavLink("sign-in", "/sign-in"))
+  val services = Seq(
+    Service("service1", "Service 1", Seq(UserTypes.INDIVIDUAL)),
+    Service("service2", "Service 2", Seq(UserTypes.ORGANISATION)))
 
   feature("Create a test user") {
 
     scenario("Create a test individual") {
-
+      givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
       givenTestIndividualIsGenerated(individual)
 
@@ -49,7 +52,7 @@ class CreateTestUserSpec extends BaseSpec {
     }
 
     scenario("Create a test organisation") {
-
+      givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
       givenTestOrganisationIsGenerated(organisation)
 

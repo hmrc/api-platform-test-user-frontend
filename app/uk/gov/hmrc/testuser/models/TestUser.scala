@@ -17,38 +17,41 @@
 package uk.gov.hmrc.testuser.models
 
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.testuser.models.ServiceNames.ServiceName
 
 sealed trait TestUser {
   val label: String
+  val fields: Seq[Field]
 }
+
+case class Field(key: String, label: String, value: String)
 
 case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: Nino) extends TestUser {
   override val label = "Individual"
+  override val fields = Seq(
+    Field("userId", "User ID", userId),
+    Field("password", "Password", password),
+    Field("saUtr", "Self Assessment UTR", saUtr.toString()),
+    Field("nino", "National Insurance Number (NINO)", nino.toString()))
 }
 
 case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
   override val label = "Organisation"
+  override val fields = Seq(
+    Field("userId", "User ID", userId),
+    Field("password", "Password", password),
+    Field("saUtr", "Self Assessment UTR", saUtr.toString()),
+    Field("empRef", "Employer Reference", empRef.toString()),
+    Field("ctUtr", "Corporation Tax UTR", ctUtr.toString()),
+    Field("vrn", "VAT Registration Number", vrn.toString()))
 }
 
 object UserTypes extends Enumeration {
   type UserType = Value
   val INDIVIDUAL = Value("INDIVIDUAL")
   val ORGANISATION = Value("ORGANISATION")
+  val AGENT = Value("AGENT")
 
   def from(userType: String) = UserTypes.values.find(e => e.toString == userType.toUpperCase)
-
 }
 
-object ServiceNames extends Enumeration {
-  type ServiceName = Value
-  val NATIONAL_INSURANCE = Value("national-insurance")
-  val SELF_ASSESSMENT = Value("self-assessment")
-  val CORPORATION_TAX = Value("corporation-tax")
-  val PAYE_FOR_EMPLOYERS = Value("paye-for-employers")
-  val SUBMIT_VAT_RETURNS = Value("submit-vat-returns")
-  val MTD_INCOME_TAX = Value("mtd-income-tax")
-  val AGENT_SERVICES = Value("agent-services")
-}
-
-case class CreateUserRequest(serviceNames: Seq[ServiceName])
+case class CreateUserRequest(serviceNames: Seq[String])

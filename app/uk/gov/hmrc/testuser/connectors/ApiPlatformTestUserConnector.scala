@@ -22,7 +22,6 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models.ServiceNames.ServiceName
 import uk.gov.hmrc.testuser.models.{CreateUserRequest, Service, TestIndividual, TestOrganisation}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -46,7 +45,7 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     else baseUrl(serviceKey)
   }
 
-  def createIndividual(enrolments: Seq[ServiceName])(implicit hc: HeaderCarrier): Future[TestIndividual] = {
+  def createIndividual(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestIndividual] = {
     val payload = CreateUserRequest(enrolments)
 
     post(s"$serviceUrl/individuals", payload) map { response =>
@@ -57,7 +56,7 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     }
   }
 
-  def createOrganisation(enrolments: Seq[ServiceName])(implicit hc: HeaderCarrier): Future[TestOrganisation] = {
+  def createOrganisation(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestOrganisation] = {
     val payload = CreateUserRequest(enrolments)
 
     post(s"$serviceUrl/organisations", payload) map { response =>
