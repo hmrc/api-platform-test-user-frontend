@@ -17,7 +17,7 @@
 package uk.gov.hmrc.testuser.models
 
 import uk.gov.hmrc.domain._
-import uk.gov.hmrc.testuser.models.ServiceName.ServiceName
+import uk.gov.hmrc.testuser.models.ServiceNames.ServiceName
 
 sealed trait TestUser {
   val label: String
@@ -31,16 +31,16 @@ case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empR
   override val label = "Organisation"
 }
 
-object UserType extends Enumeration {
+object UserTypes extends Enumeration {
   type UserType = Value
   val INDIVIDUAL = Value("INDIVIDUAL")
   val ORGANISATION = Value("ORGANISATION")
 
-  def from(userType: String) = UserType.values.find(e => e.toString == userType.toUpperCase)
+  def from(userType: String) = UserTypes.values.find(e => e.toString == userType.toUpperCase)
 
 }
 
-object ServiceName extends Enumeration {
+object ServiceNames extends Enumeration {
   type ServiceName = Value
   val NATIONAL_INSURANCE = Value("national-insurance")
   val SELF_ASSESSMENT = Value("self-assessment")

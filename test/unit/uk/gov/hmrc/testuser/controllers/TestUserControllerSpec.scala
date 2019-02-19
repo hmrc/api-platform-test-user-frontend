@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.config.AppConfig
-import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 

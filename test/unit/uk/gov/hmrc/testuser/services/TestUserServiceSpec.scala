@@ -22,8 +22,9 @@ import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
-import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
+import uk.gov.hmrc.testuser.models.ServiceNames._
 
 class TestUserServiceSpec extends UnitSpec with MockitoSugar {
 
@@ -37,7 +38,7 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
 
       val individual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
-      given(mockApiPlatformTestUserConnector.createIndividual()).willReturn(individual)
+      given(mockApiPlatformTestUserConnector.createIndividual(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX))).willReturn(individual)
 
       val result = await(underTest.createUser(INDIVIDUAL))
 
@@ -48,7 +49,8 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
 
       val organisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555", "EIA000"),
         CtUtr("1555369053"), Vrn("999902541"))
-      given(mockApiPlatformTestUserConnector.createOrganisation()).willReturn(organisation)
+      given(mockApiPlatformTestUserConnector.createOrganisation(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX,
+            CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS))).willReturn(organisation)
 
       val result = await(underTest.createUser(ORGANISATION))
 
