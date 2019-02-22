@@ -20,6 +20,8 @@ import uk.gov.hmrc.domain._
 
 sealed trait TestUser {
   val label: String
+  val userId: String
+  val password: String
   val fields: Seq[Field]
 }
 
@@ -28,8 +30,6 @@ case class Field(key: String, label: String, value: String)
 case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: Nino) extends TestUser {
   override val label = "Individual"
   override val fields = Seq(
-    Field("userId", "User ID", userId),
-    Field("password", "Password", password),
     Field("saUtr", "Self Assessment UTR", saUtr.toString()),
     Field("nino", "National Insurance Number (NINO)", nino.toString()))
 }
@@ -37,8 +37,6 @@ case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: 
 case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
   override val label = "Organisation"
   override val fields = Seq(
-    Field("userId", "User ID", userId),
-    Field("password", "Password", password),
     Field("saUtr", "Self Assessment UTR", saUtr.toString()),
     Field("empRef", "Employer Reference", empRef.toString()),
     Field("ctUtr", "Corporation Tax UTR", ctUtr.toString()),
