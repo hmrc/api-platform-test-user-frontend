@@ -17,15 +17,15 @@
 package uk.gov.hmrc.testuser.connectors
 
 import javax.inject.Inject
-import play.api.http.Status.CREATED
+import play.api.http.Status.{CREATED, OK}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models.ServiceName._
-import uk.gov.hmrc.testuser.models.{CreateUserRequest, TestIndividual, TestOrganisation}
+import uk.gov.hmrc.testuser.models.{CreateUserRequest, Service, TestIndividual, TestOrganisation}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClient,
                                              override val runModeConfiguration: Configuration,
@@ -45,10 +45,10 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     else baseUrl(serviceKey)
   }
 
-  def createIndividual()(implicit hc: HeaderCarrier) = {
-    val payload = CreateUserRequest(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX))
+  def createIndividual(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestIndividual] = {
+    val payload = CreateUserRequest(enrolments)
 
-    makeCall(s"$serviceUrl/individuals", payload) map { response =>
+    post(s"$serviceUrl/individuals", payload) map { response =>
       response.status match {
         case CREATED => response.json.as[TestIndividual]
         case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
@@ -56,11 +56,10 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     }
   }
 
-  def createOrganisation()(implicit hc: HeaderCarrier) = {
-    val payload = CreateUserRequest(Seq(NATIONAL_INSURANCE, SELF_ASSESSMENT, MTD_INCOME_TAX,
-      CORPORATION_TAX, PAYE_FOR_EMPLOYERS, SUBMIT_VAT_RETURNS))
+  def createOrganisation(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestOrganisation] = {
+    val payload = CreateUserRequest(enrolments)
 
-    makeCall(s"$serviceUrl/organisations", payload) map { response =>
+    post(s"$serviceUrl/organisations", payload) map { response =>
       response.status match {
         case CREATED => response.json.as[TestOrganisation]
         case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
@@ -68,7 +67,16 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     }
   }
 
-  private def makeCall(url: String, payload: CreateUserRequest)(implicit hc: HeaderCarrier) = {
+  def getServices()(implicit hc: HeaderCarrier): Future[Seq[Service]] = {
+    httpClient.GET(s"$serviceUrl/services") map { response =>
+      response.status match {
+        case OK => response.json.as[Seq[Service]]
+        case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+      }
+    }
+  }
+
+  private def post(url: String, payload: CreateUserRequest)(implicit hc: HeaderCarrier) = {
     httpClient.POST[CreateUserRequest, HttpResponse](url, payload, Seq("Content-Type" -> "application/json"))
   }
 }

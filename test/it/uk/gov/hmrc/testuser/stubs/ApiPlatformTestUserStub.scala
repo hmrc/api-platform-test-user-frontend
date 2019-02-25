@@ -18,9 +18,9 @@ package uk.gov.hmrc.testuser.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import uk.gov.hmrc.testuser.MockHost
-import org.apache.http.HttpStatus.SC_CREATED
+import org.apache.http.HttpStatus.{SC_CREATED, SC_OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.testuser.models.{TestOrganisation, TestIndividual}
+import uk.gov.hmrc.testuser.models.{Service, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 
 object ApiPlatformTestUserStub extends MockHost(11111) {
@@ -39,6 +39,14 @@ object ApiPlatformTestUserStub extends MockHost(11111) {
         .withStatus(SC_CREATED)
         .withHeader("Content-Type", "application/json")
         .withBody(Json.toJson(organisation).toString())))
+  }
+
+  def givenTheServicesEndpointReturnsServices(services: Seq[Service]) = {
+    mock.register(get(urlPathEqualTo("/services"))
+    .willReturn(aResponse()
+      .withStatus(SC_OK)
+      .withHeader("Content-Type", "application/json")
+      .withBody(Json.toJson(services).toString())))
   }
 
 }

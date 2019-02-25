@@ -48,6 +48,7 @@ object JsonFormatters {
   implicit val formatTestIndividual = Json.format[TestIndividual]
   implicit val formatTestOrganisation = Json.format[TestOrganisation]
   implicit val formatNavLinks = Json.format[NavLink]
-  implicit val formatServiceName = EnumJson.enumFormat(ServiceName)
   implicit val formatCreateUserServicesRequest = Json.format[CreateUserRequest]
+  implicit val formatUserType =  EnumJson.enumFormat(UserTypes)
+  implicit val formatService = Json.format[Service]
 }

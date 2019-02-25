@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.config.AppConfig
-import uk.gov.hmrc.testuser.models.UserType.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 
@@ -40,7 +40,7 @@ import scala.concurrent.Future.failed
 
 class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
 
-  val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"))
+  val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
   val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555", "EIA000"),
     CtUtr("1555369053"), Vrn("999902541"))
 

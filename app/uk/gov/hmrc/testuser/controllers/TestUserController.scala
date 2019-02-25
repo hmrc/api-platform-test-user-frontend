@@ -25,7 +25,7 @@ import play.api.mvc.{Action, AnyContent, Request, Result}
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.testuser.config.AppConfig
-import uk.gov.hmrc.testuser.models.{NavLink, UserType}
+import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 
 import scala.concurrent.Future
@@ -44,7 +44,7 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
   def createUser() = headerNavigation { implicit request =>
     navLinks =>
       def validForm(form: CreateUserForm) = {
-        UserType.from(form.userType.getOrElse("")) match {
+        UserTypes.from(form.userType.getOrElse("")) match {
           case Some(uType) => testUserService.createUser(uType) map (user => Ok(uk.gov.hmrc.testuser.views.html.test_user(navLinks, user)))
           case _ => Future.failed(new BadRequestException("Invalid request"))
         }

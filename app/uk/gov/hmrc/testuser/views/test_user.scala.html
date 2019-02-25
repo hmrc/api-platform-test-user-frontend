@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.testuser.models.TestOrganisation
 @import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.config.AppConfig
+@import uk.gov.hmrc.testuser.models.Field
 
 @(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @title = {Generated @user.label.toLowerCase}
@@ -31,10 +32,12 @@
     <div class="grid-row">
         <div class="column-three-quarters">
 
-            @user match {
-                case individual : TestIndividual => { @userdetails.individual(individual)}
-                case organisation : TestOrganisation => { @userdetails.organisation(organisation)}
-            }
+            <p>Use these credentials in the <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
+                OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).</p>
+
+                @field(Field("userid", "User ID", user.userId))
+                @field(Field("password", "Password", user.password))
+                @user.fields.map(f => field(f))
 
             <a href="@uk.gov.hmrc.testuser.controllers.routes.TestUserController.showCreateUserPage()">Add a new user</a>
         </div>

@@ -18,13 +18,14 @@ package uk.gov.hmrc.testuser.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import play.api.http.Status._
+import play.api.libs.json.Json
 import play.api.libs.json.Json.toJson
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models.{TestIndividual, TestOrganisation}
+import uk.gov.hmrc.testuser.models.{Service, TestIndividual, TestOrganisation, UserTypes}
 
 
 class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
@@ -43,14 +44,14 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
   "createIndividual" should {
     "return a generated individual" in new Setup {
-      val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
+      val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
 
       val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
 
       stubFor(post(urlEqualTo("/individuals")).withRequestBody(equalToJson(requestPayload))
         .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testIndividual).toString())))
 
-      val result = await(underTest.createIndividual())
+      val result = await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
       result shouldBe testIndividual
     }
@@ -59,7 +60,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
       stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(OK)))
 
-      intercept[RuntimeException](await(underTest.createIndividual()))
+      intercept[RuntimeException](await(underTest.createIndividual(Seq( "national-insurance", "self-assessment", "mtd-income-tax"))))
     }
   }
 
@@ -74,16 +75,13 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
            |    "national-insurance",
            |    "self-assessment",
            |    "mtd-income-tax",
-           |    "corporation-tax",
-           |    "paye-for-employers",
-           |    "submit-vat-returns"
            |  ]
            |}""".stripMargin
 
       stubFor(post(urlEqualTo("/organisations")).withRequestBody(equalToJson(requestPayload))
         .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testOrganisation).toString())))
 
-      val result = await(underTest.createOrganisation())
+      val result = await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
       result shouldBe testOrganisation
     }
@@ -92,7 +90,28 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
       stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(OK)))
 
-      intercept[RuntimeException](await(underTest.createOrganisation()))
+      intercept[RuntimeException](await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
+    }
+  }
+
+  "getServices" when {
+    "api-platform-test-user returns a 200 OK response" should {
+      "return the services from api-platform-test-user" in new Setup {
+        val services = Seq(Service("service-1", "Service One", Seq(UserTypes.INDIVIDUAL)))
+        stubFor(get(urlEqualTo("/services")).willReturn(aResponse().withBody(Json.toJson(services).toString()).withStatus(OK)))
+
+        val result = await(underTest.getServices())
+
+        result shouldBe services
+      }
+    }
+
+    "api-platform-test-user returns a response other than 200 OK" should {
+      "throw runtime exception" in new Setup {
+        stubFor(get(urlEqualTo("/services")).willReturn(aResponse().withStatus(CREATED)))
+
+        intercept[RuntimeException](await(underTest.getServices()))
+      }
     }
   }
 }
