@@ -40,7 +40,7 @@ import scala.concurrent.Future.failed
 
 class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
 
-  val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"))
+  val individual = TestIndividual("ind-user", "ind-password", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
   val organisation = TestOrganisation("org-user", "org-password", SaUtr("1555369053"), EmpRef("555", "EIA000"),
     CtUtr("1555369053"), Vrn("999902541"))
 

@@ -25,7 +25,7 @@ import uk.gov.hmrc.testuser.models._
 
 class CreateTestUserSpec extends BaseSpec {
 
-  val individual = TestIndividual("individual", "pwd", SaUtr("1555369052"), Nino("CC333333C"))
+  val individual = TestIndividual("individual", "pwd", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
   val organisation = TestOrganisation("organisation", "pws2", SaUtr("1555369053"), EmpRef("555","EIA000"),
     CtUtr("1555369054"), Vrn("999902541"))
   val userNavigationLinks = Seq(NavLink("sign-in", "/sign-in"))
@@ -48,6 +48,7 @@ class CreateTestUserSpec extends BaseSpec {
       verifyText("data-password", individual.password)
       verifyText("data-sautr", individual.saUtr.utr)
       verifyText("data-nino", individual.nino.value)
+      verifyText("data-vrn", individual.vrn.value)
       verifyHasLink(userNavigationLinks.head.label)
     }
 

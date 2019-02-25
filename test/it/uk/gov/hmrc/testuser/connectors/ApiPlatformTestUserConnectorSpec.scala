@@ -44,7 +44,7 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
   "createIndividual" should {
     "return a generated individual" in new Setup {
-      val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
+      val testIndividual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
 
       val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
 

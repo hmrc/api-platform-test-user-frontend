@@ -50,7 +50,7 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
   "createUser" should {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
 
-      val individual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"))
+      val individual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
       given(mockApiPlatformTestUserConnector.createIndividual(Seq(service1, service2))).willReturn(individual)
 
       val result = await(underTest.createUser(INDIVIDUAL))

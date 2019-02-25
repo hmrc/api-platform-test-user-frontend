@@ -21,7 +21,7 @@ import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.{OneAppPerSuite, PlaySpec}
 import play.api.i18n.Messages.Implicits.applicationMessages
 import play.api.mvc.Request
-import uk.gov.hmrc.domain.{Nino, SaUtr}
+import uk.gov.hmrc.domain.{Nino, SaUtr, Vrn}
 import uk.gov.hmrc.testuser.config.AppConfig
 import uk.gov.hmrc.testuser.models.{NavLink, TestIndividual}
 import uk.gov.hmrc.testuser.views.html._
@@ -30,7 +30,7 @@ class HotjarTemplateSpec extends PlaySpec with MockitoSugar with OneAppPerSuite 
 
   trait Setup {
     val pageTitle = "pageTitle"
-    val testUser = TestIndividual("id", "password", SaUtr("2234567890"), Nino("AA000003D"))
+    val testUser = TestIndividual("id", "password", SaUtr("2234567890"), Nino("AA000003D"), Vrn("999902541"))
     val navLinks = Seq[NavLink]()
     val mockRequest = mock[Request[Any]]
     val mockApplicationConfig = mock[AppConfig]

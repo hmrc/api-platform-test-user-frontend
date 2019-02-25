@@ -27,11 +27,12 @@ sealed trait TestUser {
 
 case class Field(key: String, label: String, value: String)
 
-case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: Nino) extends TestUser {
+case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: Nino, vrn: Vrn) extends TestUser {
   override val label = "Individual"
   override val fields = Seq(
     Field("saUtr", "Self Assessment UTR", saUtr.toString()),
-    Field("nino", "National Insurance Number (NINO)", nino.toString()))
+    Field("nino", "National Insurance Number (NINO)", nino.toString()),
+    Field("vrn", "VAT Registration Number", vrn.toString()))
 }
 
 case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
