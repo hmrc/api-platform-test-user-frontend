@@ -19,6 +19,6 @@
 
 @for(link <- navLinks) {
     <li @if(link == navLinks.last) {class="hard--right"}>
-       <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}">@{link.label}</a>
+       <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>@{link.label}</a>
     </li>
 }
