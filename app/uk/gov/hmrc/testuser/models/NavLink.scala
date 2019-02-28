@@ -16,13 +16,14 @@
 
 package uk.gov.hmrc.testuser.models
 
-case class NavLink(label: String, href: String, truncate: Boolean = false)
+case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false)
 
 case object StaticNavLinks {
   def apply() = {
     Seq(
       NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
       NavLink("Applications", "/developer/applications"),
-      NavLink("Support", "/developer/support"))
+      NavLink("Support", "/developer/support"),
+      NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true))
   }
 }
