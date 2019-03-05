@@ -25,12 +25,12 @@ import uk.gov.hmrc.testuser.models.JsonFormatters._
 
 object ApiPlatformTestUserStub extends MockHost(11111) {
 
-  def givenTestIndividualIsGenerated(individual: TestIndividual) = {
+  def givenTestIndividualIsGenerated(jsonIndividual: String) = {
     mock.register(post(urlPathEqualTo("/individuals"))
       .willReturn(aResponse()
         .withStatus(SC_CREATED)
         .withHeader("Content-Type", "application/json")
-        .withBody(Json.toJson(individual).toString())))
+        .withBody(jsonIndividual)))
   }
 
   def givenTestOrganisationIsGenerated(organisation: TestOrganisation) = {

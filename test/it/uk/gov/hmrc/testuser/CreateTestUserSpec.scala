@@ -25,7 +25,12 @@ import uk.gov.hmrc.testuser.models._
 
 class CreateTestUserSpec extends BaseSpec {
 
-  val individual = TestIndividual("individual", "pwd", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
+  private val individualUserId = "individual"
+  private val individualPassword = "pwd"
+  private val individualSaUtr = "1555369052"
+  private val individualNino = "CC333333C"
+  private val individualVrn = "999902541"
+
   val organisation = TestOrganisation("organisation", "pws2", SaUtr("1555369053"), EmpRef("555","EIA000"),
     CtUtr("1555369054"), Vrn("999902541"))
   val userNavigationLinks = Seq(NavLink("sign-in", "/sign-in"))
@@ -38,17 +43,26 @@ class CreateTestUserSpec extends BaseSpec {
     scenario("Create a test individual") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
-      givenTestIndividualIsGenerated(individual)
+      givenTestIndividualIsGenerated(
+        s"""
+          |{
+          |  "userId":"$individualUserId",
+          |  "password":"$individualPassword",
+          |  "saUtr":"$individualSaUtr",
+          |  "nino":"$individualNino",
+          |  "vrn":"$individualVrn"
+          |}
+        """.stripMargin)
 
       goOn(CreateTestUserPage)
       clickOnElement(individualCheckbox)
       clickOnSubmit()
 
-      verifyText("data-userid", individual.userId)
-      verifyText("data-password", individual.password)
-      verifyText("data-sautr", individual.saUtr.utr)
-      verifyText("data-nino", individual.nino.value)
-      verifyText("data-vrn", individual.vrn.value)
+      verifyText("data-userid", individualUserId)
+      verifyText("data-password", individualPassword)
+      verifyText("data-sautr", individualSaUtr)
+      verifyText("data-nino", individualNino)
+      verifyText("data-vrn", individualVrn)
       verifyHasLink(userNavigationLinks.head.label)
     }
 
