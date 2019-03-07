@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json.{Json, Reads, Writes}
+import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.domain._
 
 sealed trait TestUser {
@@ -47,6 +47,10 @@ case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empR
     Field("empRef", "Employer Reference", empRef.toString()),
     Field("ctUtr", "Corporation Tax UTR", ctUtr.toString()),
     Field("vrn", "VAT Registration Number", vrn.toString()))
+}
+
+object TestOrganisation {
+  implicit val testOrganisationReads: Reads[TestOrganisation] = Json.reads[TestOrganisation]
 }
 
 object UserTypes extends Enumeration {

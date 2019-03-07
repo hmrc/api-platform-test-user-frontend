@@ -96,7 +96,15 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
            |}""".stripMargin
 
       stubFor(post(urlEqualTo("/organisations")).withRequestBody(equalToJson(requestPayload))
-        .willReturn(aResponse().withStatus(CREATED).withBody(toJson(testOrganisation).toString())))
+        .willReturn(aResponse().withStatus(CREATED).withBody(s"""
+          |{
+          |  "userId":"user",
+          |  "password":"password",
+          |  "saUtr":"1555369052",
+          |  "empRef":"555/EIA000",
+          |  "ctUtr":"1555369053",
+          |  "vrn":"999902541"
+          |}""".stripMargin)))
 
       val result = await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 

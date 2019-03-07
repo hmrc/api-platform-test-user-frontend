@@ -33,12 +33,12 @@ object ApiPlatformTestUserStub extends MockHost(11111) {
         .withBody(jsonIndividual)))
   }
 
-  def givenTestOrganisationIsGenerated(organisation: TestOrganisation) = {
+  def givenTestOrganisationIsGenerated(jsonOrganisation: String) = {
     mock.register(post(urlPathEqualTo("/organisations"))
       .willReturn(aResponse()
         .withStatus(SC_CREATED)
         .withHeader("Content-Type", "application/json")
-        .withBody(Json.toJson(organisation).toString())))
+        .withBody(jsonOrganisation)))
   }
 
   def givenTheServicesEndpointReturnsServices(services: Seq[Service]) = {

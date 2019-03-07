@@ -16,12 +16,11 @@
 
 package uk.gov.hmrc.testuser
 
+import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.pages.CreateTestUserPage
 import uk.gov.hmrc.testuser.pages.CreateTestUserPage._
-import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
 import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub._
-import uk.gov.hmrc.domain._
-import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
 
 class CreateTestUserSpec extends BaseSpec {
 
@@ -29,10 +28,15 @@ class CreateTestUserSpec extends BaseSpec {
   private val individualPassword = "pwd"
   private val individualSaUtr = "1555369052"
   private val individualNino = "CC333333C"
-  private val individualVrn = "999902541"
+  private val vrn = "999902541"
 
-  val organisation = TestOrganisation("organisation", "pws2", SaUtr("1555369053"), EmpRef("555","EIA000"),
-    CtUtr("1555369054"), Vrn("999902541"))
+  private val organisationId = "organisation"
+  private val organisationPassword = "pws2"
+  private val organisationSaUtr = "1555369053"
+
+  private val empRef = "555/EIA000"
+  private val organisationCtUtr = "1555369054"
+
   val userNavigationLinks = Seq(NavLink("sign-in", "/sign-in"))
   val services = Seq(
     Service("service1", "Service 1", Seq(UserTypes.INDIVIDUAL)),
@@ -50,7 +54,7 @@ class CreateTestUserSpec extends BaseSpec {
           |  "password":"$individualPassword",
           |  "saUtr":"$individualSaUtr",
           |  "nino":"$individualNino",
-          |  "vrn":"$individualVrn"
+          |  "vrn":"$vrn"
           |}
         """.stripMargin)
 
@@ -62,25 +66,35 @@ class CreateTestUserSpec extends BaseSpec {
       verifyText("data-password", individualPassword)
       verifyText("data-sautr", individualSaUtr)
       verifyText("data-nino", individualNino)
-      verifyText("data-vrn", individualVrn)
+      verifyText("data-vrn", vrn)
       verifyHasLink(userNavigationLinks.head.label)
     }
 
     scenario("Create a test organisation") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
-      givenTestOrganisationIsGenerated(organisation)
+      givenTestOrganisationIsGenerated(
+        s"""
+           |{
+           |  "userId":"$organisationId",
+           |  "password":"$organisationPassword",
+           |  "saUtr":"$organisationSaUtr",
+           |  "empRef":"$empRef",
+           |  "ctUtr":"$organisationCtUtr",
+           |  "vrn":"$vrn"
+           |}
+        """.stripMargin)
 
       goOn(CreateTestUserPage)
       clickOnElement(organisationCheckbox)
       clickOnSubmit()
 
-      verifyText("data-userid", organisation.userId)
-      verifyText("data-password", organisation.password)
-      verifyText("data-sautr", organisation.saUtr.utr)
-      verifyText("data-ctutr", organisation.ctUtr.utr)
-      verifyText("data-empref", organisation.empRef.value)
-      verifyText("data-vrn", organisation.vrn.value)
+      verifyText("data-userid", organisationId)
+      verifyText("data-password", organisationPassword)
+      verifyText("data-sautr", organisationSaUtr)
+      verifyText("data-ctutr", organisationCtUtr)
+      verifyText("data-empref", s"$empRef")
+      verifyText("data-vrn", vrn)
     }
   }
 
