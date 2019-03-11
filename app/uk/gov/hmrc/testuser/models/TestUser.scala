@@ -16,8 +16,11 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json.{Json, Reads}
-import uk.gov.hmrc.domain._
+import play.api.libs.json._
+
+import scala.collection.immutable
+
+case class Field(key: String, label: String, value: String)
 
 sealed trait TestUser {
   val label: String
@@ -26,31 +29,38 @@ sealed trait TestUser {
   val fields: Seq[Field]
 }
 
-case class Field(key: String, label: String, value: String)
-
-case class TestIndividual(userId: String, password: String, saUtr: SaUtr, nino: Nino, vrn: Vrn) extends TestUser {
+case class TestIndividual(userId: String, password: String, fields: Seq[Field]) extends TestUser {
   override val label = "Individual"
-  override val fields = Seq(
-    Field("saUtr", "Self Assessment UTR", saUtr.toString()),
-    Field("nino", "National Insurance Number (NINO)", nino.toString()),
-    Field("vrn", "VAT Registration Number", vrn.toString()))
 }
 
-object TestIndividual {
-  implicit val testIndividualReads: Reads[TestIndividual] = Json.reads[TestIndividual]
+object TestIndividual extends TestIndividualJsonMapper(new DefaultFieldDefinitionsProvider())
+
+class TestIndividualJsonMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) extends TestUserMapper(fieldDefinitionsProvider) {
+  implicit val testIndividualReads: Reads[TestIndividual] = new Reads[TestIndividual] {
+    override def reads(json: JsValue): JsResult[TestIndividual] = {
+      val userId = (json \ "userId").as[String]
+      val password = (json \ "password").as[String]
+      val fields = json.as[Map[String, String]]
+      JsSuccess(TestIndividual(userId, password, asFields(withoutCredentials(fields)).toList))
+    }
+  }
 }
 
-case class TestOrganisation(userId: String, password: String, saUtr: SaUtr, empRef: EmpRef, ctUtr: CtUtr, vrn: Vrn) extends TestUser {
+case class TestOrganisation(userId: String, password: String, fields: Seq[Field]) extends TestUser {
   override val label = "Organisation"
-  override val fields = Seq(
-    Field("saUtr", "Self Assessment UTR", saUtr.toString()),
-    Field("empRef", "Employer Reference", empRef.toString()),
-    Field("ctUtr", "Corporation Tax UTR", ctUtr.toString()),
-    Field("vrn", "VAT Registration Number", vrn.toString()))
 }
 
-object TestOrganisation {
-  implicit val testOrganisationReads: Reads[TestOrganisation] = Json.reads[TestOrganisation]
+object TestOrganisation extends TestOrganisationJsonMapper(new DefaultFieldDefinitionsProvider)
+
+class TestOrganisationJsonMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) extends TestUserMapper(fieldDefinitionsProvider) {
+  implicit val testOrganisationReads: Reads[TestOrganisation] = new Reads[TestOrganisation] {
+    override def reads(json: JsValue): JsResult[TestOrganisation] = {
+      val userId = (json \ "userId").as[String]
+      val password = (json \ "password").as[String]
+      val fields = json.as[Map[String, String]]
+      JsSuccess(TestOrganisation(userId, password, asFields(withoutCredentials(fields)).toList))
+    }
+  }
 }
 
 object UserTypes extends Enumeration {
@@ -63,3 +73,14 @@ object UserTypes extends Enumeration {
 }
 
 case class CreateUserRequest(serviceNames: Seq[String])
+
+sealed class TestUserMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) {
+  protected def asFields(rawFields: Map[String, String]): immutable.Iterable[Field] = rawFields.map (f => {
+    val fieldDefs = fieldDefinitionsProvider.get()
+    Field(f._1, fieldDefs.find(fd => fd.key == f._1).getOrElse(FieldDefinition(f._1, f._1)).label, f._2)
+  })
+
+  protected def withoutCredentials(fields: Map[String, String]): Map[String, String] = {
+    fields.filter(f => f._1 != "userId" && f._1 != "password")
+  }
+}
