@@ -23,7 +23,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes._
-import uk.gov.hmrc.testuser.models.{Service, TestIndividual, TestOrganisation}
+import uk.gov.hmrc.testuser.models.{Field, Service, TestIndividual, TestOrganisation}
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class TestUserServiceSpec extends UnitSpec with MockitoSugar {
@@ -49,8 +50,8 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
 
   "createUser" should {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
-
-      val individual = TestIndividual("user", "password", SaUtr("1555369052"), Nino("CC333333C"), Vrn("999902541"))
+      private val fields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
+      val individual = TestIndividual("user", "password", fields)
       given(mockApiPlatformTestUserConnector.createIndividual(Seq(service1, service2))).willReturn(individual)
 
       val result = await(underTest.createUser(INDIVIDUAL))
@@ -59,9 +60,8 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
     }
 
     "return a generated organisation when type is ORGANISATION" in new Setup {
+      val organisation = TestOrganisation("org-user", "org-password", Seq(Field("saUtr", "Self Assessment UTR", "1555369053")))
 
-      val organisation = TestOrganisation("user", "password", SaUtr("1555369052"), EmpRef("555", "EIA000"),
-        CtUtr("1555369053"), Vrn("999902541"))
       given(mockApiPlatformTestUserConnector.createOrganisation(Seq(service2, service3))).willReturn(organisation)
 
       val result = await(underTest.createUser(ORGANISATION))
