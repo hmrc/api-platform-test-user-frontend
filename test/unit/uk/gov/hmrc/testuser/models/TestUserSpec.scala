@@ -16,6 +16,16 @@ class TestUserSpec extends UnitSpec {
                                          |{
                                          |  "userId":"$userId",
                                          |  "password":"$password",
+                                         |  "individualDetails": {
+                                         |    "firstName": "Ida",
+                                         |    "lastName": "Newton",
+                                         |    "dateOfBirth": "1960-06-01",
+                                         |    "address": {
+                                         |      "line1": "45 Springfield Rise",
+                                         |      "line2": "Glasgow",
+                                         |      "postcode": "TS1 1PA"
+                                         |    }
+                                         |  },
                                          |  "saUtr":"$saUtr",
                                          |  "nino":"$nino",
                                          |  "vrn":"vrn"

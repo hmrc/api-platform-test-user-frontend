@@ -40,7 +40,7 @@ class TestIndividualJsonMapper(fieldDefinitionsProvider: FieldDefinitionsProvide
     override def reads(json: JsValue): JsResult[TestIndividual] = {
       val userId = (json \ "userId").as[String]
       val password = (json \ "password").as[String]
-      val fields = json.as[Map[String, String]]
+      val fields = json.as[Map[String, JsValue]]
       JsSuccess(TestIndividual(userId, password, asFields(withoutCredentials(fields)).toList))
     }
   }
@@ -57,7 +57,7 @@ class TestOrganisationJsonMapper(fieldDefinitionsProvider: FieldDefinitionsProvi
     override def reads(json: JsValue): JsResult[TestOrganisation] = {
       val userId = (json \ "userId").as[String]
       val password = (json \ "password").as[String]
-      val fields = json.as[Map[String, String]]
+      val fields = json.as[Map[String, JsValue]]
       JsSuccess(TestOrganisation(userId, password, asFields(withoutCredentials(fields)).toList))
     }
   }
@@ -75,12 +75,13 @@ object UserTypes extends Enumeration {
 case class CreateUserRequest(serviceNames: Seq[String])
 
 sealed class TestUserMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) {
-  protected def asFields(rawFields: Map[String, String]): immutable.Iterable[Field] = rawFields.map (f => {
+  protected def asFields(rawFields: Map[String, JsValue]): immutable.Iterable[Field] = rawFields.map (f => {
     val fieldDefs = fieldDefinitionsProvider.get()
-    Field(f._1, fieldDefs.find(fd => fd.key == f._1).getOrElse(FieldDefinition(f._1, f._1)).label, f._2)
+    Field(f._1, fieldDefs.find(fd => fd.key == f._1).getOrElse(FieldDefinition(f._1, f._1)).
+      label, f._2.toString().stripPrefix("\"").stripSuffix("\""))
   })
 
-  protected def withoutCredentials(fields: Map[String, String]): Map[String, String] = {
+  protected def withoutCredentials(fields: Map[String, JsValue]): Map[String, JsValue] = {
     fields.filter(f => f._1 != "userId" && f._1 != "password")
   }
 }
