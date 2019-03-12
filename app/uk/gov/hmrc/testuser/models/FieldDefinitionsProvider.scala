@@ -30,5 +30,15 @@ class DefaultFieldDefinitionsProvider extends FieldDefinitionsProvider {
     FieldDefinition("nino", "National Insurance Number (NINO)"),
     FieldDefinition("vrn", "VAT Registration Number"),
     FieldDefinition("empRef", "Employer Reference"),
-    FieldDefinition("ctUtr", "Corporation Tax UTR"))
+    FieldDefinition("ctUtr", "Corporation Tax UTR"),
+    FieldDefinition("eoriNumber","Economic Operator Registration and Identification (EORI) number"),
+    FieldDefinition("userFullName", "Full Name"),
+    FieldDefinition("emailAddress", "Email Address"),
+    FieldDefinition("mtdItId", "Making Tax Digital Income Tax ID"),
+    FieldDefinition("vatRegistrationDate", "VAT Registration Date"),
+    FieldDefinition("lisaManagerReferenceNumber", "LISA Manager Reference Number"),
+    FieldDefinition("secureElectronicTransferReferenceNumber", "Secure Electronic Transfer reference number"),
+    FieldDefinition("pensionSchemeAdministratorIdentifier", "Pension Scheme Administrator Identifier"),
+    FieldDefinition("organisationDetails", "Organisation Details"),
+    FieldDefinition("individualDetails", "Individual Details"))
 }
