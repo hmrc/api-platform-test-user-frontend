@@ -2,6 +2,7 @@ package uk.gov.hmrc.testuser.models
 
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 
 class TestUserSpec extends UnitSpec {
 
@@ -31,10 +32,8 @@ class TestUserSpec extends UnitSpec {
                                          |  "vrn":"vrn"
                                          |}""".stripMargin)
 
-      val fieldDefinitionsProvider = new FieldDefinitionsProvider {
-        override def get(): Seq[FieldDefinition] = Seq(FieldDefinition("saUtr", "Self Assessment UTR"))
-      }
-      val testUser = Json.fromJson[TestIndividual](jsonIndividual)(new TestIndividualJsonMapper(fieldDefinitionsProvider).testIndividualReads).get
+      val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)))
+      val testUser = Json.fromJson[TestIndividual](jsonIndividual)(new TestIndividualJsonMapper(fieldDefinitions).testIndividualReads).get
     }
 
     "set userId" in new TestIndividualFromJson {
@@ -78,10 +77,9 @@ class TestUserSpec extends UnitSpec {
                                          |  "vrn":"vrn"
                                          |}""".stripMargin)
 
-      val fieldDefinitionsProvider = new FieldDefinitionsProvider {
-        override def get(): Seq[FieldDefinition] = Seq(FieldDefinition("saUtr", "Self Assessment UTR"))
-      }
-      val testUser = Json.fromJson[TestOrganisation](jsonOrg)(new TestOrganisationJsonMapper(fieldDefinitionsProvider).testOrganisationReads).get
+      val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)))
+
+      val testUser = Json.fromJson[TestOrganisation](jsonOrg)(new TestOrganisationJsonMapper(fieldDefinitions).testOrganisationReads).get
     }
 
     "set userId" in new TestOrganisationFromJson {

@@ -31,8 +31,9 @@ import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.config.AppConfig
+import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
-import uk.gov.hmrc.testuser.models.{Field, NavLink, TestIndividual, TestOrganisation}
+import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 
 import scala.concurrent.Future.failed
@@ -55,13 +56,16 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
     implicit val materializer = ActorMaterializer.create(ActorSystem.create())
     private val csrfAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
     val navLinks = Seq(NavLink("sign-in", "http://sign-in"))
+    val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(INDIVIDUAL, ORGANISATION)))
 
     val mockTestUserService = mock[TestUserService]
     val mockNavigationService = mock[NavigationService]
+    val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
     val underTest = new TestUserController(
       app.injector.instanceOf[MessagesApi],
       mockTestUserService,
       mockNavigationService,
+      mockApiPlatformTestUserConnector,
       app.injector.instanceOf[AppConfig]
     )
 

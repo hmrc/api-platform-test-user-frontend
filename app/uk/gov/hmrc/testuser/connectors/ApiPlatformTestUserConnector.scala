@@ -22,7 +22,8 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models.{CreateUserRequest, Service, TestIndividual, TestOrganisation}
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
