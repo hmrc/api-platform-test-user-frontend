@@ -33,9 +33,9 @@ case class TestIndividual(userId: String, password: String, fields: Seq[Field]) 
   override val label = "Individual"
 }
 
-object TestIndividual extends TestIndividualJsonMapper(new DefaultFieldDefinitionsProvider())
+object TestIndividual extends TestIndividualJsonMapper(FieldDefinitions.get())
 
-class TestIndividualJsonMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) extends TestUserMapper(fieldDefinitionsProvider) {
+class TestIndividualJsonMapper(fieldDefinitions: Seq[FieldDefinition]) extends TestUserMapper(fieldDefinitions) {
   implicit val testIndividualReads: Reads[TestIndividual] = new Reads[TestIndividual] {
     override def reads(json: JsValue): JsResult[TestIndividual] = {
       val userId = (json \ "userId").as[String]
@@ -50,9 +50,9 @@ case class TestOrganisation(userId: String, password: String, fields: Seq[Field]
   override val label = "Organisation"
 }
 
-object TestOrganisation extends TestOrganisationJsonMapper(new DefaultFieldDefinitionsProvider)
+object TestOrganisation extends TestOrganisationJsonMapper(FieldDefinitions.get())
 
-class TestOrganisationJsonMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) extends TestUserMapper(fieldDefinitionsProvider) {
+class TestOrganisationJsonMapper(fieldDefinitions: Seq[FieldDefinition]) extends TestUserMapper(fieldDefinitions) {
   implicit val testOrganisationReads: Reads[TestOrganisation] = new Reads[TestOrganisation] {
     override def reads(json: JsValue): JsResult[TestOrganisation] = {
       val userId = (json \ "userId").as[String]
@@ -74,11 +74,10 @@ object UserTypes extends Enumeration {
 
 case class CreateUserRequest(serviceNames: Seq[String])
 
-sealed class TestUserMapper(fieldDefinitionsProvider: FieldDefinitionsProvider) {
+sealed class TestUserMapper(fieldDefinitions: Seq[FieldDefinition]) {
   protected def asFields(rawFields: Map[String, JsValue]): immutable.Iterable[Field] = rawFields.map (f => {
-    val fieldDefs = fieldDefinitionsProvider.get()
-    Field(f._1, fieldDefs.find(fd => fd.key == f._1).getOrElse(FieldDefinition(f._1, f._1)).
-      label, f._2.toString().stripPrefix("\"").stripSuffix("\""))
+    Field(f._1, fieldDefinitions.find(fd => fd.key == f._1).getOrElse(FieldDefinition(f._1, f._1, Seq())).
+      name, f._2.toString().stripPrefix("\"").stripSuffix("\""))
   })
 
   protected def withoutCredentials(fields: Map[String, JsValue]): Map[String, JsValue] = {

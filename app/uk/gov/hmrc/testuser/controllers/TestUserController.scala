@@ -25,6 +25,7 @@ import play.api.mvc.{Action, AnyContent, Request, Result}
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.testuser.config.AppConfig
+import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 
@@ -33,6 +34,7 @@ import scala.concurrent.Future
 class TestUserController @Inject()(override val messagesApi: MessagesApi,
                                    testUserService: TestUserService,
                                    navigationService: NavigationService,
+                                   apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
                                    implicit val appConfig: AppConfig
                                   ) extends FrontendController with I18nSupport {
 

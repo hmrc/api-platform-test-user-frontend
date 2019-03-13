@@ -19,6 +19,9 @@
 @import uk.gov.hmrc.testuser.controllers.CreateUserForm
 @import uk.gov.hmrc.testuser.views.html.includes._
 
+@import uk.gov.hmrc.testuser.models.FieldDefinitions
+@import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
@@ -28,83 +31,73 @@
             @errorSummary(form)
             <h1 class="heading-xlarge">Create a test user</h1>
             <p>
-                Create a test user account for <a href="api-documentation/docs/testing">testing in the sandbox</a> with <a href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>.
+                A test user is a dummy Government Gateway user ID used for <a href="api-documentation/docs/testing">testing in the sandbox</a>.
+                This includes granting authority to your software to interact with our <a href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>.
             </p>
-            <details>
-                <summary aria-label="What is a test user?" role="button" aria-expanded="true" aria-controls="details-content-0">
-                    <span>What is a test user?</span>
-                </summary>
-                <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
-                    <p>
-                        A test user is a dummy Government Gateway account that you can use for <a href="api-documentation/docs/testing">testing in our sandbox.</a>
-                    </p>
-                    <p>
-                        To access <a href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>, your application’s users must complete the OAuth journey, which includes signing into their Government Gateway account.
-                    </p>
-                    <p>
-                        Each test user has a:
-                    </p>
+            <p>
+                A test user ID has:
+            </p>
+                <ul class="list list-bullet">
+                    <li>a type - individual, organisation or agent</li>
+                    <li>a password</li>
+                    <li>a set of service enrolments and related tax identifiers needed for different APIs</li>
+                </ul>
+            <p>
+                You must use the <a href="/documentation/create-test-user-api">Create Test User API</a> to:
+            </p>
+            <ul class="list list-bullet">
+                <li>create a test user which is an agent</li>
+                <li>create a test user for use in automated testing</li>
+                <li>select individual service enrollments</li>
+            </ul>
+            <p>Test users and other test data are <a href="documentation/testing/data-cleardown">no longer cleared down every two weeks</a>.</p>
 
-                        <ul class="list list-bullet">
-                            <li>type of Government Gateway account - individual, organisation or agent</li>
-                            <li>Government Gateway user ID and password - for sign in during the OAuth journey</li>
-                            <li>default set of service enrolments and related tax identifiers - as different APIs require different enrolments</li>
-                        </ul>
-                </div>
-            </details>
-
-            <details>
-                <summary aria-label="What types of test user can I create?" role="button" aria-expanded="true" aria-controls="details-content-1">
-                    <span>What types of test user can I create?</span>
-                </summary>
-                <div class="panel panel-border-narrow" id="details-content-1" aria-hidden="false">
-                    <p>
-                        You can create individuals or organisations with a default set of service enrolments and tax identifiers.
-                    </p>
-                    <p>
-                        To create a wider range of test users, including agents, or if you are using automated testing,
-                        use the <a href="api-documentation/docs/api/service/api-platform-test-user">Create Test User API</a>.
-                    </p>
-                </div>
-            </details>
-
-            <details>
-                <summary aria-label="How long does a test user last?" role="button" aria-expanded="true" aria-controls="details-content-2">
-                    <span>How long does a test user last?</span>
-                </summary>
-                <div class="panel panel-border-narrow" id="details-content-2" aria-hidden="false">
-                    <p>
-                        Indefinitely. Test users and other test data are <a href="https://developer.service.hmrc.gov.uk/api-documentation/docs/testing/data-cleardown">no longer cleared down every two weeks</a>.
-                    </p>
-                </div>
-            </details>
-
-            <h2 class="heading-large">Choose a type</h2>
 
             @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
                 @helper.CSRF.formField
                 <div class="form-group">
                     <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
-                        <legend class="visuallyhidden">Choose a type</legend>
+                        <legend>
+                            <h2 class="heading-large">Choose a type of test user</h2></legend>
                         @fieldError(form.errors, "userType")
                         <div class="multiple-choice">
                             <input type="radio" name="userType" id="Individual" value="INDIVIDUAL" aria-describedby="individualTypeHint"/>
                             <label for="Individual" data-type="individual">
                                 <span><strong class="bold">Individual</strong></span>
-                                <span id="individualTypeHint" class="form-hint">
-                                    <p>Creates a test user with a User ID, Password, Self Assessment UTR and National Insurance number.
-                                        <br>Enrols them for all available services.</p>
-                                </span>
+                                <details role="group">
+                                    <summary aria-label="What is a test user?" role="button" aria-expanded="false" aria-controls="details-content-0"><span>What dummy data is generated?</span></summary>
+                                    <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
+                                        <p>Creates a test user with a:</p>
+                                        <ul class="list list-bullet">
+                                            <li>user ID</li>
+                                            <li>password</li>
+                                            @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                                              <li>@field.name</li>
+                                            }
+                                        </ul>
+                                        <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.</p>
+                                    </div>
+                                </details>
                             </label>
                         </div>
                         <div class="multiple-choice">
                             <input type="radio" name="userType" id="Organisation" value="ORGANISATION" aria-describedby="organisationTypeHint"/>
                             <label for="Organisation" data-type="organisation">
                                 <span><strong class="bold">Organisation</strong></span>
-                                <span id="organisationTypeHint" class="form-hint">
-                                    <p>Creates a test user with a User ID, Password, Self Assessment UTR, Corporation Tax UTR, Employer Reference and VAT Registration Number.
-                                        <br>Enrols them for all available services.</p>
-                                </span>
+                                <details role="group">
+                                    <summary aria-label="What is a test user?" role="button" aria-expanded="false" aria-controls="details-content-1"><span>What dummy data is generated?</span></summary>
+                                    <div class="panel panel-border-narrow" id="details-content-1" aria-hidden="true">
+                                        <p>Creates a test user with a:</p>
+                                        <ul class="list list-bullet">
+                                            <li>user ID</li>
+                                            <li>password</li>
+                                            @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                                                <li>@field.name</li>
+                                            }
+                                        </ul>
+                                        <p>Enrols them for all services available through the relevant <a href="https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.</p>
+                                    </div>
+                                </details>
                             </label>
                         </div>
                     </fieldset>
