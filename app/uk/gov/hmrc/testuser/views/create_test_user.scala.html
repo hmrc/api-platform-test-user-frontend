@@ -69,8 +69,8 @@
                                     <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
                                         <p>Creates a test user with a:</p>
                                         <ul class="list list-bullet">
-                                            <li>user ID</li>
-                                            <li>password</li>
+                                            <li>User ID</li>
+                                            <li>Password</li>
                                             @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
                                               <li>@field.name</li>
                                             }
@@ -89,8 +89,8 @@
                                     <div class="panel panel-border-narrow" id="details-content-1" aria-hidden="true">
                                         <p>Creates a test user with a:</p>
                                         <ul class="list list-bullet">
-                                            <li>user ID</li>
-                                            <li>password</li>
+                                            <li>User ID</li>
+                                            <li>Password</li>
                                             @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
                                                 <li>@field.name</li>
                                             }
