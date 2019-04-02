@@ -58,47 +58,49 @@
                 <div class="form-group">
                     <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
                         <legend>
-                            <h2 class="heading-large">Choose a type of test user</h2></legend>
+                            <h2 class="heading-large">Choose a type of test user</h2>
+                        </legend>
                         @fieldError(form.errors, "userType")
+
                         <div class="multiple-choice">
                             <input type="radio" name="userType" id="Individual" value="INDIVIDUAL" aria-describedby="individualTypeHint"/>
                             <label for="Individual" data-type="individual">
-                                <span><strong class="bold">Individual</strong></span>
-                                <details role="group">
-                                    <summary aria-label="What is a test user?" role="button" aria-expanded="false" aria-controls="details-content-0"><span>What dummy data is generated?</span></summary>
-                                    <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
-                                        <p>Creates a test user with a:</p>
-                                        <ul class="list list-bullet">
-                                            <li>User ID</li>
-                                            <li>Password</li>
-                                            @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
-                                              <li>@field.name</li>
-                                            }
-                                        </ul>
-                                        <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-individual_post_accordion">Create Test User API endpoint</a>.</p>
-                                    </div>
-                                </details>
+                                <strong class="bold">Individual</strong>
                             </label>
+                            <details>
+                                <summary>What dummy data is generated?</summary>
+                                <div class="panel panel-border-narrow">
+                                    <p>Creates a test user with a:</p>
+                                    <ul class="list list-bullet">
+                                        <li>User ID</li>
+                                        <li>Password</li>
+                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                                        <li>@field.name</li>
+                                        }
+                                    </ul>
+                                    <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-individual_post_accordion">Create Test User API endpoint</a>.</p>
+                                </div>
+                            </details>
                         </div>
                         <div class="multiple-choice">
                             <input type="radio" name="userType" id="Organisation" value="ORGANISATION" aria-describedby="organisationTypeHint"/>
                             <label for="Organisation" data-type="organisation">
-                                <span><strong class="bold">Organisation</strong></span>
-                                <details role="group">
-                                    <summary aria-label="What is a test user?" role="button" aria-expanded="false" aria-controls="details-content-1"><span>What dummy data is generated?</span></summary>
-                                    <div class="panel panel-border-narrow" id="details-content-1" aria-hidden="true">
-                                        <p>Creates a test user with a:</p>
-                                        <ul class="list list-bullet">
-                                            <li>User ID</li>
-                                            <li>Password</li>
-                                            @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
-                                                <li>@field.name</li>
-                                            }
-                                        </ul>
-                                        <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.</p>
-                                    </div>
-                                </details>
+                                <strong class="bold">Organisation</strong>
                             </label>
+                            <details>
+                                <summary >What dummy data is generated?</summary>
+                                <div class="panel panel-border-narrow">
+                                    <p>Creates a test user with a:</p>
+                                    <ul class="list list-bullet">
+                                        <li>User ID</li>
+                                        <li>Password</li>
+                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                                        <li>@field.name</li>
+                                        }
+                                  </ul>
+                                  <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.</p>
+                                </div>
+                            </details>
                         </div>
                     </fieldset>
                 </div>
