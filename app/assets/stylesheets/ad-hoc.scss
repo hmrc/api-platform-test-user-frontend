@@ -60,7 +60,8 @@
 }
 
 @media (min-width: 641px) {
-  .multiple-choice {
+  .inline .multiple-choice {
+    clear: both;
     float: none;
   }
 }
