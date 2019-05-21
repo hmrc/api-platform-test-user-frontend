@@ -38,5 +38,6 @@ object FieldDefinitions {
     FieldDefinition("secureElectronicTransferReferenceNumber", "Secure Electronic Transfer reference number", Seq(ORGANISATION)),
     FieldDefinition("pensionSchemeAdministratorIdentifier", "Pension Scheme Administrator Identifier", Seq(ORGANISATION)),
     FieldDefinition("organisationDetails", "Organisation Details", Seq()),
-    FieldDefinition("individualDetails", "Individual Details", Seq()))
+    FieldDefinition("individualDetails", "Individual Details", Seq()),
+    FieldDefinition("groupIdentifier", "Group Identifier", Seq(INDIVIDUAL, ORGANISATION)))
 }
