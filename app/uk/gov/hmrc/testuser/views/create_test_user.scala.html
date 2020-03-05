@@ -21,8 +21,12 @@
 
 @import uk.gov.hmrc.testuser.models.FieldDefinitions
 @import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+@import uk.gov.hmrc.testuser.views.html.govuk_wrapper
+
+@this(govUkWrapper: govuk_wrapper)
 
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
 @mainContent = {
@@ -111,7 +115,7 @@
     </div>
 }
 
-@govuk_wrapper(
+@govUkWrapper(
     title = titleError + "Create test user",
     navLinks = navLinks,
     mainContent = mainContent

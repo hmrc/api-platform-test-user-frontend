@@ -23,7 +23,7 @@
 
 @this(layoutsHead: Head, layoutsHeaderNav: HeaderNav, layoutsFooter: Footer, layoutsFooterLinks: FooterLinks,
         layoutsServiceInfo: ServiceInfo, layoutsMainContentHeader: MainContentHeader, layoutsMainContent: MainContent,
-        helpersReportAProblemLink: ReportAProblemLink, govUkTemplate: GovUkTemplate)
+        helpersReportAProblemLink: ReportAProblemLink, betaBanner: BetaBanner, govUkTemplate: GovUkTemplate)
 
 @(title: String,
   navLinks: Seq[NavLink] = Seq.empty,
@@ -70,12 +70,11 @@
 @afterHeader = {}
 
 @bodyEnd = {
-    @layoutsFooter(
-      analyticsToken = Some(appConfig.analyticsToken),
-      analyticsHost = appConfig.analyticsHost,
-      ssoUrl = None,
-      scriptElem = scriptElem,
-      gaCalls = None)
+    @layoutsFooter(analyticsToken = Some(appConfig.analyticsToken),
+        analyticsHost = appConfig.analyticsHost,
+        ssoUrl = None,
+        scriptElem = scriptElem,
+        gaCalls = None)
 }
 
 @footerTop = {}
@@ -102,18 +101,9 @@
     </div>
 }
 
-@betaBanner = {
-@uiLayouts.betaBanner(
-    userLoggedIn = false,
-    betaFeedbackUrl = "/contact/beta-feedback",
-    betaFeedbackUnauthenticatedUrl = "/contact/beta-feedback-unauthenticated",
-    showFeedbackLinkInBetaBanner = true,
-    noBorder = false)
-}
-
 @serviceInfo = {
-    @uiLayouts.serviceInfo(
-      betaBanner = banner,
+    @layoutsServiceInfo(
+      betaBanner = HtmlFormat.empty,
       includeGridWrapper = false,
       includeHMRCBranding = false,
       serviceInfoContent = None)
@@ -121,16 +111,16 @@
 
 @mainContentHeader = {
     @if(contentHeader.isDefined) {
-        @uiLayouts.main_content_header(contentHeader = contentHeader.get)
+        @layoutsMainContentHeader(contentHeader = contentHeader.get)
     }
 }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+@getHelpForm = @{helpersReportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @content = {
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
                   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    @uiLayouts.main_content(
+    @layoutsMainContent(
       article = mainContent,
       mainClass = mainClass,
       mainDataAttributes = mainDataAttributes,
