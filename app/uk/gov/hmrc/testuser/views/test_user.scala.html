@@ -18,7 +18,7 @@
 @import uk.gov.hmrc.testuser.models.TestIndividual
 @import uk.gov.hmrc.testuser.models.TestOrganisation
 @import uk.gov.hmrc.testuser.models.NavLink
-@import uk.gov.hmrc.testuser.config.AppConfig
+@import uk.gov.hmrc.testuser.wiring.AppConfig
 @import uk.gov.hmrc.testuser.models.Field
 
 @(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)

@@ -21,7 +21,7 @@ import org.scalatestplus.play.OneServerPerSuite
 import play.api.i18n.Messages.Implicits.applicationMessages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.testuser.config.AppConfig
+import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ErrorTemplateSpec extends UnitSpec with MockitoSugar with OneServerPerSuite {
   "Error template page" should {

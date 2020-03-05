@@ -20,6 +20,7 @@ import javax.inject.Inject
 import play.api.Configuration
 import play.api.i18n.MessagesApi
 import play.api.mvc.Request
+import uk.gov.hmrc.testuser.wiring.AppConfig
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 
 class ErrorHandler @Inject()(val messagesApi: MessagesApi, val configuration: Configuration

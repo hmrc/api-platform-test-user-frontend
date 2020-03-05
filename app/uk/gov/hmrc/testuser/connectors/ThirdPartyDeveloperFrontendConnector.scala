@@ -19,8 +19,8 @@ package uk.gov.hmrc.testuser.connectors
 import javax.inject.{Inject, Singleton}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.config.ServicesConfig
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
 
@@ -29,12 +29,10 @@ import scala.concurrent.Future
 
 @Singleton
 class ThirdPartyDeveloperFrontendConnector @Inject()(httpClient: HttpClient,
-                                                     override val runModeConfiguration: Configuration,
-                                                     environment: Environment) extends ServicesConfig {
-
-  override protected def mode = environment.mode
-
-  lazy val serviceUrl = baseUrl("third-party-developer-frontend")
+                                                     runModeConfiguration: Configuration,
+                                                     environment: Environment,
+                                                     servicesConfig: ServicesConfig) {
+  lazy val serviceUrl = servicesConfig.baseUrl("third-party-developer-frontend")
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = {
     httpClient.GET[Seq[NavLink]](s"$serviceUrl/developer/user-navlinks")

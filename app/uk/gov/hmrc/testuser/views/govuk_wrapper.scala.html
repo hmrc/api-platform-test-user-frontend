@@ -14,9 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.testuser.config.AppConfig
-@import uk.gov.hmrc.testuser.models.NavLink
-@import uk.gov.hmrc.testuser.models.StaticNavLinks
+@import uk.gov.hmrc.play.views.html.layouts._
+@import uk.gov.hmrc.testuser.models.{NavLink, StaticNavLinks}
+@import uk.gov.hmrc.testuser.wiring.AppConfig
+@import views.html.layouts.GovUkTemplate
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers, layouts => uiLayouts}
+@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+
+@this(layoutsHead: Head, layoutsHeaderNav: HeaderNav, layoutsFooter: Footer, layoutsFooterLinks: FooterLinks,
+        layoutsServiceInfo: ServiceInfo, layoutsMainContentHeader: MainContentHeader, layoutsMainContent: MainContent,
+        helpersReportAProblemLink: ReportAProblemLink, govUkTemplate: GovUkTemplate)
+
 @(title: String,
   navLinks: Seq[NavLink] = Seq.empty,
   mainClass: Option[String] = None,
@@ -27,21 +35,22 @@
   mainContent: Html = HtmlFormat.empty,
   scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
-@import partials._
+@headerNavLinks(navLinks: Seq[NavLink], anchorClass: Option[String] = None) = {
+    @for(link <- navLinks) {
+        <li @if(link == navLinks.last) {class="hard--right"}>
+            <a class="align--middle inline-block@if(link.truncate) { truncate truncate--small no-wrap text--center} @anchorClass.getOrElse("")" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>@{link.label}</a>
+        </li>
+    }
+}
 
 @headScripts = {
     <script src='@routes.Assets.versioned("javascripts/googleTagManager.js")'></script>
 }
 
 @head = {
-    @uiLayouts.head(
-      linkElem = None,
-      headScripts = Some(headScripts))
+    @layoutsHead(linkElem = None, headScripts = Some(headScripts))
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/main.css")'>
-    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="telephone=no"/>
 }
 
 @insideHeader = {
@@ -51,7 +60,7 @@
             <nav id="proposition-menu" class="header__menu" role="navigation">
                 <a href="@Call("GET", "/api-documentation")" class="header__menu__proposition-name">HMRC Developer Hub</a>
                 <ul id="proposition-links" class="header__menu__proposition-links">
-                    @partials.headerNavLinks(StaticNavLinks()))
+                    @headerNavLinks(StaticNavLinks()))
                 </ul>
             </nav>
         </div>
@@ -61,7 +70,7 @@
 @afterHeader = {}
 
 @bodyEnd = {
-    @uiLayouts.footer(
+    @layoutsFooter(
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
@@ -82,7 +91,7 @@
 @userBanner = {
     <div class="header__menu__proposition--sub-header">
         <ul class="header__menu__proposition-links">
-        @partials.headerNavLinks(navLinks, anchorClass=Some("link-style"))
+        @headerNavLinks(navLinks, Some("link-style"))
         </ul>
     </div>
 }
@@ -131,15 +140,4 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(
-    Some(s"$title - HMRC Developer Hub - GOV.UK"),
-    bodyClasses = None
-)(
-    head,
-    bodyEnd,
-    insideHeader,
-    afterHeader,
-    footerTop,
-    Some(footerLinks),
-    true
-)(content)
+@govUkTemplate(Some(s"$title - HMRC Developer Hub - GOV.UK"), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(layoutsFooterLinks()), nav = true)(content)
