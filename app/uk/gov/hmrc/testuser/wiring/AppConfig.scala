@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 trait AppConfig {
   val appName: String
 
-  val contactHost: Int
+  val contactHost: String
   val contactFormServiceIdentifier: String
 
   val analyticsToken: String
@@ -37,7 +37,7 @@ trait AppConfig {
 class AppConfigImpl @Inject()(config: ServicesConfig) extends AppConfig {
   val appName = config.getString("appName")
 
-  val contactHost = config.getInt("contact-frontend.host")
+  val contactHost = config.getString("contact-frontend.host")
   val contactFormServiceIdentifier = "MyService"
 
   val analyticsToken = config.getString("google-analytics.token")

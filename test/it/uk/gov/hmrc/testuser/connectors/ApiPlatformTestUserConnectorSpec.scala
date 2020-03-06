@@ -22,9 +22,11 @@ import play.api.libs.json.Json
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.wiring.AppConfig
 
 
 class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
@@ -50,8 +52,10 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
     val underTest = new ApiPlatformTestUserConnector(
       fakeApplication.injector.instanceOf[ProxiedHttpClient],
+      fakeApplication.injector.instanceOf[AppConfig],
       fakeApplication.injector.instanceOf[Configuration],
-      fakeApplication.injector.instanceOf[Environment]
+      fakeApplication.injector.instanceOf[Environment],
+      fakeApplication.injector.instanceOf[ServicesConfig]
     ) {
       override val serviceUrl: String = wireMockUrl
     }
