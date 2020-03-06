@@ -35,12 +35,12 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
                                              servicesConfig: ServicesConfig) {
   private val serviceKey = "api-platform-test-user"
 
-  private val bearerToken = configuration.get[String](s"$serviceKey.bearer-token")
+  private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
 
   private val httpClient = proxiedHttpClient.withAuthorization(bearerToken)
 
   val serviceUrl: String = {
-    val context = configuration.get[String](s"$serviceKey.context")
+    val context = servicesConfig.getConfString(s"$serviceKey.context", "")
     if (context.length > 0) s"${servicesConfig.baseUrl(serviceKey)}/$context"
     else servicesConfig.baseUrl(serviceKey)
   }
