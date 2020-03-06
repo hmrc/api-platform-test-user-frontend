@@ -28,8 +28,8 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
-  "uk.gov.hmrc" %% "govuk-template" % "5.48.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.6.0-play-26"
+  "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-26"
 )
 
 lazy val test = Seq(
@@ -69,12 +69,12 @@ lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 lazy val microservice = (project in file("."))
   .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
-  .settings(playSettings: _*)
-  .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
-  .settings(defaultSettings(): _*)
   .settings(
     name := appName,
+    defaultSettings(),
+    playSettings,
+    scalaSettings,
+    publishingSettings,
     scalaVersion := "2.12.10",
     libraryDependencies ++= appDependencies,
     dependencyOverrides ++= jettyOverrides,
@@ -83,6 +83,7 @@ lazy val microservice = (project in file("."))
     parallelExecution in Test := false,
     fork in Test := false,
     majorVersion := 0,
+    scoverageSettings,
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
       Resolver.jcenterRepo
@@ -92,11 +93,8 @@ lazy val microservice = (project in file("."))
   .settings(inConfig(Test)(Defaults.testSettings): _*)
   .settings(
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
-    Test / unmanagedSourceDirectories ++= Seq(
-      baseDirectory.value / "test" / "common",
-      baseDirectory.value / "test" / "unit"
-    ),
-    sourceDirectory := baseDirectory.value / "test" / "unit"
+    Test / unmanagedSourceDirectories += baseDirectory.value / "test",
+    Test / sourceDirectory := baseDirectory.value / "test"
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
@@ -121,16 +119,21 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
     )
   }
 
-// Coverage configuration
-coverageMinimum := 75
-coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;" +
-  ".*definition.*;" +
-  "prod.*;" +
-  "testOnlyDoNotUseInAppConf.*;" +
-  "app.*;" +
-  "uk.gov.hmrc.BuildInfo;controllers.javascript.*;" +
-  "uk.gov.hmrc.testuser.FrontendModule;" +
-  "uk.gov.hmrc.testuser.controllers.javascript.*;" +
-  "uk.gov.hmrc.testuser.controllers.FormKeys;" +
-  "uk.gov.hmrc.testuser.ErrorHandler"
+lazy val scoverageSettings = {
+  import scoverage.ScoverageKeys
+  Seq(
+    ScoverageKeys.coverageMinimum := 75.00,
+    ScoverageKeys.coverageFailOnMinimum := true,
+    ScoverageKeys.coverageHighlighting := true,
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;" +
+      ".*definition.*;" +
+      "prod.*;" +
+      "testOnlyDoNotUseInAppConf.*;" +
+      "app.*;" +
+      "uk.gov.hmrc.BuildInfo;controllers.javascript.*;" +
+      "uk.gov.hmrc.testuser.FrontendModule;" +
+      "uk.gov.hmrc.testuser.controllers.javascript.*;" +
+      "uk.gov.hmrc.testuser.controllers.FormKeys;" +
+      "uk.gov.hmrc.testuser.ErrorHandler"
+  )
+}
