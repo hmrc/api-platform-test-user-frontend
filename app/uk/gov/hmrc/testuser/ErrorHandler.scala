@@ -59,32 +59,12 @@ class ErrorHandler @Inject()(
   govUkWrapper: govuk_wrapper)(implicit val config: Configuration, appConfig: AppConfig, ec: ExecutionContext)
     extends FrontendErrorHandler with AuthRedirects with ErrorAuditing {
 
-  private val isDevEnv =
-    if (env.mode.equals(Mode.Test)) false
-    else config.get[String]("run.mode").forall(Mode.Dev.toString.equals)
-
   override def onClientError(
     request: RequestHeader,
     statusCode: Int,
     message: String): Future[Result] = {
     auditClientError(request, statusCode, message)
     super.onClientError(request, statusCode, message)
-  }
-
-  override def resolveError(request: RequestHeader, exception: Throwable) = {
-    auditServerError(request, exception)
-    implicit val r = Request(request, "")
-    exception match {
-      case _: NoActiveSession =>
-        toGGLogin(if (isDevEnv) s"http://${request.host}${request.uri}" else s"${request.uri}")
-      case _: InsufficientEnrolments => Forbidden
-      case _ =>
-        Ok(
-          standardErrorTemplate(
-            Messages("global.error.500.title"),
-            Messages("global.error.500.heading"),
-            Messages("global.error.500.message")))
-    }
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(
