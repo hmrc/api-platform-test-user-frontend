@@ -21,6 +21,8 @@ lazy val scalaTestPlusVersion = "3.1.3"
 lazy val wiremockVersion = "2.25.1"
 lazy val mockitoVersion = "1.10.19"
 
+lazy val scope: String = "test, it"
+
 lazy val compile = Seq(
   ws,
   "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
@@ -29,8 +31,6 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "govuk-template" % "5.48.0-play-26",
   "uk.gov.hmrc" %% "play-ui" % "8.6.0-play-26"
 )
-
-lazy val scope: String = "test, it"
 
 lazy val test = Seq(
   "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
@@ -82,9 +82,7 @@ lazy val microservice = (project in file("."))
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     parallelExecution in Test := false,
     fork in Test := false,
-    majorVersion := 0
-  )
-  .settings(
+    majorVersion := 0,
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
       Resolver.jcenterRepo
@@ -93,28 +91,46 @@ lazy val microservice = (project in file("."))
   .configs(Test)
   .settings(inConfig(Test)(Defaults.testSettings): _*)
   .settings(
-    testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
-    unmanagedSourceDirectories in Test += baseDirectory.value / "test" / "common",
-    unmanagedSourceDirectories in Test += baseDirectory.value / "test" / "unit",
+    Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
+    Test / unmanagedSourceDirectories ++= Seq(
+      baseDirectory.value / "test" / "common",
+      baseDirectory.value / "test" / "unit"
+    ),
     sourceDirectory := baseDirectory.value / "test" / "unit"
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
-    testOptions in IntegrationTest += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
-    fork in IntegrationTest := true,
-    unmanagedSourceDirectories in IntegrationTest += baseDirectory.value / "test" / "it",
-    sourceDirectory := baseDirectory.value / "test" / "it",
-    addTestReportOption(IntegrationTest, "int-test-reports"),
-    testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value)
+    IntegrationTest / sourceDirectory := baseDirectory.value / "it",
+    IntegrationTest / fork := true,
+    IntegrationTest / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
+    IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "it",
+    IntegrationTest / testGrouping := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
+    addTestReportOption(IntegrationTest, "int-test-reports")
   )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
   tests map { test =>
-    Group(test.name, Seq(test), SubProcess(ForkOptions().withRunJVMOptions(Vector(s"-Dtest.name={test.name}", s"-Dtest_driver=${Properties.propOrElse("test_driver", "chrome")}"))))
+    Group(
+      test.name,
+      Seq(test),
+      SubProcess(
+        ForkOptions().withRunJVMOptions(
+          Vector(s"-Dtest.name={test.name}", s"-Dtest_driver=${Properties.propOrElse("test_driver", "chrome")}"))
+      )
+    )
   }
 
 // Coverage configuration
 coverageMinimum := 75
 coverageFailOnMinimum := true
-coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;.*definition.*;prod.*;testOnlyDoNotUseInAppConf.*;app.*;uk.gov.hmrc.BuildInfo;controllers.javascript.*;uk.gov.hmrc.testuser.FrontendModule;uk.gov.hmrc.testuser.controllers.javascript.*;uk.gov.hmrc.testuser.controllers.FormKeys;uk.gov.hmrc.testuser.ErrorHandler"
+coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;" +
+  ".*definition.*;" +
+  "prod.*;" +
+  "testOnlyDoNotUseInAppConf.*;" +
+  "app.*;" +
+  "uk.gov.hmrc.BuildInfo;controllers.javascript.*;" +
+  "uk.gov.hmrc.testuser.FrontendModule;" +
+  "uk.gov.hmrc.testuser.controllers.javascript.*;" +
+  "uk.gov.hmrc.testuser.controllers.FormKeys;" +
+  "uk.gov.hmrc.testuser.ErrorHandler"

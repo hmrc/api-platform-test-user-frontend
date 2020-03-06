@@ -29,7 +29,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 @Singleton
 class NavigationService @Inject()(connector: ThirdPartyDeveloperFrontendConnector, configuration: Configuration) {
 
-  lazy val developerFrontendUrl = configuration.getString(s"third-party-developer-frontend.host").getOrElse("")
+  lazy val developerFrontendUrl: String = configuration.getOptional[String]("third-party-developer-frontend.host") match {
+    case Some(s) => s
+    case _ => ""
+  }
 
   def headerNavigation()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] =
     connector.fetchNavLinks() map (navLinks => addUrlPrefix(developerFrontendUrl, navLinks))
