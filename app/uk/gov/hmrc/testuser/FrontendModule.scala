@@ -45,6 +45,5 @@ class FrontendModule(val environment: Environment, val configuration: Configurat
 
     bind(classOf[HttpGet]).to(classOf[DefaultHttpClient])
     bind(classOf[HttpPost]).to(classOf[DefaultHttpClient])
-//    bind(classOf[AuthConnector]).to(classOf[FrontendAuthConnector])
   }
 }
