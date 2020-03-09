@@ -52,7 +52,7 @@ class NavigationServiceSpec extends UnitSpec with MockitoSugar {
       val navLinks = Seq(NavLink("sign-in", "/sign-in"))
 
       given(connector.fetchNavLinks()).willReturn(navLinks)
-      given(configuration.getString("third-party-developer-frontend.host")).willReturn(Some("http://localhost:1111"))
+      given(configuration.getOptional[String]("third-party-developer-frontend.host")).willReturn(Some("http://localhost:1111"))
 
       val result = await(underTest.headerNavigation())
 

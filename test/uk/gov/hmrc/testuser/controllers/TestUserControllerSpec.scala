@@ -18,27 +18,32 @@ package uk.gov.hmrc.testuser.controllers
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+import javax.inject.Inject
 import org.jsoup.Jsoup
 import org.mockito.BDDMockito.given
 import org.mockito.Matchers.{any, refEq}
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
-import play.api.Logger
-import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded}
+import play.api.{Configuration, Logger}
+import play.api.i18n.{Lang, MessagesApi}
+import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.common.LogSuppressing
-import uk.gov.hmrc.testuser.config.AppConfig
+import uk.gov.hmrc.testuser.wiring.AppConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
+import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 
+import scala.concurrent.ExecutionContext
 import scala.concurrent.Future.failed
 
-class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
+class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, mcc: MessagesControllerComponents)
+                                      (implicit val configuration: Configuration, ec: ExecutionContext, appConfig: AppConfig)
+  extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
 
   private val individualFields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
   val individual = TestIndividual("ind-user", "ind-password", individualFields)
@@ -66,7 +71,8 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
       mockTestUserService,
       mockNavigationService,
       mockApiPlatformTestUserConnector,
-      app.injector.instanceOf[AppConfig]
+      mcc,
+      govUkWrapper
     )
 
     given(mockTestUserService.createUser(refEq(INDIVIDUAL))(any[HeaderCarrier]())).willReturn(individual)
@@ -131,7 +137,7 @@ class TestUserControllerSpec extends UnitSpec with MockitoSugar with GuiceOneApp
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey))
+      bodyOf(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey)(Lang.defaultLang))
     }
 
     "display the logged in navigation links" in new Setup {

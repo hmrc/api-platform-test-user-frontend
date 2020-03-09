@@ -17,33 +17,32 @@
 package uk.gov.hmrc.testuser.connectors
 
 import javax.inject.Inject
-import play.api.http.Status.{CREATED, OK}
 import play.api.{Configuration, Environment}
+import play.api.http.Status.{CREATED, OK}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.wiring.AppConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClient,
-                                             override val runModeConfiguration: Configuration,
-                                             environment: Environment) extends ServicesConfig {
-
-  override protected def mode = environment.mode
-
+                                             appConfig: AppConfig,
+                                             configuration: Configuration,
+                                             environment: Environment,
+                                             servicesConfig: ServicesConfig) {
   private val serviceKey = "api-platform-test-user"
 
-  private val bearerToken = getConfString(s"$serviceKey.bearer-token", "")
+  private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
 
   private val httpClient = proxiedHttpClient.withAuthorization(bearerToken)
 
   val serviceUrl: String = {
-    val context = getConfString(s"$serviceKey.context", "")
-    if (context.length > 0) s"${baseUrl(serviceKey)}/$context"
-    else baseUrl(serviceKey)
+    val context = servicesConfig.getConfString(s"$serviceKey.context", "")
+    if (context.length > 0) s"${servicesConfig.baseUrl(serviceKey)}/$context"
+    else servicesConfig.baseUrl(serviceKey)
   }
 
   def createIndividual(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestIndividual] = {

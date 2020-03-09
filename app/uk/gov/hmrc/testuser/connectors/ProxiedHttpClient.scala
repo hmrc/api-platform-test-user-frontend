@@ -23,17 +23,16 @@ import play.api.http.HeaderNames.ACCEPT
 import play.api.libs.ws.{WSClient, WSProxyServer}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.logging.Authorization
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 import uk.gov.hmrc.play.http.ws.{WSProxy, WSProxyConfiguration}
 
 @Singleton
 class ProxiedHttpClient @Inject()(config: Configuration,
-                                  auditConnector: AuditConnector,
+                                  auditConnector: HttpAuditing,
                                   wsClient: WSClient,
                                   environment: play.api.Environment,
-                                  actorSystem: ActorSystem
-                                 )
+                                  actorSystem: ActorSystem)
   extends DefaultHttpClient(config, auditConnector, wsClient, actorSystem) with WSProxy {
 
   val authorization: Option[Authorization] = None
@@ -42,9 +41,9 @@ class ProxiedHttpClient @Inject()(config: Configuration,
     override val authorization = Some(Authorization(s"Bearer $bearerToken"))
   }
 
-  override def wsProxyServer: Option[WSProxyServer] = WSProxyConfiguration("proxy")
+  override def wsProxyServer: Option[WSProxyServer] = WSProxyConfiguration("proxy", config)
 
-  override def buildRequest[A](url: String)(implicit hc: HeaderCarrier) = {
+  def buildRequest[A](url: String)(implicit hc: HeaderCarrier) = {
     val hcWithBearerAndAccept = hc.copy(authorization = authorization,
       extraHeaders = hc.extraHeaders :+ (ACCEPT -> "application/hmrc.vnd.1.0+json"))
 

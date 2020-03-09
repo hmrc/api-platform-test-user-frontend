@@ -21,6 +21,7 @@ import play.api.http.Status.OK
 import play.api.libs.json.Json.{stringify, toJson}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
@@ -34,7 +35,8 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends UnitSpec with WiremockSug
     val underTest = new ThirdPartyDeveloperFrontendConnector(
       fakeApplication.injector.instanceOf[HttpClient],
       fakeApplication.injector.instanceOf[Configuration],
-      fakeApplication.injector.instanceOf[Environment]
+      fakeApplication.injector.instanceOf[Environment],
+      fakeApplication.injector.instanceOf[ServicesConfig]
     ) {
       override lazy val serviceUrl = wireMockUrl
     }
@@ -52,7 +54,6 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends UnitSpec with WiremockSug
     }
 
     "fail when third-party-developer-frontend return an error" in new Setup {
-
       stubFor(get(urlEqualTo("/developer/user-navlinks")).willReturn(aResponse().withStatus(500)))
 
       intercept[Upstream5xxResponse](await(underTest.fetchNavLinks()))
