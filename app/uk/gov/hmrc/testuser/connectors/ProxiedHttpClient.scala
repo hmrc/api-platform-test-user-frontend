@@ -43,7 +43,7 @@ class ProxiedHttpClient @Inject()(config: Configuration,
 
   override def wsProxyServer: Option[WSProxyServer] = WSProxyConfiguration("proxy", config)
 
-  def buildRequest[A](url: String)(implicit hc: HeaderCarrier) = {
+  override def buildRequest[A](url: String, headers: Seq[(String, String)])(implicit hc: HeaderCarrier) = {
     val hcWithBearerAndAccept = hc.copy(authorization = authorization,
       extraHeaders = hc.extraHeaders :+ (ACCEPT -> "application/hmrc.vnd.1.0+json"))
 
