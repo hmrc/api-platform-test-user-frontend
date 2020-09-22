@@ -1,5 +1,7 @@
 # microservice specific routes
 
+->         /govuk-frontend                      govuk.Routes
+
 GET        /                uk.gov.hmrc.testuser.controllers.TestUserController.showCreateUserPage()
 
 POST       /user            uk.gov.hmrc.testuser.controllers.TestUserController.createUser()

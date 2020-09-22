@@ -31,11 +31,12 @@
     <h1 class="heading-xlarge">@title</h1>
 }
 
-@mainContent = {
+@govUkWrapper(Some("test")) {
+    <h1 class="heading-xlarge">@title</h1>
     <div class="grid-row">
         <div class="column-three-quarters">
 
-            <p>Use these credentials in the <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
+            <p class="govuk-body">Use these credentials in the <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
                 OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).</p>
 
                 @field(Field("userid", "User ID", user.userId))
@@ -46,10 +47,3 @@
         </div>
     </div>
 }
-
-@govUkWrapper(
-    title = title.toString,
-    navLinks = navLinks,
-    contentHeader = Some(contentHeader),
-    mainContent = mainContent
-)

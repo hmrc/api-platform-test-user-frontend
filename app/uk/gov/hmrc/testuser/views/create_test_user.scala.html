@@ -18,18 +18,19 @@
 @import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.controllers.CreateUserForm
 @import uk.gov.hmrc.testuser.views.html.includes._
-
 @import uk.gov.hmrc.testuser.models.FieldDefinitions
 @import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 @import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 
-@this(govUkWrapper: govuk_wrapper)
+@this(
+    govUkWrapper: govuk_wrapper
+)
 
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
-@mainContent = {
+@govUkWrapper(pageTitle = Some("Test")) {
     <div class="grid-row">
         <div class="column-three-quarters">
             @errorSummary(form)
@@ -114,9 +115,3 @@
         </div>
     </div>
 }
-
-@govUkWrapper(
-    title = titleError + "Create test user",
-    navLinks = navLinks,
-    mainContent = mainContent
-)

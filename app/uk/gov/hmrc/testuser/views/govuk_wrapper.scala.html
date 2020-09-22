@@ -14,114 +14,38 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts._
-@import uk.gov.hmrc.testuser.models.{NavLink, StaticNavLinks}
-@import uk.gov.hmrc.testuser.wiring.AppConfig
-@import views.html.layouts.GovUkTemplate
-@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
-@import play.twirl.api.HtmlFormat
-@import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(layoutsHead: Head, layoutsHeaderNav: HeaderNav, layoutsFooter: Footer, layoutsFooterLinks: FooterLinks,
-        layoutsServiceInfo: ServiceInfo, layoutsMainContentHeader: MainContentHeader, layoutsMainContent: MainContent,
-        helpersReportAProblemLink: ReportAProblemLink, betaBanner: BetaBanner, govUkTemplate: GovUkTemplate)
+@this(
+  govukLayout: GovukLayout
+)
 
-@(title: String,
-  navLinks: Seq[NavLink] = Seq.empty,
-  mainClass: Option[String] = None,
-  mainDataAttributes: Option[Html] = None,
-  bodyClasses: Option[String] = None,
-  sidebar: Html = HtmlFormat.empty,
-  contentHeader: Option[Html] = None,
-  mainContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
-@headScripts = {
-    <script src='@routes.Assets.versioned("javascripts/googleTagManager.js")'></script>
-}
+@(
+  pageTitle: Option[String] = None,
+  headBlock: Option[Html] = None,
+  headerBlock: Option[Html] = None,
+  beforeContentBlock: Option[Html] = None,
+  footerBlock: Option[Html] = None,
+  footerItems: Seq[FooterItem] = Seq.empty,
+  bodyEndBlock: Option[Html] = None,
+  scriptsBlock: Option[Html] = None
+)(contentBlock: Html)(implicit messages: Messages)
 
 @head = {
-    @layoutsHead(linkElem = None, headScripts = Some(headScripts))
-    <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/main.css")'>
-    <meta name="format-detection" content="telephone=no"/>
+  <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' rel="stylesheet" type="text/css" />
 }
 
-@insideHeader = {
-    <div class="header-proposition">
-        <div class="content">
-            <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
-            <nav id="proposition-menu" class="header__menu" role="navigation">
-                <a href="@Call("GET", "/api-documentation")" class="header__menu__proposition-name">HMRC Developer Hub</a>
-                <ul id="proposition-links" class="header__menu__proposition-links">
-                    @headerNavLinks(StaticNavLinks()))
-                </ul>
-            </nav>
-        </div>
-    </div>
+@scripts = {
+  <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+  <script>window.GOVUKFrontend.initAll();</script>
 }
 
-@afterHeader = {}
-
-@bodyEnd = {
-    @layoutsFooter(analyticsToken = Some(appConfig.analyticsToken),
-        analyticsHost = appConfig.analyticsHost,
-        ssoUrl = None,
-        scriptElem = scriptElem,
-        gaCalls = None)
-}
-
-@footerTop = {}
-@footerLinks = {
-<ul class="platform-help-links">
-    <li><a href="/api-documentation/docs/help/cookies" target="_blank" data-sso="false" data-journey-click="footer:Click:Cookies">@Messages("footer.links.cookies.text")</a></li>
-    <li><a href="/api-documentation/docs/help/privacy" target="_blank" data-sso="false" data-journey-click="footer:Click:Privacy policy">@Messages("footer.links.privacy_policy.text")</a></li>
-    <li><a href='/api-documentation/docs/help/terms-and-conditions' target="_blank" data-sso="false" data-journey-click="footer:Click:Terms and conditions">@Messages("footer.links.terms_and_conditions.text")</a></li>
-    <li><a href='@Messages("footer.links.help_page.url")' target="_blank" data-sso="false" data-journey-click="footer:Click:Help">@Messages("footer.links.help_page.text")</a></li>
-    <li><a href='@{appConfig.platformFrontendHost}/accessibility-statement/hmrc-developer-hub?referrerUrl=@{helper.urlEncode(request.uri)}' rel="noopener noreferrer" data-sso="false" data-journey-click="footer:Click:AccessibilityStatement">Accessibility statement</a></li>
-</ul>
-}
-
-@userBanner = {
-    <div class="header__menu__proposition--sub-header">
-        <ul class="header__menu__proposition-links">
-        @headerNavLinks(navLinks, Some("link-style"))
-        </ul>
-    </div>
-}
-
-@banner = {
-    <div class="banner">
-        @Some(userBanner)
-    </div>
-}
-
-@serviceInfo = {
-    @layoutsServiceInfo(
-      betaBanner = banner,
-      includeGridWrapper = false,
-      includeHMRCBranding = false,
-      serviceInfoContent = None)
-}
-
-@mainContentHeader = {
-    @if(contentHeader.isDefined) {
-        @layoutsMainContentHeader(contentHeader = contentHeader.get)
-    }
-}
-
-@getHelpForm = @{helpersReportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
-
-@content = {
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    @layoutsMainContent(
-      article = mainContent,
-      mainClass = mainClass,
-      mainDataAttributes = mainDataAttributes,
-      mainContentHeader = mainContentHeader,
-      serviceInfo = serviceInfo,
-      getHelpForm = getHelpForm,
-      sidebar = sidebar)
-}
-
-@govUkTemplate(Some(s"$title - HMRC Developer Hub - GOV.UK"), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), nav = true)(content)
+@govukLayout(
+  pageTitle = pageTitle,
+  headBlock = Some(head),
+  beforeContentBlock = beforeContentBlock,
+  bodyEndBlock = bodyEndBlock,
+  scriptsBlock = Some(scripts),
+  headerBlock = headerBlock,
+  footerItems = footerItems
+)(contentBlock)
