@@ -14,10 +14,17 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.testuser.config.AppConfig
+@import uk.gov.hmrc.testuser.views.html.components._
+@import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter}
+@import uk.gov.hmrc.testuser.views.FooterLinks
 
 @this(
-  govukLayout: GovukLayout
+  govukLayout: GovukLayout,
+  siteHeader: siteHeader,
+  siteFooter: siteFooter,
+  footerLinks: FooterLinks,
+  appConfig: AppConfig
 )
 
 @(
@@ -29,15 +36,19 @@
   footerItems: Seq[FooterItem] = Seq.empty,
   bodyEndBlock: Option[Html] = None,
   scriptsBlock: Option[Html] = None
-)(contentBlock: Html)(implicit messages: Messages)
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @head = {
-  <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' rel="stylesheet" type="text/css" />
+  <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' media="screen" rel="stylesheet" type="text/css" />
 }
 
 @scripts = {
   <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
   <script>window.GOVUKFrontend.initAll();</script>
+}
+
+@footerBlock = {
+  @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
 @govukLayout(
@@ -46,6 +57,6 @@
   beforeContentBlock = beforeContentBlock,
   bodyEndBlock = bodyEndBlock,
   scriptsBlock = Some(scripts),
-  headerBlock = headerBlock,
-  footerItems = footerItems
+  headerBlock = Some(siteHeader()),
+  footerBlock = Some(footerBlock)
 )(contentBlock)

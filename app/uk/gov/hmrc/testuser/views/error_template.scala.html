@@ -21,7 +21,7 @@
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-@govuk_wrapper(Some(pageTitle)) {
+@govuk_wrapper(Some("Tab Title")) {
 
   <h1 class="govuk-heading-xl">@heading</h1>
 
