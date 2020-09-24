@@ -29,9 +29,4 @@ class AppConfig @Inject()(config: Configuration) {
   lazy val termsConditions: String = host + config.get[String]("urls.footer.termsConditions")
   lazy val govukHelp: String       = config.get[String]("urls.footer.govukHelp")
   lazy val accessibility: String   = config.get[String]("urls.footer.accessibility")
-
-  lazy val documentation: String         = host + config.get[String]("urls.header.documentation")
-  lazy val applications: String          = host + config.get[String]("urls.header.applications")
-  lazy val support: String               = host + config.get[String]("urls.header.support")
-  lazy val serviceAvailability: String   = config.get[String]("urls.header.serviceAvailability")
 }
