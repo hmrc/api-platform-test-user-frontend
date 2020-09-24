@@ -23,7 +23,7 @@
 @import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 
 @this(
-    govUkWrapper: govuk_wrapper
+  govUkWrapper: govuk_wrapper
 )
 
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
@@ -31,87 +31,135 @@
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
 @govUkWrapper(pageTitle = Some("Test")) {
-    <div class="grid-row">
-        <div class="column-three-quarters">
-            @errorSummary(form)
-            <h1 class="heading-xlarge">Create a test user</h1>
-            <p>
-                A test user is a dummy Government Gateway user ID used for <a href="api-documentation/docs/testing">testing in the sandbox</a>.
-                This includes granting authority to your software to interact with our <a href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>.
-            </p>
-            <p>
-                A test user ID has:
-            </p>
-                <ul class="list list-bullet">
-                    <li>a type - individual, organisation or agent</li>
-                    <li>a password</li>
-                    <li>a set of service enrolments and related tax identifiers needed for different APIs</li>
-                </ul>
-            <p>
-                You must use the <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0">Create Test User API</a> to:
-            </p>
-            <ul class="list list-bullet">
-                <li>create a test user which is an agent</li>
-                <li>create a test user for use in automated testing</li>
-                <li>select individual service enrollments</li>
-            </ul>
-            <p>Test users and other test data are no longer cleared down every two weeks.</p>
+  @errorSummary(form)
+  <h1 class="govuk-heading-xl">Create a test user</h1>
+  <p class="govuk-body">
+    A test user is a dummy Government Gateway user ID used for <a class="govuk-link" href="api-documentation/docs/testing">testing in the sandbox</a>.
+    This includes granting authority to your software to interact with our <a class="govuk-link" href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>.
+  </p>
+  <p class="govuk-body">
+    A test user ID has:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>a type - individual, organisation or agent</li>
+    <li>a password</li>
+    <li>a set of service enrolments and related tax identifiers needed for different APIs</li>
+  </ul>
+  <p class="govuk-body">
+    You must use the <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0">Create Test User API</a> to:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>create a test user which is an agent</li>
+    <li>create a test user for use in automated testing</li>
+    <li>select individual service enrollments</li>
+  </ul>
+  <p class="govuk-body">
+    Test users and other test data are no longer cleared down every two weeks.
+  </p>
 
+  @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
+    @helper.CSRF.formField
+    <!-- <div class="form-group">
+      <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
+        <legend>
+          <h2 class="heading-large">Choose a type of test user</h2>
+        </legend>
+        @fieldError(form.errors, "userType")
 
-            @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
-                @helper.CSRF.formField
-                <div class="form-group">
-                    <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
-                        <legend>
-                            <h2 class="heading-large">Choose a type of test user</h2>
-                        </legend>
-                        @fieldError(form.errors, "userType")
-
-                        <div class="multiple-choice">
-                            <input type="radio" name="userType" id="Individual" value="INDIVIDUAL" aria-describedby="individualTypeHint"/>
-                            <label for="Individual" data-type="individual">
-                                <strong class="bold">Individual</strong>
-                            </label>
-                            <details>
-                                <summary>What dummy data is generated?</summary>
-                                <div class="panel panel-border-narrow">
-                                    <p>Creates a test user with a:</p>
-                                    <ul class="list list-bullet">
-                                        <li>User ID</li>
-                                        <li>Password</li>
-                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
-                                        <li>@field.name</li>
-                                        }
-                                    </ul>
-                                    <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-individual_post_accordion">Create Test User API endpoint</a>.</p>
-                                </div>
-                            </details>
-                        </div>
-                        <div class="multiple-choice">
-                            <input type="radio" name="userType" id="Organisation" value="ORGANISATION" aria-describedby="organisationTypeHint"/>
-                            <label for="Organisation" data-type="organisation">
-                                <strong class="bold">Organisation</strong>
-                            </label>
-                            <details>
-                                <summary >What dummy data is generated?</summary>
-                                <div class="panel panel-border-narrow">
-                                    <p>Creates a test user with a:</p>
-                                    <ul class="list list-bullet">
-                                        <li>User ID</li>
-                                        <li>Password</li>
-                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
-                                        <li>@field.name</li>
-                                        }
-                                  </ul>
-                                  <p>Enrols them for all services available through the relevant <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.</p>
-                                </div>
-                            </details>
-                        </div>
-                    </fieldset>
-                </div>
-
-                <button id="submit" class="button" type="submit">Create</button>
-            }
+        <div class="multiple-choice">
+          <input type="radio" name="userType" id="Individual" value="INDIVIDUAL" aria-describedby="individualTypeHint"/>
+          <label for="Individual" data-type="individual">
+            <strong class="bold">Individual</strong>
+          </label>
+          <details>
+            <summary>What dummy data is generated?</summary>
+            <div class="panel panel-border-narrow">
+              <p class="govuk-body">Creates a test user with a:</p>
+              <ul class="list list-bullet">
+                <li>User ID</li>
+                <li>Password</li>
+                @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                  <li>@field.name</li>
+                }
+              </ul>
+              <p class="govuk-body">
+                Enrols them for all services available through the relevant 
+                <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-individual_post_accordion">Create Test User API endpoint</a>.
+              </p>
+            </div>
+          </details>
         </div>
+        <div class="multiple-choice">
+          <input type="radio" name="userType" id="Organisation" value="ORGANISATION" aria-describedby="organisationTypeHint"/>
+          <label for="Organisation" data-type="organisation">
+            <strong class="bold">Organisation</strong>
+          </label>
+          <details>
+            <summary >What dummy data is generated?</summary>
+            <div class="panel panel-border-narrow">
+              <p class="govuk-body">Creates a test user with a:</p>
+              <ul class="list list-bullet">
+                <li>User ID</li>
+                <li>Password</li>
+                @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                  <li>@field.name</li>
+                }
+              </ul>
+              <p class="govuk-body">
+                Enrols them for all services available through the relevant 
+                <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.
+              </p>
+            </div>
+          </details>
+        </div>
+      </fieldset>
+    </div> -->
+
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" aria-describedby="sign-in-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h2 class="govuk-fieldset__heading">
+            Choose a type of test user
+          </h2>
+        </legend>
+        <div class="govuk-radios">
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="sign-in" name="sign-in" type="radio" value="government-gateway" aria-describedby="sign-in-item-hint">
+            <label class="govuk-label govuk-radios__label" for="sign-in">
+              Individual
+            </label>
+            <details>
+              <summary >What dummy data is generated?</summary>
+              <div class="panel panel-border-narrow">
+                <p class="govuk-body">Creates a test user with a:</p>
+                <ul class="list list-bullet">
+                  <li>User ID</li>
+                  <li>Password</li>
+                  @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                    <li>@field.name</li>
+                  }
+                </ul>
+                <p class="govuk-body">
+                  Enrols them for all services available through the relevant 
+                  <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.
+                </p>
+              </div>
+            </details>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="sign-in-2" name="sign-in" type="radio" value="govuk-verify" aria-describedby="sign-in-2-item-hint">
+            <label class="govuk-label govuk-radios__label" for="sign-in-2">
+              Organisation
+            </label>
+            <div id="sign-in-2-item-hint" class="govuk-hint govuk-radios__hint">
+              You’ll have an account if you’ve already proved your identity with either Barclays, CitizenSafe, Digidentity, Experian, Post Office, Royal Mail or SecureIdentity.
+            </div>
+          </div>
+        </div>
+    
+      </fieldset>
     </div>
+
+    <button id="submit" class="govuk-button" data-module="govuk-button" type="submit">Create</button>
+  }
 }
