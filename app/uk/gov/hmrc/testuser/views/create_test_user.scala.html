@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.testuser.wiring.AppConfig
 @import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.controllers.CreateUserForm
 @import uk.gov.hmrc.testuser.views.html.includes._
@@ -26,12 +25,9 @@
   govUkWrapper: govuk_wrapper
 )
 
-@(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
-
-@titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
+@(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages)
 
 @govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub"), navLinks = navLinks) {
-  @println(s"ORANGE ******* + $navLinks")
   <h1 class="govuk-heading-xl">Create a test user</h1>
   @errorSummary(form)
   <p class="govuk-body">

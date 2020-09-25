@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.testuser.models.TestUser
 @import uk.gov.hmrc.testuser.models.NavLink
-@import uk.gov.hmrc.testuser.wiring.AppConfig
 @import uk.gov.hmrc.testuser.models.Field
 
 @import uk.gov.hmrc.testuser.views.html.field
@@ -24,7 +23,7 @@
 
 @this(govUkWrapper: govuk_wrapper)
 
-@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages)
 @title = {Generated @user.label.toLowerCase}
 
 @govUkWrapper(Some("Generated Individual  - HMRC Developer Hub - GOV.UK")) {
