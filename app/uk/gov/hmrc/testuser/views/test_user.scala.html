@@ -28,18 +28,20 @@
 @title = {Generated @user.label.toLowerCase}
 
 @govUkWrapper(Some("Generated Individual  - HMRC Developer Hub - GOV.UK")) {
-    <h1 class="govuk-heading-xl">@title</h1>
+  <h1 class="govuk-heading-xl">@title</h1>
 
-    <p class="govuk-body">
-        Use these credentials in the <a class="govuk-link" href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
-        OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).
-    </p>
+  <p class="govuk-body">
+    Use these credentials in the <a class="govuk-link" href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
+    OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).
+  </p>
 
+  <ul class="govuk-list govuk-list--bullet govuk-list--no-style">
     @field(Field("userid", "User ID", user.userId))
     @field(Field("password", "Password", user.password))
     @user.fields.map(f => field(f))
+  </ul>
 
-    <a class="govuk-link" href="@uk.gov.hmrc.testuser.controllers.routes.TestUserController.showCreateUserPage()">
-        Add a new user
-    </a>
+  <a class="govuk-link" href="@uk.gov.hmrc.testuser.controllers.routes.TestUserController.showCreateUserPage()">
+    Add a new user
+  </a>
 }

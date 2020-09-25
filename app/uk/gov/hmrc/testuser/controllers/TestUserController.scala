@@ -43,6 +43,7 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
 
   def showCreateUserPage() = headerNavigation { implicit request =>
     navLinks =>
+      println(s"PEAS ******* + $navLinks")
       Future.successful(Ok(new create_test_user(govUkWrapper)(navLinks, CreateUserForm.form)))
   }
 

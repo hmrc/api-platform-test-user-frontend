@@ -30,7 +30,8 @@
 
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
-@govUkWrapper(pageTitle = Some("Test")) {
+@govUkWrapper(pageTitle = Some("Test"), navLinks = navLinks) {
+  @println(s"ORANGE ******* + $navLinks")
   @errorSummary(form)
   <h1 class="govuk-heading-xl">Create a test user</h1>
   <p class="govuk-body">
@@ -124,15 +125,38 @@
         </legend>
         <div class="govuk-radios">
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="sign-in" name="sign-in" type="radio" value="government-gateway" aria-describedby="sign-in-item-hint">
-            <label class="govuk-label govuk-radios__label" for="sign-in">
-              Individual
+            <input class="govuk-radios__input" id="Individual" value="INDIVIDUAL" name="userType" type="radio" aria-describedby="individual-type-hint">
+            <label class="govuk-label govuk-radios__label" for="Individual" data-type="individual">
+              <b>Individual</b>
             </label>
             <details>
-              <summary >What dummy data is generated?</summary>
-              <div class="panel panel-border-narrow">
+              <summary class="govuk-summary-text">What dummy data is generated?</summary>
+              <div class="govuk-inset-text">
                 <p class="govuk-body">Creates a test user with a:</p>
-                <ul class="list list-bullet">
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>User ID</li>
+                  <li>Password</li>
+                  @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                    <li>@field.name</li>
+                  }
+                </ul>
+                <p class="govuk-body">
+                  Enrols them for all services available through the relevant 
+                  <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.
+                </p>
+              </div>
+            </details>
+          </div>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="sign-in-2" name="sign-in" type="radio" value="govuk-verify" aria-describedby="sign-in-2-item-hint">
+            <label class="govuk-label govuk-radios__label" for="sign-in-2">
+              <b>Organisation</b>
+            </label>
+            <details>
+              <summary class="govuk-summary-text">What dummy data is generated?</summary>
+              <div class="govuk-inset-text">
+                <p class="govuk-body">Creates a test user with a:</p>
+                <ul class="govuk-list govuk-list--bullet">
                   <li>User ID</li>
                   <li>Password</li>
                   @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
@@ -141,19 +165,10 @@
                 </ul>
                 <p class="govuk-body">
                   Enrols them for all services available through the relevant 
-                  <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.
+                  <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.
                 </p>
               </div>
             </details>
-          </div>
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="sign-in-2" name="sign-in" type="radio" value="govuk-verify" aria-describedby="sign-in-2-item-hint">
-            <label class="govuk-label govuk-radios__label" for="sign-in-2">
-              Organisation
-            </label>
-            <div id="sign-in-2-item-hint" class="govuk-hint govuk-radios__hint">
-              You’ll have an account if you’ve already proved your identity with either Barclays, CitizenSafe, Digidentity, Experian, Post Office, Royal Mail or SecureIdentity.
-            </div>
           </div>
         </div>
     

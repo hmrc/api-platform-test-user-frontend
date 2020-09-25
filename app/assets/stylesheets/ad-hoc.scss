@@ -14,6 +14,27 @@
     }
 }
 
+.govuk-summary-text {
+  color:#1d70b8;
+  &:hover {
+    color: #003078;
+    cursor: pointer;
+  }
+}
+
+.govuk-body {
+  &--word-wrap {
+    word-wrap:break-word;
+  }
+}
+
+.govuk-list {
+  &--no-style {
+    list-style: none;
+    padding-left: 0;
+  }
+}
+
 .beta-banner .phase-tag {
     background-color: #005ea5;
 }

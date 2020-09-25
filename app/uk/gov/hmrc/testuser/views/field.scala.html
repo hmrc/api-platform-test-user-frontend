@@ -17,8 +17,8 @@
 @import uk.gov.hmrc.testuser.models.Field
 @(field: Field)
 
-<div class="form-group">
-    <p class="govuk-body" class="form-label-bold" id="@field.key.toLowerCase-label"><b>@field.label</b></p>
-    <p class="govuk-body" data-@field.key.toLowerCase>@field.value</p>
-</div>
+<li>
+  <p class="govuk-body" class="form-label-bold" id="@field.key.toLowerCase-label"><b>@field.label</b></p>
+  <p class="govuk-body govuk-body--word-wrap" data-@field.key.toLowerCase>@field.value</p>
+</li>
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
