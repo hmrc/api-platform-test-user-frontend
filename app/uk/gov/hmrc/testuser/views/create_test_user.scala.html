@@ -30,10 +30,10 @@
 
 @titleError = { @if(form.errors.nonEmpty) {Error: } else {}}
 
-@govUkWrapper(pageTitle = Some("Test"), navLinks = navLinks) {
+@govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub"), navLinks = navLinks) {
   @println(s"ORANGE ******* + $navLinks")
-  @errorSummary(form)
   <h1 class="govuk-heading-xl">Create a test user</h1>
+  @errorSummary(form)
   <p class="govuk-body">
     A test user is a dummy Government Gateway user ID used for <a class="govuk-link" href="api-documentation/docs/testing">testing in the sandbox</a>.
     This includes granting authority to your software to interact with our <a class="govuk-link" href="api-documentation/docs/authorisation/user-restricted-endpoints">user-restricted endpoints</a>.
@@ -60,69 +60,14 @@
 
   @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
     @helper.CSRF.formField
-    <!-- <div class="form-group">
-      <fieldset id="userType" class="inline @if(form.errors("userType").nonEmpty) {form-group-error}">
-        <legend>
-          <h2 class="heading-large">Choose a type of test user</h2>
-        </legend>
-        @fieldError(form.errors, "userType")
-
-        <div class="multiple-choice">
-          <input type="radio" name="userType" id="Individual" value="INDIVIDUAL" aria-describedby="individualTypeHint"/>
-          <label for="Individual" data-type="individual">
-            <strong class="bold">Individual</strong>
-          </label>
-          <details>
-            <summary>What dummy data is generated?</summary>
-            <div class="panel panel-border-narrow">
-              <p class="govuk-body">Creates a test user with a:</p>
-              <ul class="list list-bullet">
-                <li>User ID</li>
-                <li>Password</li>
-                @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
-                  <li>@field.name</li>
-                }
-              </ul>
-              <p class="govuk-body">
-                Enrols them for all services available through the relevant 
-                <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-individual_post_accordion">Create Test User API endpoint</a>.
-              </p>
-            </div>
-          </details>
-        </div>
-        <div class="multiple-choice">
-          <input type="radio" name="userType" id="Organisation" value="ORGANISATION" aria-describedby="organisationTypeHint"/>
-          <label for="Organisation" data-type="organisation">
-            <strong class="bold">Organisation</strong>
-          </label>
-          <details>
-            <summary >What dummy data is generated?</summary>
-            <div class="panel panel-border-narrow">
-              <p class="govuk-body">Creates a test user with a:</p>
-              <ul class="list list-bullet">
-                <li>User ID</li>
-                <li>Password</li>
-                @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
-                  <li>@field.name</li>
-                }
-              </ul>
-              <p class="govuk-body">
-                Enrols them for all services available through the relevant 
-                <a href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">Create Test User API endpoint</a>.
-              </p>
-            </div>
-          </details>
-        </div>
-      </fieldset>
-    </div> -->
-
-    <div class="govuk-form-group">
-      <fieldset class="govuk-fieldset" aria-describedby="sign-in-hint">
+    <div class="govuk-form-group @if(form.errors("userType").nonEmpty) {govuk-form-group--error}">
+      <fieldset class="govuk-fieldset" aria-describedby="sign-in-hint"></fieldset>
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h2 class="govuk-fieldset__heading">
             Choose a type of test user
           </h2>
         </legend>
+        @fieldError(form.errors, "userType")
         <div class="govuk-radios">
           <div class="govuk-radios__item">
             <input class="govuk-radios__input" id="Individual" value="INDIVIDUAL" name="userType" type="radio" aria-describedby="individual-type-hint">
@@ -148,8 +93,8 @@
             </details>
           </div>
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="sign-in-2" name="sign-in" type="radio" value="govuk-verify" aria-describedby="sign-in-2-item-hint">
-            <label class="govuk-label govuk-radios__label" for="sign-in-2">
+            <input class="govuk-radios__input" id="Organisation" value="ORGANISATION" name="userType" type="radio" aria-describedby="organisation-type-hint">
+            <label class="govuk-label govuk-radios__label" for="Organisation" data-type="organisation">
               <b>Organisation</b>
             </label>
             <details>
@@ -171,7 +116,6 @@
             </details>
           </div>
         </div>
-    
       </fieldset>
     </div>
 
