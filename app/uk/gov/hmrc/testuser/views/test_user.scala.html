@@ -35,7 +35,7 @@
     OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).
   </p>
 
-  <ul class="govuk-list govuk-list--bullet govuk-list--no-style">
+  <ul class="govuk-list govuk-list--bullet govuk-list--no-style" role="list">
     @field(Field("userid", "User ID", user.userId))
     @field(Field("password", "Password", user.password))
     @user.fields.map(f => field(f))
