@@ -52,7 +52,7 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
     navLinks =>
       def validForm(form: CreateUserForm) = {
         UserTypes.from(form.userType.getOrElse("")) match {
-          case Some(uType) => testUserService.createUser(uType) map (user => Ok(new test_user(govUkWrapper)(navLinks, user)))
+          case Some(uType) => testUserService.createUser(uType) map (user => Ok(new test_user(govUkWrapper, helpersReportAProblemLink, appConfig)(navLinks, user)))
           case _ => Future.failed(new BadRequestException("Invalid request"))
         }
       }
