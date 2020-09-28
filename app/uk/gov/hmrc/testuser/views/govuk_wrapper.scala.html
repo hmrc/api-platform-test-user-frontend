@@ -14,9 +14,8 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.testuser.config.AppConfig
 @import uk.gov.hmrc.testuser.views.html.components._
-@import uk.gov.hmrc.testuser.models.{NavLink, StaticNavLinks}
+@import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter}
 @import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
 @import uk.gov.hmrc.testuser.views.FooterLinks
@@ -26,7 +25,6 @@
   siteHeader: siteHeader,
   siteFooter: siteFooter,
   footerLinks: FooterLinks,
-  appConfig: AppConfig
 )
 
 @(
@@ -54,7 +52,6 @@
   <div class="header__menu__proposition--sub-header">
     <ul class="header__menu__proposition-links">
       @headerNavLinks(navLinks, Some("link-style"))
-      @println(s"POMODORO ******* + $navLinks")
     </ul>
   </div>
 }
