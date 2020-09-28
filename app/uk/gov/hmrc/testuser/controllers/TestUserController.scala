@@ -45,20 +45,20 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
 
   def showCreateUserPage() = headerNavigation { implicit request =>
     navLinks =>
-      Future.successful(Ok(new create_test_user(govUkWrapper, helpersReportAProblemLink, appConfig)(navLinks, CreateUserForm.form)))
+      Future.successful(Ok(new create_test_user(govUkWrapper)(navLinks, CreateUserForm.form)))
   }
 
   def createUser() = headerNavigation { implicit request =>
     navLinks =>
       def validForm(form: CreateUserForm) = {
         UserTypes.from(form.userType.getOrElse("")) match {
-          case Some(uType) => testUserService.createUser(uType) map (user => Ok(new test_user(govUkWrapper, helpersReportAProblemLink, appConfig)(navLinks, user)))
+          case Some(uType) => testUserService.createUser(uType) map (user => Ok(new test_user(govUkWrapper)(navLinks, user)))
           case _ => Future.failed(new BadRequestException("Invalid request"))
         }
       }
 
       def invalidForm(invalidForm: Form[CreateUserForm]) = {
-        Future.successful(BadRequest(new create_test_user(govUkWrapper, helpersReportAProblemLink, appConfig)(navLinks, invalidForm)))
+        Future.successful(BadRequest(new create_test_user(govUkWrapper)(navLinks, invalidForm)))
       }
 
       CreateUserForm.form.bindFromRequest().fold(invalidForm, validForm)
