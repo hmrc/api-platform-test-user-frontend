@@ -21,9 +21,11 @@
 @import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 @import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 
-@this(
-  govUkWrapper: govuk_wrapper
-)
+@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+@import uk.gov.hmrc.testuser.wiring.AppConfig
+
+@this(govUkWrapper: govuk_wrapper, helpersReportAProblemLink: ReportAProblemLink, appConfig: AppConfig)
+
 
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages)
 
@@ -114,6 +116,8 @@
         </div>
       </fieldset>
     </div>
+
+    @{helpersReportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
     <button id="submit" class="govuk-button" data-module="govuk-button" type="submit">Create</button>
   }

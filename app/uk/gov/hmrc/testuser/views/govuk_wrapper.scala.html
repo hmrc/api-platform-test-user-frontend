@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.testuser.config.AppConfig
 @import uk.gov.hmrc.testuser.views.html.components._
 @import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter}
-@import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 @import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
 @import uk.gov.hmrc.testuser.views.FooterLinks
 
@@ -27,7 +25,6 @@
   siteHeader: siteHeader,
   siteFooter: siteFooter,
   footerLinks: FooterLinks,
-  appConfig: AppConfig
 )
 
 @(
@@ -62,8 +59,6 @@
 @footerBlock = {
   @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
-
-@getHelpForm = @{helpersReportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @govukLayout(
   pageTitle = pageTitle,
