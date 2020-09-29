@@ -1,6 +1,7 @@
 # microservice specific routes
 
 ->         /govuk-frontend                      govuk.Routes
+->         /hmrc-frontend                       hmrcfrontend.Routes
 
 GET        /                uk.gov.hmrc.testuser.controllers.TestUserController.showCreateUserPage()
 

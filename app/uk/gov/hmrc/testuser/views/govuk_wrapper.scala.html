@@ -14,9 +14,8 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.testuser.views.html.components._
 @import uk.gov.hmrc.testuser.models.NavLink
-@import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter}
+@import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter, siteHelper}
 @import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
 @import uk.gov.hmrc.testuser.views.FooterLinks
 
@@ -24,7 +23,8 @@
   govukLayout: GovukLayout,
   siteHeader: siteHeader,
   siteFooter: siteFooter,
-  footerLinks: FooterLinks,
+  siteHelper: siteHelper,
+  footerLinks: FooterLinks
 )
 
 @(
@@ -56,6 +56,11 @@
   </div>
 }
 
+@content = {
+  @contentBlock
+  @siteHelper()
+}
+
 @footerBlock = {
   @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
@@ -68,4 +73,4 @@
   scriptsBlock = Some(scripts),
   headerBlock = Some(siteHeader()),
   footerBlock = Some(footerBlock)
-)(contentBlock)
+)(content)
