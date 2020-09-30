@@ -56,7 +56,7 @@
   @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
     @helper.CSRF.formField
     <div class="govuk-form-group @if(form.errors("userType").nonEmpty) {govuk-form-group--error}">
-      <fieldset class="govuk-fieldset" aria-describedby="sign-in-hint"></fieldset>
+      <fieldset id="userType" class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
           <h2 class="govuk-fieldset__heading">
             Choose a type of test user
@@ -69,7 +69,7 @@
             <label class="govuk-label govuk-radios__label" for="Individual" data-type="individual">
               <b>Individual</b>
             </label>
-            <details>
+            <details id="individual-type-hint">
               <summary class="govuk-summary-text">What dummy data is generated?</summary>
               <div class="govuk-inset-text">
                 <p class="govuk-body">Creates a test user with a:</p>
@@ -92,7 +92,7 @@
             <label class="govuk-label govuk-radios__label" for="Organisation" data-type="organisation">
               <b>Organisation</b>
             </label>
-            <details>
+            <details id="organisation-type-hint">
               <summary class="govuk-summary-text">What dummy data is generated?</summary>
               <div class="govuk-inset-text">
                 <p class="govuk-body">Creates a test user with a:</p>
