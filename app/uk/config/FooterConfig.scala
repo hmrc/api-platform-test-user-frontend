@@ -20,13 +20,14 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class AppConfig @Inject()(config: Configuration) {
+class FooterConfig @Inject()(config: Configuration) {
 
   lazy val host: String = config.get[String]("host")
+  private lazy val urlFooterConfig = config.underlying.getConfig("urls.footer")
 
-  lazy val cookies: String         = host + config.get[String]("urls.footer.cookies")
-  lazy val privacy: String         = host + config.get[String]("urls.footer.privacy")
-  lazy val termsConditions: String = host + config.get[String]("urls.footer.termsConditions")
-  lazy val govukHelp: String       = config.get[String]("urls.footer.govukHelp")
-  lazy val accessibility: String   = config.get[String]("urls.footer.accessibility")
+  lazy val cookies: String         = urlFooterConfig.getString("cookies")
+  lazy val privacy: String         = urlFooterConfig.getString("privacy")
+  lazy val termsConditions: String = urlFooterConfig.getString("termsConditions")
+  lazy val govukHelp: String       = urlFooterConfig.getString("govukHelp")
+  lazy val accessibility: String   = urlFooterConfig.getString("accessibility")
 }

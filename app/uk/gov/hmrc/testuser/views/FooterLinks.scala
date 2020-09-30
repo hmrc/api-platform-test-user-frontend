@@ -16,13 +16,13 @@
 
 package uk.gov.hmrc.testuser.views
 
-import uk.gov.hmrc.testuser.controllers.routes // DOuble check this after
+import uk.gov.hmrc.testuser.controllers.routes
 import javax.inject.Inject
 import play.api.i18n.Messages
-import uk.gov.hmrc.testuser.config.AppConfig
+import uk.gov.hmrc.testuser.config.FooterConfig
 import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
 
-class FooterLinks @Inject()(appConfig: AppConfig) {
+class FooterLinks @Inject()(appConfig: FooterConfig) {
 
   def cookieLink(implicit messages: Messages): FooterItem = FooterItem(
     Some(messages("footer.cookies")),
