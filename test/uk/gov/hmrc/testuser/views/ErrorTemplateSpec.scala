@@ -23,17 +23,15 @@ import play.api.i18n.Messages
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.views.html.{error_template, govuk_wrapper}
-import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ErrorTemplateSpec @Inject()(govUkWrapper: govuk_wrapper) extends UnitSpec with MockitoSugar with GuiceOneServerPerSuite {
   "Error template page" should {
     "render correctly when given title, heading and message" in {
       val message = "Error Message"
 
-      val config = app.injector.instanceOf[AppConfig]
       val messages = app.injector.instanceOf[Messages]
 
-      val page = new error_template(govUkWrapper).render("", "", message, FakeRequest(), messages, config)
+      val page = new error_template(govUkWrapper).render("", "", message, FakeRequest(), messages)
 
       page.body should include(message)
     }

@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.testuser.models.TestUser
 @import uk.gov.hmrc.testuser.models.NavLink
-@import uk.gov.hmrc.testuser.wiring.AppConfig
 @import uk.gov.hmrc.testuser.models.Field
 
 @import uk.gov.hmrc.testuser.views.html.field
@@ -24,32 +23,26 @@
 
 @this(govUkWrapper: govuk_wrapper)
 
-@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages)
 @title = {Generated @user.label.toLowerCase}
 
-@contentHeader = {
-    <h1 class="heading-xlarge">@title</h1>
+@govUkWrapper(Some("Generated Individual  - HMRC Developer Hub - GOV.UK")) {
+  <h1 class="govuk-heading-xl">@title</h1>
+
+  <p class="govuk-body">
+    Use these credentials in the <a class="govuk-link" href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
+    OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).
+  </p>
+
+  <ul class="govuk-list govuk-list--bullet govuk-list--no-style" role="list">
+    @field(Field("userid", "User ID", user.userId))
+    @field(Field("password", "Password", user.password))
+    @user.fields.map(f => field(f))
+  </ul>
+
+  <p class="govuk-body govuk-!-padding-bottom-4">
+    <a class="govuk-link" href="@uk.gov.hmrc.testuser.controllers.routes.TestUserController.showCreateUserPage()">
+      Add a new user
+    </a>
+  </p>
 }
-
-@mainContent = {
-    <div class="grid-row">
-        <div class="column-three-quarters">
-
-            <p>Use these credentials in the <a href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
-                OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).</p>
-
-                @field(Field("userid", "User ID", user.userId))
-                @field(Field("password", "Password", user.password))
-                @user.fields.map(f => field(f))
-
-            <a href="@uk.gov.hmrc.testuser.controllers.routes.TestUserController.showCreateUserPage()">Add a new user</a>
-        </div>
-    </div>
-}
-
-@govUkWrapper(
-    title = title.toString,
-    navLinks = navLinks,
-    contentHeader = Some(contentHeader),
-    mainContent = mainContent
-)

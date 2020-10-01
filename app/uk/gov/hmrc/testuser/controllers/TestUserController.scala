@@ -29,6 +29,7 @@ import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.wiring.AppConfig
 import uk.gov.hmrc.testuser.views.html.{create_test_user, govuk_wrapper, test_user}
+import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,6 +38,7 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
                                    navigationService: NavigationService,
                                    apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
                                    messagesControllerComponents: MessagesControllerComponents,
+                                   helpersReportAProblemLink: ReportAProblemLink,
                                    govUkWrapper: govuk_wrapper)
                                   (implicit val configuration: Configuration, ec: ExecutionContext, appConfig: AppConfig)
   extends FrontendController(messagesControllerComponents) with I18nSupport {
