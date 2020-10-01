@@ -67,7 +67,6 @@ class CreateTestUserSpec extends BaseSpec {
       verifyText("data-sautr", individualSaUtr)
       verifyText("data-nino", individualNino)
       verifyText("data-vrn", vrn)
-      verifyHasLink(userNavigationLinks.head.label)
     }
 
     scenario("Create a test organisation") {
