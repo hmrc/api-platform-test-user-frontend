@@ -18,7 +18,7 @@
 @(navLinks: Seq[NavLink], anchorClass: Option[String] = None)
 
 @for(link <- navLinks) {
-    <li @if(link == navLinks.last)>
+    <li @if(link == navLinks.last) {class=""}>
        <a class="govuk-link" href="@{link.href}" @if(link.openInNewWindow){target="_blank"}>@{link.label}</a>
     </li>
 }
