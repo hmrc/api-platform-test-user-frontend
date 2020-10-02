@@ -43,6 +43,18 @@
     display: none;
 }
 
+// New register & sign in styles
+
+.govuk-auth-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  float: right;
+  &:first-child {
+    padding-right: 15px;
+  }
+}
 
 @media (min-width: 769px) {
   #global-header .header-proposition #proposition-links li {

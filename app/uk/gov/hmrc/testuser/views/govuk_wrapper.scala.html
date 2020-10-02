@@ -49,10 +49,12 @@
 }
 
 @beforeContentBlock = {
-  <div class="header__menu__proposition--sub-header">
-    <ul class="header__menu__proposition-links">
-      @headerNavLinks(navLinks, Some("link-style"))
-    </ul>
+  <div class="service-info">
+    <div class="header__menu__proposition--sub-header">
+      <ul class="govuk-auth-links">
+        @headerNavLinks(navLinks, Some("link-style"))
+      </ul>
+    </div>
   </div>
 }
 
