@@ -37,11 +37,12 @@ import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.govuk_wrapper
+import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future.failed
 
-class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, mcc: MessagesControllerComponents)
+class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersReportAProblemLink: ReportAProblemLink, mcc: MessagesControllerComponents)
                                       (implicit val configuration: Configuration, ec: ExecutionContext, appConfig: AppConfig)
   extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
 
@@ -72,6 +73,7 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, mcc: Message
       mockNavigationService,
       mockApiPlatformTestUserConnector,
       mcc,
+      helpersReportAProblemLink,
       govUkWrapper
     )
 

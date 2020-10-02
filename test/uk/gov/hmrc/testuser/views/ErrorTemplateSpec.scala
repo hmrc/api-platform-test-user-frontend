@@ -33,7 +33,7 @@ class ErrorTemplateSpec @Inject()(govUkWrapper: govuk_wrapper) extends UnitSpec 
       val config = app.injector.instanceOf[AppConfig]
       val messages = app.injector.instanceOf[Messages]
 
-      val page = new error_template(govUkWrapper).render("", "", message, FakeRequest(), messages, config)
+      val page = new error_template(govUkWrapper).render("", "", message, FakeRequest(), messages)
 
       page.body should include(message)
     }
