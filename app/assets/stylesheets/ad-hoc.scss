@@ -51,9 +51,10 @@
   display: flex;
   flex-direction: row;
   float: right;
-  &:first-child {
-    padding-right: 15px;
-  }
+}
+
+.govuk-auth-links > *:first-child {
+  padding-right: 15px;
 }
 
 @media (min-width: 769px) {
