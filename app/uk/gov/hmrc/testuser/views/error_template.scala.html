@@ -20,7 +20,7 @@
 
 @(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
 
-@govuk_wrapper(Some("Tab Title")) {
+@govuk_wrapper(Some(pageTitle)) {
 
   <h1 class="govuk-heading-xl">@heading</h1>
 
