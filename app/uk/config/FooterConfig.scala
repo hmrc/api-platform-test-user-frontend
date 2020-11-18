@@ -22,7 +22,6 @@ import play.api.Configuration
 @Singleton
 class FooterConfig @Inject()(config: Configuration) {
 
-  lazy val host: String = config.get[String]("host")
   private lazy val urlFooterConfig = config.underlying.getConfig("urls.footer")
 
   lazy val cookies: String         = urlFooterConfig.getString("cookies")
