@@ -26,7 +26,7 @@
 
 @(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages)
 
-@govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub"), navLinks = navLinks) {
+@govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub - GOV.UK"), navLinks = navLinks) {
   <h1 class="govuk-heading-xl">Create a test user</h1>
   @errorSummary(form)
   <p class="govuk-body">
