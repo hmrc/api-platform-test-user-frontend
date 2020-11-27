@@ -32,7 +32,6 @@ trait AppConfig {
 
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
-  val platformFrontendHost: String
 }
 
 class AppConfigImpl @Inject()(config: ServicesConfig) extends AppConfig {
@@ -46,5 +45,4 @@ class AppConfigImpl @Inject()(config: ServicesConfig) extends AppConfig {
 
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  val platformFrontendHost = config.getString("platform.frontend.host")
 }
