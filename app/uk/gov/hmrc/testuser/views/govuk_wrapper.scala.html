@@ -18,13 +18,15 @@
 @import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter, siteHelper}
 @import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
 @import uk.gov.hmrc.testuser.views.FooterLinks
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
 
 @this(
   govukLayout: GovukLayout,
   siteHeader: siteHeader,
   siteFooter: siteFooter,
   siteHelper: siteHelper,
-  footerLinks: FooterLinks
+  footerLinks: FooterLinks,
+  hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
 )
 
 @(
@@ -41,6 +43,7 @@
 
 @head = {
   <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' media="screen" rel="stylesheet" type="text/css" />
+  @hmrcTrackingConsentSnippet()
 }
 
 @scripts = {
