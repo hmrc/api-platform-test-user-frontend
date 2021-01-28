@@ -12,8 +12,8 @@ import scala.util.Properties
 
 lazy val appName = "api-platform-test-user-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
-lazy val bootstrapPlayVersion = "1.5.0"
-lazy val playPartialsVersion = "6.9.0-play-26"
+lazy val bootstrapPlayVersion = "2.3.0"
+lazy val playPartialsVersion = "6.11.0-play-26"
 lazy val hmrcTestVersion = "3.9.0-play-26"
 lazy val scalaTestVersion = "3.0.8"
 lazy val pegdownVersion = "1.6.0"
@@ -28,10 +28,10 @@ lazy val compile = Seq(
   "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
   "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
   "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
-  "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-26",
-  "uk.gov.hmrc" %% "play-frontend-govuk" % "0.49.0-play-26",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.26.0-play-26"
+  "uk.gov.hmrc" %% "govuk-template" % "5.61.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "8.21.0-play-26",
+  "uk.gov.hmrc" %% "play-frontend-govuk" % "0.60.0-play-26",
+  "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.38.0-play-26"
 )
 
 lazy val test = Seq(
