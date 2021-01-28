@@ -9,13 +9,12 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 import scala.util.Properties
+import bloop.integrations.sbt.BloopDefaults
 
 lazy val appName = "api-platform-test-user-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val bootstrapPlayVersion = "2.3.0"
 lazy val playPartialsVersion = "6.11.0-play-26"
-lazy val hmrcTestVersion = "3.9.0-play-26"
-lazy val scalaTestVersion = "3.0.8"
 lazy val pegdownVersion = "1.6.0"
 lazy val scalaTestPlusVersion = "3.1.3"
 lazy val wiremockVersion = "2.25.1"
@@ -35,16 +34,18 @@ lazy val compile = Seq(
 )
 
 lazy val test = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % hmrcTestVersion % scope,
-  "org.scalatest" %% "scalatest" % scalaTestVersion % scope,
   "org.pegdown" % "pegdown" % pegdownVersion % scope,
   "org.jsoup" % "jsoup" % "1.8.1" % scope,
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
-  "org.mockito" % "mockito-core" % mockitoVersion % scope,
   "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope,
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % "test,it",
-  "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0"
+  // "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
+  // "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
+
+  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % scope,
+  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59" % scope,
+  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59" % scope,
+  "org.mockito" %% "mockito-scala-scalatest" % "1.7.1" % scope
 )
 
 val jettyVersion = "9.2.24.v20180105"
@@ -77,7 +78,7 @@ lazy val microservice = (project in file("."))
     playSettings,
     scalaSettings,
     publishingSettings,
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= appDependencies,
     dependencyOverrides ++= jettyOverrides,
     retrieveManaged := true,
@@ -103,15 +104,18 @@ lazy val microservice = (project in file("."))
   .settings(
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
+    Test / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
     Test / sourceDirectory := baseDirectory.value / "test"
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .settings(inConfig(IntegrationTest)(BloopDefaults.configSettings))
   .settings(
     IntegrationTest / sourceDirectory := baseDirectory.value / "it",
     IntegrationTest / fork := true,
     IntegrationTest / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "it",
+    IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
     IntegrationTest / testGrouping := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
     addTestReportOption(IntegrationTest, "int-test-reports")
   )

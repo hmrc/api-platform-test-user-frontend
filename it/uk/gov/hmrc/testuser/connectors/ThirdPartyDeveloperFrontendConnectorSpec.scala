@@ -23,20 +23,28 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 
-class ThirdPartyDeveloperFrontendConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
+class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
+  
   trait Setup {
     implicit val hc = HeaderCarrier()
 
     val underTest = new ThirdPartyDeveloperFrontendConnector(
-      fakeApplication.injector.instanceOf[HttpClient],
-      fakeApplication.injector.instanceOf[Configuration],
-      fakeApplication.injector.instanceOf[Environment],
-      fakeApplication.injector.instanceOf[ServicesConfig]
+      app.injector.instanceOf[HttpClient],
+      app.injector.instanceOf[Configuration],
+      app.injector.instanceOf[Environment],
+      app.injector.instanceOf[ServicesConfig]
     ) {
       override lazy val serviceUrl = wireMockUrl
     }

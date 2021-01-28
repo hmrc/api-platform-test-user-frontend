@@ -22,14 +22,21 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.wiring.AppConfig
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 
+class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
-class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
-
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
+  
   private val individualUserId = "individual"
   private val individualPassword = "pwd"
   private val individualSaUtr = "1555369052"
@@ -50,11 +57,11 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     implicit val hc = HeaderCarrier()
 
     val underTest = new ApiPlatformTestUserConnector(
-      fakeApplication.injector.instanceOf[ProxiedHttpClient],
-      fakeApplication.injector.instanceOf[AppConfig],
-      fakeApplication.injector.instanceOf[Configuration],
-      fakeApplication.injector.instanceOf[Environment],
-      fakeApplication.injector.instanceOf[ServicesConfig]
+      app.injector.instanceOf[ProxiedHttpClient],
+      app.injector.instanceOf[AppConfig],
+      app.injector.instanceOf[Configuration],
+      app.injector.instanceOf[Environment],
+      app.injector.instanceOf[ServicesConfig]
     ) {
       override val serviceUrl: String = wireMockUrl
     }

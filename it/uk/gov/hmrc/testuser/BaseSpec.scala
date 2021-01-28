@@ -23,13 +23,13 @@ import uk.gov.hmrc.testuser.helpers.{NavigationSugar, Env}
 import uk.gov.hmrc.testuser.stubs.{ThirdPartyDeveloperFrontendStub, ApiPlatformTestUserStub}
 import org.openqa.selenium.WebDriver
 import org.scalatest._
-import org.scalatestplus.play.OneServerPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with OneServerPerSuite
+trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with GuiceOneAppPerSuite
 with GivenWhenThen with NavigationSugar {
 
-  override lazy val port = 6001
+  // override lazy val port = 6001
   implicit val webDriver: WebDriver = Env.driver
 
   implicit override lazy val app = GuiceApplicationBuilder().configure(Map(

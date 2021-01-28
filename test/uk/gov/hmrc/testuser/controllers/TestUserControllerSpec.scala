@@ -16,20 +16,13 @@
 
 package uk.gov.hmrc.testuser.controllers
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import javax.inject.Inject
 import org.jsoup.Jsoup
-import org.mockito.BDDMockito.given
-import org.mockito.Matchers.{any, refEq}
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneAppPerTest
 import play.api.{Configuration, Logger}
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.wiring.AppConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
@@ -38,13 +31,17 @@ import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+import play.api.test.Helpers._
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.Future.failed
+import scala.concurrent.Future.{successful,failed}
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import akka.stream.Materializer
 
 class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersReportAProblemLink: ReportAProblemLink, mcc: MessagesControllerComponents)
                                       (implicit val configuration: Configuration, ec: ExecutionContext, appConfig: AppConfig)
-  extends UnitSpec with MockitoSugar with GuiceOneAppPerTest with LogSuppressing {
+  extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing {
 
   private val individualFields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
   val individual = TestIndividual("ind-user", "ind-password", individualFields)
@@ -59,7 +56,7 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersRepor
   val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
   trait Setup {
-    implicit val materializer = ActorMaterializer.create(ActorSystem.create())
+    implicit val materializer = app.injector.instanceOf[Materializer]
     private val csrfAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
     val navLinks = Seq(NavLink("sign-in", "http://sign-in"))
     val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(INDIVIDUAL, ORGANISATION)))
@@ -77,18 +74,18 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersRepor
       govUkWrapper,
     )
 
-    given(mockTestUserService.createUser(refEq(INDIVIDUAL))(any[HeaderCarrier]())).willReturn(individual)
-    given(mockTestUserService.createUser(refEq(ORGANISATION))(any[HeaderCarrier]())).willReturn(organisation)
-    given(mockNavigationService.headerNavigation()(any[HeaderCarrier]())).willReturn(navLinks)
+    when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(individual))
+    when(mockTestUserService.createUser(eqTo(ORGANISATION))(*)).thenReturn(successful(organisation))
+    when(mockNavigationService.headerNavigation()(*)).thenReturn(successful(navLinks))
 
-    def execute[T <: play.api.mvc.AnyContent](action: Action[AnyContent], request: FakeRequest[T] = FakeRequest()) = await(csrfAddToken(action)(request))
+    def execute[T <: play.api.mvc.AnyContent](action: Action[AnyContent], request: FakeRequest[T] = FakeRequest()) = csrfAddToken(action)(request)
   }
 
   "showCreateTestUser" should {
     "display the Create test user page" in new Setup {
 
       val result = execute(underTest.showCreateUserPage())
-      val page = bodyOf(result)
+      val page = contentAsString(result)
 
       page should include("Create test user")
 
@@ -102,17 +99,17 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersRepor
 
       val result = execute(underTest.showCreateUserPage())
 
-      bodyOf(result) should include(navLinks.head.label)
+      contentAsString(result) should include(navLinks.head.label)
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
       withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
-        given(mockNavigationService.headerNavigation()(any[HeaderCarrier]()))
-          .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
+        when(mockNavigationService.headerNavigation()(*))
+          .thenReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
 
         val result = execute(underTest.showCreateUserPage())
 
-        bodyOf(result) should (include("Create test user") and not include navLinks.head.label)
+        contentAsString(result) should (include("Create test user") and not include navLinks.head.label)
       }
     }
   }
@@ -123,7 +120,7 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersRepor
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include(individual.userId)
+      contentAsString(result) should include(individual.userId)
     }
 
     "create an organisation when the user type is ORGANISATION" in new Setup {
@@ -131,7 +128,7 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersRepor
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include(organisation.userId)
+      contentAsString(result) should include(organisation.userId)
     }
 
     "display an error message when the user type is not defined" in new Setup {
@@ -139,23 +136,23 @@ class TestUserControllerSpec @Inject()(govUkWrapper: govuk_wrapper, helpersRepor
 
       val result = execute(underTest.createUser(), request)
 
-      bodyOf(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey)(Lang.defaultLang))
+      contentAsString(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey)(Lang.defaultLang))
     }
 
     "display the logged in navigation links" in new Setup {
       val result = execute(underTest.createUser(), individualRequest)
 
-      bodyOf(result) should include(navLinks.head.label)
+      contentAsString(result) should include(navLinks.head.label)
     }
 
     "display the page without the links when retrieving the links fail" in new Setup {
       withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
-        given(mockNavigationService.headerNavigation()(any[HeaderCarrier]()))
-          .willReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
+        when(mockNavigationService.headerNavigation()(*))
+          .thenReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
 
         val result = execute(underTest.createUser(), individualRequest)
 
-        bodyOf(result) should (include(individual.userId) and not include navLinks.head.label)
+        contentAsString(result) should (include(individual.userId) and not include navLinks.head.label)
       }
     }
   }

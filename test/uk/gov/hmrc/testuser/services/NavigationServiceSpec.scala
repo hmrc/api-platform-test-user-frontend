@@ -16,17 +16,15 @@
 
 package uk.gov.hmrc.testuser.services
 
-import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ThirdPartyDeveloperFrontendConnector
 import uk.gov.hmrc.testuser.models.NavLink
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import scala.concurrent.Future.failed
+import scala.concurrent.Future.{successful, failed}
 
-class NavigationServiceSpec extends UnitSpec with MockitoSugar {
+class NavigationServiceSpec extends AsyncHmrcSpec {
 
   trait Setup {
     implicit val hc = HeaderCarrier()
@@ -40,8 +38,8 @@ class NavigationServiceSpec extends UnitSpec with MockitoSugar {
     "return the navigation links" in new Setup {
       val navLinks = Seq(NavLink("sign-in", "/sign-in"))
 
-      given(connector.fetchNavLinks()).willReturn(navLinks)
-      given(configuration.getString("third-party-developer-frontend.host")).willReturn(None)
+      when(connector.fetchNavLinks()(*)).thenReturn(successful(navLinks))
+      when(configuration.getString("third-party-developer-frontend.host")).thenReturn(None)
 
       val result = await(underTest.headerNavigation())
 
@@ -51,8 +49,8 @@ class NavigationServiceSpec extends UnitSpec with MockitoSugar {
     "prefix the links with local environment when it is set" in new Setup {
       val navLinks = Seq(NavLink("sign-in", "/sign-in"))
 
-      given(connector.fetchNavLinks()).willReturn(navLinks)
-      given(configuration.getOptional[String]("third-party-developer-frontend.host")).willReturn(Some("http://localhost:1111"))
+      when(connector.fetchNavLinks()(*)).thenReturn(successful(navLinks))
+      when(configuration.getOptional[String]("third-party-developer-frontend.host")).thenReturn(Some("http://localhost:1111"))
 
       val result = await(underTest.headerNavigation())
 
@@ -61,7 +59,7 @@ class NavigationServiceSpec extends UnitSpec with MockitoSugar {
 
     "fail when the links can not be retrieved" in new Setup {
 
-      given(connector.fetchNavLinks()).willReturn(failed(new RuntimeException("test failure")))
+      when(connector.fetchNavLinks()(*)).thenReturn(failed(new RuntimeException("test failure")))
 
       intercept[RuntimeException]{await(underTest.headerNavigation())}
     }

@@ -20,8 +20,8 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import uk.gov.hmrc.testuser.MockHost
 import org.apache.http.HttpStatus.{SC_CREATED, SC_OK}
 import play.api.libs.json.Json
-import uk.gov.hmrc.testuser.models.{Service, TestIndividual, TestOrganisation}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models.Service
 
 object ApiPlatformTestUserStub extends MockHost(11111) {
 
