@@ -17,7 +17,8 @@ lazy val bootstrapPlayVersion = "2.3.0"
 lazy val playPartialsVersion = "6.11.0-play-26"
 lazy val pegdownVersion = "1.6.0"
 lazy val scalaTestPlusVersion = "3.1.3"
-lazy val wiremockVersion = "2.25.1"
+// lazy val wiremockVersion = "2.25.1"
+lazy val wiremockVersion = "1.58"
 lazy val mockitoVersion = "1.10.19"
 
 lazy val scope: String = "test, it"
@@ -42,30 +43,30 @@ lazy val test = Seq(
   // "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
   // "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
 
-  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % scope,
-  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59" % scope,
-  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59" % scope,
+  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
+  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "2.52.0" % scope,
+  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "2.52.0" % scope,
   "org.mockito" %% "mockito-scala-scalatest" % "1.7.1" % scope
 )
 
-val jettyVersion = "9.2.24.v20180105"
+// val jettyVersion = "9.2.24.v20180105"
 
-val jettyOverrides = Seq(
-  "org.eclipse.jetty" % "jetty-server" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-security" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-continuation" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-xml" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-client" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-http" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-io" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty" % "jetty-util" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty.websocket" % "websocket-api" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty.websocket" % "websocket-common" % jettyVersion % IntegrationTest,
-  "org.eclipse.jetty.websocket" % "websocket-client" % jettyVersion % IntegrationTest
-)
+// val jettyOverrides = Seq(
+//   "org.eclipse.jetty" % "jetty-server" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-security" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-continuation" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-xml" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-client" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-http" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-io" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty" % "jetty-util" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty.websocket" % "websocket-api" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty.websocket" % "websocket-common" % jettyVersion % IntegrationTest,
+//   "org.eclipse.jetty.websocket" % "websocket-client" % jettyVersion % IntegrationTest
+// )
 
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
@@ -80,7 +81,7 @@ lazy val microservice = (project in file("."))
     publishingSettings,
     scalaVersion := "2.12.12",
     libraryDependencies ++= appDependencies,
-    dependencyOverrides ++= jettyOverrides,
+    // dependencyOverrides ++= jettyOverrides,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     parallelExecution in Test := false,

@@ -69,10 +69,19 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
   "createIndividual" should {
     "return a generated individual" in new Setup {
+      println("******** INDIVIDUAL")
+
       val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
 
-      stubFor(post(urlEqualTo("/individuals")).withRequestBody(equalToJson(requestPayload))
-        .willReturn(aResponse().withStatus(CREATED).withBody(jsonTestIndividual)))
+      stubFor(
+        post(urlEqualTo("/individuals"))
+        .withRequestBody(equalToJson(requestPayload))
+        .willReturn(
+          aResponse()
+          .withStatus(CREATED)
+          .withBody(jsonTestIndividual)
+        )
+      )
 
       val result = await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
@@ -83,8 +92,13 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     }
 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
-
-      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(OK)))
+      stubFor(
+        post(urlEqualTo("/individuals"))
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+        )
+      )
 
       intercept[RuntimeException](await(underTest.createIndividual(Seq( "national-insurance", "self-assessment", "mtd-income-tax"))))
     }
@@ -142,8 +156,13 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     }
 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
-
-      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(OK)))
+      stubFor(
+        post(urlEqualTo("/organisations"))
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+        )
+      )
 
       intercept[RuntimeException](await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
     }
@@ -153,7 +172,17 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     "api-platform-test-user returns a 200 OK response" should {
       "return the services from api-platform-test-user" in new Setup {
         val services = Seq(Service("service-1", "Service One", Seq(UserTypes.INDIVIDUAL)))
-        stubFor(get(urlEqualTo("/services")).willReturn(aResponse().withBody(Json.toJson(services).toString()).withStatus(OK)))
+
+        stubFor(
+          get(urlEqualTo("/services"))
+          .willReturn(
+            aResponse()
+            .withBody(
+              Json.toJson(services).toString()
+            )
+            .withStatus(OK)
+          )
+        )
 
         val result = await(underTest.getServices())
 
@@ -163,7 +192,13 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
     "api-platform-test-user returns a response other than 200 OK" should {
       "throw runtime exception" in new Setup {
-        stubFor(get(urlEqualTo("/services")).willReturn(aResponse().withStatus(CREATED)))
+        stubFor(
+          get(urlEqualTo("/services"))
+          .willReturn(
+            aResponse()
+            .withStatus(CREATED)
+          )
+        )
 
         intercept[RuntimeException](await(underTest.getServices()))
       }

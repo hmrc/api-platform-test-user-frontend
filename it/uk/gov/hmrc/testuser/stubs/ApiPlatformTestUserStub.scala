@@ -17,16 +17,16 @@
 package uk.gov.hmrc.testuser.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import uk.gov.hmrc.testuser.MockHost
 import org.apache.http.HttpStatus.{SC_CREATED, SC_OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.Service
 
-object ApiPlatformTestUserStub extends MockHost(11111) {
+object ApiPlatformTestUserStub {
 
   def givenTestIndividualIsGenerated(jsonIndividual: String) = {
-    mock.register(post(urlPathEqualTo("/individuals"))
+    println(s"******** givenTestIndividualIsGenerated jsonIndividual=$jsonIndividual")
+    stubFor(post(urlPathEqualTo("/individuals"))
       .willReturn(aResponse()
         .withStatus(SC_CREATED)
         .withHeader("Content-Type", "application/json")
@@ -34,7 +34,8 @@ object ApiPlatformTestUserStub extends MockHost(11111) {
   }
 
   def givenTestOrganisationIsGenerated(jsonOrganisation: String) = {
-    mock.register(post(urlPathEqualTo("/organisations"))
+    println(s"******** givenTestOrganisationIsGenerated jsonOrganisation=$jsonOrganisation")
+    stubFor(post(urlPathEqualTo("/organisations"))
       .willReturn(aResponse()
         .withStatus(SC_CREATED)
         .withHeader("Content-Type", "application/json")
@@ -42,7 +43,8 @@ object ApiPlatformTestUserStub extends MockHost(11111) {
   }
 
   def givenTheServicesEndpointReturnsServices(services: Seq[Service]) = {
-    mock.register(get(urlPathEqualTo("/services"))
+    println(s"******** givenTheServicesEndpointReturnsServices services=$services")
+    stubFor(get(urlPathEqualTo("/services"))
     .willReturn(aResponse()
       .withStatus(SC_OK)
       .withHeader("Content-Type", "application/json")
