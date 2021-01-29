@@ -32,8 +32,8 @@ import scala.concurrent.Future.{successful,failed}
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import akka.stream.Materializer
-import uk.gov.hmrc.testuser.views.html.test_user
-import uk.gov.hmrc.testuser.views.html.create_test_user
+import uk.gov.hmrc.testuser.views.html.TestUserView
+import uk.gov.hmrc.testuser.views.html.CreateTestUserView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
@@ -59,8 +59,8 @@ class TestUserControllerSpec
     val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(INDIVIDUAL, ORGANISATION)))
 
     val mcc = app.injector.instanceOf[MessagesControllerComponents]
-    val createTestUserView = app.injector.instanceOf[create_test_user]
-    val testUserView = app.injector.instanceOf[test_user]
+    val createTestUserView = app.injector.instanceOf[CreateTestUserView]
+    val testUserView = app.injector.instanceOf[TestUserView]
 
     val mockTestUserService = mock[TestUserService]
     val mockNavigationService = mock[NavigationService]

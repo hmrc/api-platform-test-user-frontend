@@ -19,18 +19,18 @@ package uk.gov.hmrc.testuser.views
 import javax.inject.Inject
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import uk.gov.hmrc.testuser.views.html.{error_template, govuk_wrapper}
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 import uk.gov.hmrc.test.utils.HmrcSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-class ErrorTemplateSpec @Inject()(govUkWrapper: govuk_wrapper) extends HmrcSpec with GuiceOneAppPerSuite {
+class ErrorTemplateSpec @Inject()(errorTemplate: ErrorTemplate) extends HmrcSpec with GuiceOneAppPerSuite {
   "Error template page" should {
     "render correctly when given title, heading and message" in {
       val message = "Error Message"
 
       val messages = app.injector.instanceOf[Messages]
 
-      val page = new error_template(govUkWrapper).render("", "", message, FakeRequest(), messages)
+      val page = errorTemplate.render("", "", message, FakeRequest(), messages)
 
       page.body should include(message)
     }

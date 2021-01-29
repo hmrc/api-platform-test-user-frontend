@@ -38,12 +38,11 @@ import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
-import uk.gov.hmrc.testuser.views.html.error_template
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.{AuthRedirects, HttpAuditEvent}
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
-import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -53,7 +52,7 @@ class ErrorHandler @Inject()(
   val messagesApi: MessagesApi,
   val auditConnector: AuditConnector,
   @Named("appName") val appName: String,
-  govUkWrapper: govuk_wrapper)(implicit val config: Configuration, ec: ExecutionContext)
+  errorTemplate: ErrorTemplate)(implicit val config: Configuration, ec: ExecutionContext)
     extends FrontendErrorHandler with AuthRedirects with ErrorAuditing {
 
   override def onClientError(
@@ -66,7 +65,7 @@ class ErrorHandler @Inject()(
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(
     implicit request: Request[_]) =
-    new error_template(govUkWrapper)(pageTitle, heading, message)
+    errorTemplate(pageTitle, heading, message)
 }
 
 object EventTypes {
