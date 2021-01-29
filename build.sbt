@@ -11,43 +11,9 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import scala.util.Properties
 import bloop.integrations.sbt.BloopDefaults
 
-lazy val appName = "api-platform-test-user-frontend"
-lazy val appDependencies: Seq[ModuleID] = compile ++ test
-lazy val bootstrapPlayVersion = "2.3.0"
-lazy val playPartialsVersion = "6.11.0-play-26"
-lazy val pegdownVersion = "1.6.0"
-lazy val scalaTestPlusVersion = "3.1.3"
-lazy val wiremockVersion = "1.58"
-lazy val mockitoVersion = "1.10.19"
-
-lazy val scope: String = "test, it"
-
-lazy val compile = Seq(
-  ws,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
-  "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
-  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
-  "uk.gov.hmrc" %% "govuk-template" % "5.61.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.21.0-play-26",
-  "uk.gov.hmrc" %% "play-frontend-govuk" % "0.60.0-play-26",
-  "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.38.0-play-26"
-)
-
-lazy val test = Seq(
-  "org.pegdown" % "pegdown" % pegdownVersion % scope,
-  "org.jsoup" % "jsoup" % "1.8.1" % scope,
-  "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-  "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
-  "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope,
-
-  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % scope,
-  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59" % scope,
-  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59" % scope,
-  "org.mockito" %% "mockito-scala-scalatest" % "1.7.1" % scope
-)
-
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
+lazy val appName = "api-platform-test-user-frontend"
 
 lazy val microservice = (project in file("."))
   .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
@@ -58,18 +24,19 @@ lazy val microservice = (project in file("."))
     scalaSettings,
     publishingSettings,
     scalaVersion := "2.12.12",
-    libraryDependencies ++= appDependencies,
+    libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     parallelExecution in Test := false,
     fork in Test := false,
     majorVersion := 0,
-    scoverageSettings,
     resolvers ++= Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
       Resolver.jcenterRepo
     )
   )
+  .settings(SilencerSettings(): _*)
+  .settings(ScoverageSettings(): _*)
   .settings(
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
@@ -83,6 +50,7 @@ lazy val microservice = (project in file("."))
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
     Test / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
+    Test / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
     Test / sourceDirectory := baseDirectory.value / "test"
   )
   .configs(IntegrationTest)
@@ -94,6 +62,7 @@ lazy val microservice = (project in file("."))
     IntegrationTest / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
     IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "it",
     IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
+    IntegrationTest / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
     IntegrationTest / testGrouping := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
     addTestReportOption(IntegrationTest, "int-test-reports")
   )
@@ -109,22 +78,3 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
       )
     )
   }
-
-lazy val scoverageSettings = {
-  import scoverage.ScoverageKeys
-  Seq(
-    ScoverageKeys.coverageMinimum := 80.00,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true,
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;" +
-      ".*definition.*;" +
-      "prod.*;" +
-      "testOnlyDoNotUseInAppConf.*;" +
-      "app.*;" +
-      "uk.gov.hmrc.BuildInfo;controllers.javascript.*;" +
-      "uk.gov.hmrc.testuser.FrontendModule;" +
-      "uk.gov.hmrc.testuser.controllers.javascript.*;" +
-      "uk.gov.hmrc.testuser.controllers.FormKeys;" +
-      "uk.gov.hmrc.testuser.ErrorHandler"
-  )
-}

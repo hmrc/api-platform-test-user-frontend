@@ -37,6 +37,7 @@ import uk.gov.hmrc.testuser.views.html.CreateTestUserView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
+import play.api.Logger
 
 class TestUserControllerSpec
   extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing {
@@ -104,14 +105,14 @@ class TestUserControllerSpec
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
-      // withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
+    withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
         when(mockNavigationService.headerNavigation()(*))
           .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
         val result = execute(underTest.showCreateUserPage())
 
         contentAsString(result) should (include("Create test user") and not include navLinks.head.label)
-      // }
+      }
     }
   }
 
@@ -151,7 +152,7 @@ class TestUserControllerSpec
     "display the page without the links when retrieving the links fail" in new Setup {
       val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
-      // withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
+      withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
         when(mockNavigationService.headerNavigation()(*))
           .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
@@ -159,6 +160,6 @@ class TestUserControllerSpec
 
         contentAsString(result) should (include(individual.userId) and not include navLinks.head.label)
       }
-    // }
+    }
   }
 }

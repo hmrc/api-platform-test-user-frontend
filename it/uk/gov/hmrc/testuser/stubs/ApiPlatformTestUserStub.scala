@@ -25,7 +25,6 @@ import uk.gov.hmrc.testuser.models.Service
 object ApiPlatformTestUserStub {
 
   def givenTestIndividualIsGenerated(jsonIndividual: String) = {
-    println(s"******** givenTestIndividualIsGenerated jsonIndividual=$jsonIndividual")
     stubFor(post(urlPathEqualTo("/individuals"))
       .willReturn(aResponse()
         .withStatus(SC_CREATED)
@@ -34,7 +33,6 @@ object ApiPlatformTestUserStub {
   }
 
   def givenTestOrganisationIsGenerated(jsonOrganisation: String) = {
-    println(s"******** givenTestOrganisationIsGenerated jsonOrganisation=$jsonOrganisation")
     stubFor(post(urlPathEqualTo("/organisations"))
       .willReturn(aResponse()
         .withStatus(SC_CREATED)
@@ -43,7 +41,6 @@ object ApiPlatformTestUserStub {
   }
 
   def givenTheServicesEndpointReturnsServices(services: Seq[Service]) = {
-    println(s"******** givenTheServicesEndpointReturnsServices services=$services")
     stubFor(get(urlPathEqualTo("/services"))
     .willReturn(aResponse()
       .withStatus(SC_OK)

@@ -69,8 +69,6 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
   "createIndividual" should {
     "return a generated individual" in new Setup {
-      println("******** INDIVIDUAL")
-
       val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
 
       stubFor(
