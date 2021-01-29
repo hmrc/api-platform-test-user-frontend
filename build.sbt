@@ -17,7 +17,6 @@ lazy val bootstrapPlayVersion = "2.3.0"
 lazy val playPartialsVersion = "6.11.0-play-26"
 lazy val pegdownVersion = "1.6.0"
 lazy val scalaTestPlusVersion = "3.1.3"
-// lazy val wiremockVersion = "2.25.1"
 lazy val wiremockVersion = "1.58"
 lazy val mockitoVersion = "1.10.19"
 
@@ -40,12 +39,10 @@ lazy val test = Seq(
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
   "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope,
-  // "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
-  // "org.seleniumhq.selenium" % "selenium-htmlunit-driver" % "2.52.0" % scope,
 
-  "org.seleniumhq.selenium" % "selenium-java" % "2.53.1" % scope,
-  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "2.52.0" % scope,
-  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "2.52.0" % scope,
+  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % scope,
+  "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59" % scope,
+  "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59" % scope,
   "org.mockito" %% "mockito-scala-scalatest" % "1.7.1" % scope
 )
 
@@ -62,7 +59,6 @@ lazy val microservice = (project in file("."))
     publishingSettings,
     scalaVersion := "2.12.12",
     libraryDependencies ++= appDependencies,
-    // dependencyOverrides ++= jettyOverrides,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     parallelExecution in Test := false,

@@ -24,6 +24,8 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
 
+import uk.gov.hmrc.http.HttpReads.Implicits._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

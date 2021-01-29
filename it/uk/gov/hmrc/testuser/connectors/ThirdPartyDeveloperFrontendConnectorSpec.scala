@@ -17,10 +17,9 @@
 package uk.gov.hmrc.testuser.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.http.Status.OK
+import play.api.http.Status._
 import play.api.libs.json.Json.{stringify, toJson}
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.testuser.models.JsonFormatters._
@@ -29,6 +28,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import uk.gov.hmrc.http.UpstreamErrorResponse
+import uk.gov.hmrc.http.HeaderCarrier
 
 class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
@@ -62,9 +63,11 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with Wiremo
     }
 
     "fail when third-party-developer-frontend return an error" in new Setup {
-      stubFor(get(urlEqualTo("/developer/user-navlinks")).willReturn(aResponse().withStatus(500)))
+      stubFor(get(urlEqualTo("/developer/user-navlinks")).willReturn(aResponse().withStatus(INTERNAL_SERVER_ERROR)))
 
-      intercept[Upstream5xxResponse](await(underTest.fetchNavLinks()))
+      intercept[UpstreamErrorResponse](
+        await(underTest.fetchNavLinks())
+      ).statusCode shouldBe INTERNAL_SERVER_ERROR
     }
   }
 }

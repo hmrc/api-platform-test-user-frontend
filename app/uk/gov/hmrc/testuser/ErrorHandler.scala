@@ -34,11 +34,9 @@ package uk.gov.hmrc.testuser
 
 import com.google.inject.name.Named
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.{Messages, MessagesApi}
-import play.api.mvc.Results._
+import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.{Configuration, Environment, Mode}
-import uk.gov.hmrc.auth.core.{InsufficientEnrolments, NoActiveSession}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
 import uk.gov.hmrc.testuser.views.html.error_template
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -46,7 +44,6 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.{AuthRedirects, HttpAuditEvent}
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 import uk.gov.hmrc.testuser.views.html.govuk_wrapper
-import uk.gov.hmrc.testuser.wiring.AppConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -56,7 +53,7 @@ class ErrorHandler @Inject()(
   val messagesApi: MessagesApi,
   val auditConnector: AuditConnector,
   @Named("appName") val appName: String,
-  govUkWrapper: govuk_wrapper)(implicit val config: Configuration, appConfig: AppConfig, ec: ExecutionContext)
+  govUkWrapper: govuk_wrapper)(implicit val config: Configuration, ec: ExecutionContext)
     extends FrontendErrorHandler with AuthRedirects with ErrorAuditing {
 
   override def onClientError(

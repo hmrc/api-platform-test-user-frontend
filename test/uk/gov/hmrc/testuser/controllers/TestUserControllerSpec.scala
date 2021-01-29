@@ -17,11 +17,9 @@
 package uk.gov.hmrc.testuser.controllers
 
 import org.jsoup.Jsoup
-import play.api.Logger
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
-import uk.gov.hmrc.http.{HeaderCarrier, Upstream5xxResponse}
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
@@ -38,6 +36,7 @@ import uk.gov.hmrc.testuser.views.html.test_user
 import uk.gov.hmrc.testuser.views.html.create_test_user
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class TestUserControllerSpec
   extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing {
@@ -107,7 +106,7 @@ class TestUserControllerSpec
     "displays the page without the links when retrieving the links fail" in new Setup {
       // withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
         when(mockNavigationService.headerNavigation()(*))
-          .thenReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
+          .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
         val result = execute(underTest.showCreateUserPage())
 
@@ -154,7 +153,7 @@ class TestUserControllerSpec
 
       // withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
         when(mockNavigationService.headerNavigation()(*))
-          .thenReturn(failed(Upstream5xxResponse("expected test error", 500, 500)))
+          .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
         val result = execute(underTest.createUser(), individualRequest)
 

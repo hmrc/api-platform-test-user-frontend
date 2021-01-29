@@ -108,14 +108,8 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     "return a generated organisation" in new Setup {
       private val saUtr = "1555369052"
       private val empRef = "555/EIA000"
-      private val organisationFields = Seq(
-        Field("saUtr", "Self Assessment UTR", saUtr),
-        Field("empRef", "Employer Reference", empRef),
-        Field("ctUtr", "Corporation Tax UTR", "1555369053"),
-        Field("vrn", "VAT Registration Number", "999902541"))
       private val userId = "user"
       private val password = "password"
-      val testOrganisation = TestOrganisation(userId, password, organisationFields)
 
       val requestPayload =
         s"""{

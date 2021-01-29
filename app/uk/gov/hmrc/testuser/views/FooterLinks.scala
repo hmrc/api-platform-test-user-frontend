@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.testuser.views
 
-import uk.gov.hmrc.testuser.controllers.routes
 import javax.inject.Inject
 import play.api.i18n.Messages
 import uk.gov.hmrc.testuser.config.FooterConfig
