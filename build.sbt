@@ -49,25 +49,6 @@ lazy val test = Seq(
   "org.mockito" %% "mockito-scala-scalatest" % "1.7.1" % scope
 )
 
-// val jettyVersion = "9.2.24.v20180105"
-
-// val jettyOverrides = Seq(
-//   "org.eclipse.jetty" % "jetty-server" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-servlet" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-security" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-servlets" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-continuation" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-webapp" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-xml" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-client" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-http" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-io" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty" % "jetty-util" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty.websocket" % "websocket-api" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty.websocket" % "websocket-common" % jettyVersion % IntegrationTest,
-//   "org.eclipse.jetty.websocket" % "websocket-client" % jettyVersion % IntegrationTest
-// )
-
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
@@ -136,7 +117,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
 lazy val scoverageSettings = {
   import scoverage.ScoverageKeys
   Seq(
-    ScoverageKeys.coverageMinimum := 75.00,
+    ScoverageKeys.coverageMinimum := 80.00,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     ScoverageKeys.coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;" +

@@ -40,7 +40,11 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEac
 
   override def newAppForTest(testData: TestData): Application = {
     GuiceApplicationBuilder()
-      .configure("run.mode" -> "Stub")
+      .configure(
+        "run.mode" -> "Stub",
+        "microservice.services.api-platform-test-user.port" -> stubPort,
+        "microservice.services.third-party-developer-frontend.port" -> stubPort
+      )
       .in(Mode.Prod)
       .build()
   }
@@ -59,47 +63,3 @@ trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEac
     WireMock.reset()
   }
 }
-
-// import com.github.tomakehurst.wiremock.WireMockServer
-// import com.github.tomakehurst.wiremock.client.WireMock
-// import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-// import uk.gov.hmrc.testuser.helpers.{NavigationSugar, Env}
-// import uk.gov.hmrc.testuser.stubs.{ThirdPartyDeveloperFrontendStub, ApiPlatformTestUserStub}
-// import org.openqa.selenium.WebDriver
-// import org.scalatest._
-// import play.api.inject.guice.GuiceApplicationBuilder
-// import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-
-// trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with GuiceOneAppPerSuite
-// with GivenWhenThen with NavigationSugar {
-
-//   // override lazy val port = 6001
-//   implicit val webDriver: WebDriver = Env.driver
-
-//   implicit override lazy val app = GuiceApplicationBuilder().configure(Map(
-//         "auditing.enabled" -> false,
-//         "auditing.traceRequests" -> false,
-//         "microservice.services.api-platform-test-user.port" -> ApiPlatformTestUserStub.port,
-//         "microservice.services.third-party-developer-frontend.port" -> ThirdPartyDeveloperFrontendStub.port)).build()
-
-//   val mocks = Seq(ApiPlatformTestUserStub, ThirdPartyDeveloperFrontendStub)
-
-//   override protected def beforeEach(): Unit = {
-//     mocks.foreach(m => if (!m.server.isRunning) m.server.start())
-//   }
-
-//   override protected def afterEach(): Unit = {
-//     webDriver.manage().deleteAllCookies()
-//     mocks.foreach(_.mock.resetMappings())
-//   }
-
-//   override protected def afterAll(): Unit = {
-//     mocks.foreach(_.server.stop())
-//   }
-// }
-
-// case class MockHost(port: Int) {
-//   val server = new WireMockServer(WireMockConfiguration.wireMockConfig().port(port))
-//   val mock = new WireMock("localhost", port)
-//   val url = s"http://localhost:$port"
-// }
