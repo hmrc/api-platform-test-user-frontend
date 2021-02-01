@@ -88,8 +88,8 @@ class CreateTestUserSpec extends BaseSpec {
       clickOnElement(organisationCheckbox)
       clickOnSubmit()
 
-      verifyText("data-userid", organisationId)
       verifyText("data-password", organisationPassword)
+      verifyText("data-userid", organisationId)
       verifyText("data-sautr", organisationSaUtr)
       verifyText("data-ctutr", organisationCtUtr)
       verifyText("data-empref", s"$empRef")

@@ -18,8 +18,8 @@ package uk.gov.hmrc.testuser.helpers
 
 import org.openqa.selenium.{By, WebDriver}
 import org.scalatest.concurrent.Eventually
-import org.scalatest.selenium.WebBrowser
-import org.scalatest.selenium.WebBrowser.{go => goo}
+import org.scalatestplus.selenium.WebBrowser
+import org.scalatestplus.selenium.WebBrowser.{go => goo}
 import org.scalatest.{Assertions, Matchers}
 
 trait NavigationSugar extends WebBrowser with Eventually with Assertions with Matchers {

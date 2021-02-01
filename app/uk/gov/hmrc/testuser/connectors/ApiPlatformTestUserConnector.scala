@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import uk.gov.hmrc.testuser.wiring.AppConfig
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import uk.gov.hmrc.http.UpstreamErrorResponse
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClient,
                                              appConfig: AppConfig,
@@ -68,11 +70,10 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
   }
 
   def getServices()(implicit hc: HeaderCarrier): Future[Seq[Service]] = {
-    httpClient.GET(s"$serviceUrl/services") map { response =>
-      response.status match {
-        case OK => response.json.as[Seq[Service]]
-        case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
-      }
+    httpClient.GET[Either[UpstreamErrorResponse,HttpResponse]](s"$serviceUrl/services") map { 
+      case Right(response) if(response.status == OK)     => response.json.as[Seq[Service]]
+      case Right(response)                               => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+      case Left(UpstreamErrorResponse(body, status,_,_)) => throw new RuntimeException(s"Unexpected response code=${status} message=${body}")
     }
   }
 

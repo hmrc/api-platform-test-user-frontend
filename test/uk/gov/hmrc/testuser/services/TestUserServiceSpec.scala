@@ -16,18 +16,16 @@
 
 package uk.gov.hmrc.testuser.services
 
-import org.mockito.BDDMockito.given
-import org.scalatest.mockito.MockitoSugar
-import uk.gov.hmrc.domain._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes._
 import uk.gov.hmrc.testuser.models.{Field, Service, TestIndividual, TestOrganisation}
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
+import scala.concurrent.Future.successful
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class TestUserServiceSpec extends UnitSpec with MockitoSugar {
+class TestUserServiceSpec extends AsyncHmrcSpec {
 
   private val service1 = "service1"
   private val service2 = "service2"
@@ -45,14 +43,14 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
     val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
     val underTest = new TestUserService(mockApiPlatformTestUserConnector)
 
-    given(mockApiPlatformTestUserConnector.getServices()).willReturn(services)
+    when(mockApiPlatformTestUserConnector.getServices()(*)).thenReturn(successful(services))
   }
 
   "createUser" should {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
       private val fields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
       val individual = TestIndividual("user", "password", fields)
-      given(mockApiPlatformTestUserConnector.createIndividual(Seq(service1, service2))).willReturn(individual)
+      when(mockApiPlatformTestUserConnector.createIndividual(eqTo(Seq(service1, service2)))(*)).thenReturn(successful(individual))
 
       val result = await(underTest.createUser(INDIVIDUAL))
 
@@ -62,7 +60,7 @@ class TestUserServiceSpec extends UnitSpec with MockitoSugar {
     "return a generated organisation when type is ORGANISATION" in new Setup {
       val organisation = TestOrganisation("org-user", "org-password", Seq(Field("saUtr", "Self Assessment UTR", "1555369053")))
 
-      given(mockApiPlatformTestUserConnector.createOrganisation(Seq(service2, service3))).willReturn(organisation)
+      when(mockApiPlatformTestUserConnector.createOrganisation(eqTo(Seq(service2, service3)))(*)).thenReturn(successful(organisation))
 
       val result = await(underTest.createUser(ORGANISATION))
 

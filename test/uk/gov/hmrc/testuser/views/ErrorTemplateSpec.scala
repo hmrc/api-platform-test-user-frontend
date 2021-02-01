@@ -17,21 +17,20 @@
 package uk.gov.hmrc.testuser.views
 
 import javax.inject.Inject
-import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.UnitSpec
-import uk.gov.hmrc.testuser.views.html.{error_template, govuk_wrapper}
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
+import uk.gov.hmrc.test.utils.HmrcSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-class ErrorTemplateSpec @Inject()(govUkWrapper: govuk_wrapper) extends UnitSpec with MockitoSugar with GuiceOneServerPerSuite {
+class ErrorTemplateSpec @Inject()(errorTemplate: ErrorTemplate) extends HmrcSpec with GuiceOneAppPerSuite {
   "Error template page" should {
     "render correctly when given title, heading and message" in {
       val message = "Error Message"
 
       val messages = app.injector.instanceOf[Messages]
 
-      val page = new error_template(govUkWrapper).render("", "", message, FakeRequest(), messages)
+      val page = errorTemplate.render("", "", message, FakeRequest(), messages)
 
       page.body should include(message)
     }

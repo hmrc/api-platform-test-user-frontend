@@ -22,14 +22,21 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.wiring.AppConfig
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+import play.api.Application
+import play.api.inject.guice.GuiceApplicationBuilder
 
+class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
-class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with WithFakeApplication {
-
+  override def fakeApplication(): Application =
+    GuiceApplicationBuilder()
+      .configure(("metrics.jvm", false))
+      .build()
+  
   private val individualUserId = "individual"
   private val individualPassword = "pwd"
   private val individualSaUtr = "1555369052"
@@ -50,11 +57,11 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     implicit val hc = HeaderCarrier()
 
     val underTest = new ApiPlatformTestUserConnector(
-      fakeApplication.injector.instanceOf[ProxiedHttpClient],
-      fakeApplication.injector.instanceOf[AppConfig],
-      fakeApplication.injector.instanceOf[Configuration],
-      fakeApplication.injector.instanceOf[Environment],
-      fakeApplication.injector.instanceOf[ServicesConfig]
+      app.injector.instanceOf[ProxiedHttpClient],
+      app.injector.instanceOf[AppConfig],
+      app.injector.instanceOf[Configuration],
+      app.injector.instanceOf[Environment],
+      app.injector.instanceOf[ServicesConfig]
     ) {
       override val serviceUrl: String = wireMockUrl
     }
@@ -64,8 +71,15 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     "return a generated individual" in new Setup {
       val requestPayload = """{ "serviceNames": [ "national-insurance", "self-assessment", "mtd-income-tax" ] }"""
 
-      stubFor(post(urlEqualTo("/individuals")).withRequestBody(equalToJson(requestPayload))
-        .willReturn(aResponse().withStatus(CREATED).withBody(jsonTestIndividual)))
+      stubFor(
+        post(urlEqualTo("/individuals"))
+        .withRequestBody(equalToJson(requestPayload))
+        .willReturn(
+          aResponse()
+          .withStatus(CREATED)
+          .withBody(jsonTestIndividual)
+        )
+      )
 
       val result = await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
@@ -76,8 +90,13 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     }
 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
-
-      stubFor(post(urlEqualTo("/individuals")).willReturn(aResponse().withStatus(OK)))
+      stubFor(
+        post(urlEqualTo("/individuals"))
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+        )
+      )
 
       intercept[RuntimeException](await(underTest.createIndividual(Seq( "national-insurance", "self-assessment", "mtd-income-tax"))))
     }
@@ -87,14 +106,8 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     "return a generated organisation" in new Setup {
       private val saUtr = "1555369052"
       private val empRef = "555/EIA000"
-      private val organisationFields = Seq(
-        Field("saUtr", "Self Assessment UTR", saUtr),
-        Field("empRef", "Employer Reference", empRef),
-        Field("ctUtr", "Corporation Tax UTR", "1555369053"),
-        Field("vrn", "VAT Registration Number", "999902541"))
       private val userId = "user"
       private val password = "password"
-      val testOrganisation = TestOrganisation(userId, password, organisationFields)
 
       val requestPayload =
         s"""{
@@ -135,8 +148,13 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     }
 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
-
-      stubFor(post(urlEqualTo("/organisations")).willReturn(aResponse().withStatus(OK)))
+      stubFor(
+        post(urlEqualTo("/organisations"))
+        .willReturn(
+          aResponse()
+          .withStatus(OK)
+        )
+      )
 
       intercept[RuntimeException](await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
     }
@@ -146,7 +164,17 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
     "api-platform-test-user returns a 200 OK response" should {
       "return the services from api-platform-test-user" in new Setup {
         val services = Seq(Service("service-1", "Service One", Seq(UserTypes.INDIVIDUAL)))
-        stubFor(get(urlEqualTo("/services")).willReturn(aResponse().withBody(Json.toJson(services).toString()).withStatus(OK)))
+
+        stubFor(
+          get(urlEqualTo("/services"))
+          .willReturn(
+            aResponse()
+            .withBody(
+              Json.toJson(services).toString()
+            )
+            .withStatus(OK)
+          )
+        )
 
         val result = await(underTest.getServices())
 
@@ -156,7 +184,13 @@ class ApiPlatformTestUserConnectorSpec extends UnitSpec with WiremockSugar with 
 
     "api-platform-test-user returns a response other than 200 OK" should {
       "throw runtime exception" in new Setup {
-        stubFor(get(urlEqualTo("/services")).willReturn(aResponse().withStatus(CREATED)))
+        stubFor(
+          get(urlEqualTo("/services"))
+          .willReturn(
+            aResponse()
+            .withStatus(CREATED)
+          )
+        )
 
         intercept[RuntimeException](await(underTest.getServices()))
       }

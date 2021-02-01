@@ -1,10 +1,10 @@
 package uk.gov.hmrc.testuser.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-class TestUserSpec extends UnitSpec {
+class TestUserSpec extends AsyncHmrcSpec {
 
   "Mapping test individual from Json" should {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.testuser.views
 
-import uk.gov.hmrc.testuser.controllers.routes
 import javax.inject.Inject
 import play.api.i18n.Messages
 import uk.gov.hmrc.testuser.config.FooterConfig

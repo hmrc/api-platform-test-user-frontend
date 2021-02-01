@@ -17,16 +17,15 @@
 package uk.gov.hmrc.testuser.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import uk.gov.hmrc.testuser.MockHost
 import play.api.http.Status.OK
 import play.api.libs.json.Json.{stringify, toJson}
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
 
-object ThirdPartyDeveloperFrontendStub extends MockHost(11112) {
+object ThirdPartyDeveloperFrontendStub {
 
   def givenTheUserNavigationLinks(navLinks: Seq[NavLink]) = {
-    mock.register(get(urlPathEqualTo("/developer/user-navlinks"))
+    stubFor(get(urlPathEqualTo("/developer/user-navlinks"))
       .willReturn(aResponse()
         .withStatus(OK)
         .withHeader("Content-Type", "application/json")

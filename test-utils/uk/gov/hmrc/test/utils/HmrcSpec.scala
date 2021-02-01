@@ -1,5 +1,5 @@
-@*
- * Copyright 2020 HM Revenue & Customs
+/*
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,17 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.testuser.views.html.govuk_wrapper
+package uk.gov.hmrc.test.utils
 
-@this(govuk_wrapper: govuk_wrapper)
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
+import org.scalatest.{Matchers, OptionValues, WordSpec}
+import org.scalatestplus.play.WsScalaTestClient
+import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+abstract class HmrcSpec extends WordSpec with Matchers with OptionValues with WsScalaTestClient with MockitoSugar with ArgumentMatchersSugar
 
-@govuk_wrapper(Some(pageTitle)) {
-
-  <h1 class="govuk-heading-xl">@heading</h1>
-
-  <p class="govuk-body">@message</p>
-}
+abstract class AsyncHmrcSpec extends HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}
