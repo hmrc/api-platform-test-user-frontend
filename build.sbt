@@ -29,11 +29,7 @@ lazy val microservice = (project in file("."))
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     parallelExecution in Test := false,
     fork in Test := false,
-    majorVersion := 0,
-    resolvers ++= Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.jcenterRepo
-    )
+    majorVersion := 0
   )
   .settings(SilencerSettings(): _*)
   .settings(ScoverageSettings(): _*)
