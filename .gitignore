@@ -24,3 +24,5 @@ target
 test-result
 tmp
 bin
+
+project/metals.sbt
