@@ -39,7 +39,7 @@ import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
 import uk.gov.hmrc.testuser.views.html.ErrorTemplate
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.{AuthRedirects, HttpAuditEvent}
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
@@ -103,7 +103,7 @@ trait ErrorAuditing extends HttpAuditEvent {
         transactionName,
         request,
         Map(TransactionFailureReason -> ex.getMessage))(
-        HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))))
+        HeaderCarrierConverter.fromRequestAndSession(request, request.session)))
   }
 
   def auditClientError(request: RequestHeader, statusCode: Int, message: String)(
@@ -117,7 +117,7 @@ trait ErrorAuditing extends HttpAuditEvent {
             notFoundError,
             request,
             Map(TransactionFailureReason -> message))(
-            HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))))
+            HeaderCarrierConverter.fromRequestAndSession(request, request.session)))
       case BAD_REQUEST =>
         auditConnector.sendEvent(
           dataEvent(
@@ -125,7 +125,7 @@ trait ErrorAuditing extends HttpAuditEvent {
             badRequestError,
             request,
             Map(TransactionFailureReason -> message))(
-            HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))))
+            HeaderCarrierConverter.fromRequestAndSession(request, request.session)))
       case _ =>
     }
   }
