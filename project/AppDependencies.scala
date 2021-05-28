@@ -6,11 +6,11 @@ object AppDependencies {
   def apply() = appDependencies
 
   lazy val appDependencies: Seq[ModuleID] = compile ++ test
-  lazy val bootstrapPlayVersion = "2.3.0"
+  lazy val bootstrapPlayVersion = "4.0.0"
   lazy val playPartialsVersion = "6.11.0-play-26"
   lazy val pegdownVersion = "1.6.0"
   lazy val scalaTestPlusVersion = "3.1.3"
-  lazy val wiremockVersion = "1.58"
+  lazy val wiremockVersion = "2.27.1"
   lazy val mockitoVersion = "1.10.19"
 
   lazy val scope: String = "test, it"
@@ -31,8 +31,8 @@ object AppDependencies {
     "org.jsoup" % "jsoup" % "1.8.1" % scope,
     "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
     "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
-    "com.github.tomakehurst" % "wiremock" % wiremockVersion % scope,
-
+    "com.github.tomakehurst"  % "wiremock-jre8-standalone"  % wiremockVersion,
+  
     "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % scope,
     "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59" % scope,
     "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59" % scope,

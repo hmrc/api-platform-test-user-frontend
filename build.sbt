@@ -11,12 +11,11 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import scala.util.Properties
 import bloop.integrations.sbt.BloopDefaults
 
-lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val appName = "api-platform-test-user-frontend"
 
 lazy val microservice = (project in file("."))
-  .enablePlugins(Seq(_root_.play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
+  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .settings(
     name := appName,
     defaultSettings(),
