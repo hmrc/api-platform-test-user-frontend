@@ -28,11 +28,14 @@ import uk.gov.hmrc.testuser.helpers.Env
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestData}
 import org.scalatest.matchers.should.Matchers
+import play.api.test.RunningServer
 
 trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with NavigationSugar with GuiceOneServerPerTest {
 
   val stubPort = 11111
   val stubHost = "localhost"
+
+  override protected def newServerForTest(app: Application, testData: TestData): RunningServer = MyTestServerFactory.start(app)
 
   implicit val webDriver: WebDriver = Env.driver
 
