@@ -39,7 +39,7 @@ import play.api.{Configuration, Environment, Logger}
 
 class FrontendModule(val environment: Environment, val configuration: Configuration) extends AbstractModule {
 
-  def configure(): Unit = {
+  override def configure(): Unit = {
     val appName = "api-platform-test-user-frontend"
     Logger(getClass).info(s"Starting microservice : $appName : in mode : ${environment.mode}")
 

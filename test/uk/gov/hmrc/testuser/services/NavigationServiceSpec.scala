@@ -39,7 +39,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec {
       val navLinks = Seq(NavLink("sign-in", "/sign-in"))
 
       when(connector.fetchNavLinks()(*)).thenReturn(successful(navLinks))
-      when(configuration.getString("third-party-developer-frontend.host")).thenReturn(None)
+      when(configuration.getOptional[String]("third-party-developer-frontend.host")).thenReturn(None)
 
       val result = await(underTest.headerNavigation())
 

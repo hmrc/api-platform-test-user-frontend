@@ -20,16 +20,17 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import org.openqa.selenium.WebDriver
-import org.scalatest._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.{Application, Mode}
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
 import uk.gov.hmrc.testuser.helpers.NavigationSugar
 import uk.gov.hmrc.testuser.helpers.Env
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestData}
+import org.scalatest.matchers.should.Matchers
 
-trait BaseSpec extends FeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with NavigationSugar with GuiceOneServerPerTest {
+trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with NavigationSugar with GuiceOneServerPerTest {
 
-  override lazy val port = Env.port
   val stubPort = 11111
   val stubHost = "localhost"
 

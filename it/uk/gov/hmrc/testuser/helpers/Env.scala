@@ -28,7 +28,6 @@ import org.openqa.selenium.firefox.FirefoxDriver
 
 trait Env {
   val driver: WebDriver = createWebDriver
-  lazy val port = 6001
   lazy val windowSize = new Dimension(1024, 800)
 
   lazy val createWebDriver: WebDriver = {

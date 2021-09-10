@@ -35,8 +35,7 @@ lazy val microservice = (project in file("."))
   .settings(
     TwirlKeys.templateImports ++= Seq(
       "play.twirl.api.HtmlFormat",
-      "uk.gov.hmrc.govukfrontend.views.html.components._",
-      "uk.gov.hmrc.govukfrontend.views.html.helpers._"
+      "uk.gov.hmrc.govukfrontend.views.html.components._"
     )
   )
   .configs(Test)
