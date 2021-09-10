@@ -23,7 +23,7 @@ object AppDependencies {
   lazy val test = Seq(
     "uk.gov.hmrc"             %% "bootstrap-test-play-28"       % "5.13.0",
     "org.jsoup"               %  "jsoup"                        % "1.8.1",
-    "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.27.1", // "2.31.0"
+    "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.31.0",
     "org.seleniumhq.selenium" %  "selenium-java"                % "3.141.59",
     "org.seleniumhq.selenium" %  "selenium-firefox-driver"      % "3.141.59",
     "org.seleniumhq.selenium" %  "selenium-chrome-driver"       % "3.141.59",
