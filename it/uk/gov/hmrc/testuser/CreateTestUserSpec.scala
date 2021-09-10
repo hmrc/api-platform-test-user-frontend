@@ -42,9 +42,8 @@ class CreateTestUserSpec extends BaseSpec {
     Service("service1", "Service 1", Seq(UserTypes.INDIVIDUAL)),
     Service("service2", "Service 2", Seq(UserTypes.ORGANISATION)))
 
-  feature("Create a test user") {
-
-    scenario("Create a test individual") {
+  Feature("Create a test user") {
+    Scenario("Create a test individual") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
       givenTestIndividualIsGenerated(
@@ -58,7 +57,7 @@ class CreateTestUserSpec extends BaseSpec {
           |}
         """.stripMargin)
 
-      goOn(CreateTestUserPage)
+      goOn(new CreateTestUserPage(port))
       clickOnElement(individualCheckbox)
       clickOnSubmit()
 
@@ -69,7 +68,7 @@ class CreateTestUserSpec extends BaseSpec {
       verifyText("data-vrn", vrn)
     }
 
-    scenario("Create a test organisation") {
+    Scenario("Create a test organisation") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
       givenTestOrganisationIsGenerated(
@@ -84,7 +83,7 @@ class CreateTestUserSpec extends BaseSpec {
            |}
         """.stripMargin)
 
-      goOn(CreateTestUserPage)
+      goOn(new CreateTestUserPage(port))
       clickOnElement(organisationCheckbox)
       clickOnSubmit()
 

@@ -17,8 +17,8 @@
 package uk.gov.hmrc.testuser.helpers
 
 import org.openqa.selenium.WebDriver
-import org.scalatest._
 import org.scalatestplus.selenium.{Page, WebBrowser}
+import org.scalatest.matchers.should.Matchers
 
 case class Link(href: String, text: String)
 

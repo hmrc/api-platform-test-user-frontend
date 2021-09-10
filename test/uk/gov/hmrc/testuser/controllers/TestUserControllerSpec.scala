@@ -37,10 +37,9 @@ import uk.gov.hmrc.testuser.views.html.CreateTestUserView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
-import play.api.Logger
+import uk.gov.hmrc.testuser.ApplicationLogger
 
-class TestUserControllerSpec
-  extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing {
+class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 
   private val individualFields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
   val individual = TestIndividual("ind-user", "ind-password", individualFields)
@@ -105,7 +104,7 @@ class TestUserControllerSpec
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
-    withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
+      withSuppressedLoggingFrom(logger, "expected test error") { suppressedLogs =>
         when(mockNavigationService.headerNavigation()(*))
           .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
@@ -152,7 +151,7 @@ class TestUserControllerSpec
     "display the page without the links when retrieving the links fail" in new Setup {
       val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
-      withSuppressedLoggingFrom(Logger, "expected test error") { suppressedLogs =>
+      withSuppressedLoggingFrom(logger, "expected test error") { suppressedLogs =>
         when(mockNavigationService.headerNavigation()(*))
           .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 

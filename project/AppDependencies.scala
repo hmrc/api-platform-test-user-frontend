@@ -6,36 +6,28 @@ object AppDependencies {
   def apply() = appDependencies
 
   lazy val appDependencies: Seq[ModuleID] = compile ++ test
-  lazy val bootstrapPlayVersion = "4.0.0"
-  lazy val playPartialsVersion = "6.11.0-play-26"
-  lazy val pegdownVersion = "1.6.0"
-  lazy val scalaTestPlusVersion = "3.1.3"
-  lazy val wiremockVersion = "2.27.1"
-  lazy val mockitoVersion = "1.10.19"
 
   lazy val scope: String = "test, it"
 
   lazy val compile = Seq(
     ws,
-    "uk.gov.hmrc" %% "bootstrap-play-26" % bootstrapPlayVersion,
-    "uk.gov.hmrc" %% "play-partials" % playPartialsVersion,
-    "uk.gov.hmrc" %% "domain" % "5.10.0-play-26",
-    "uk.gov.hmrc" %% "govuk-template" % "5.61.0-play-26",
-    "uk.gov.hmrc" %% "play-ui" % "8.21.0-play-26",
-    "uk.gov.hmrc" %% "play-frontend-govuk" % "0.63.0-play-26",
-    "uk.gov.hmrc" %% "play-frontend-hmrc" % "0.57.0-play-26"
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28"   % "5.13.0",
+    "uk.gov.hmrc"             %% "play-partials"                % "8.2.0-play-28",
+    "uk.gov.hmrc"             %% "domain"                       % "6.2.0-play-28",
+    "uk.gov.hmrc"             %% "govuk-template"               % "5.70.0-play-28",
+    "uk.gov.hmrc"             %% "play-ui"                      % "9.7.0-play-28",
+    "uk.gov.hmrc"             %% "play-frontend-govuk"          % "1.0.0-play-28",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "1.6.0-play-28"
   )
 
   lazy val test = Seq(
-    "org.pegdown" % "pegdown" % pegdownVersion % scope,
-    "org.jsoup" % "jsoup" % "1.8.1" % scope,
-    "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play" % scalaTestPlusVersion % scope,
-    "com.github.tomakehurst"  % "wiremock-jre8-standalone"  % wiremockVersion,
-  
-    "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % scope,
-    "org.seleniumhq.selenium" % "selenium-firefox-driver" % "3.141.59" % scope,
-    "org.seleniumhq.selenium" % "selenium-chrome-driver" % "3.141.59" % scope,
-    "org.mockito" %% "mockito-scala-scalatest" % "1.7.1" % scope
-  )
+    "uk.gov.hmrc"             %% "bootstrap-test-play-28"       % "5.13.0",
+    "org.jsoup"               %  "jsoup"                        % "1.8.1",
+    "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.31.0",
+    "org.seleniumhq.selenium" %  "selenium-java"                % "3.141.59",
+    "org.seleniumhq.selenium" %  "selenium-firefox-driver"      % "3.141.59",
+    "org.seleniumhq.selenium" %  "selenium-chrome-driver"       % "3.141.59",
+    "org.mockito"             %% "mockito-scala-scalatest"      % "1.7.1",
+    "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.36.8"
+  ).map(_ % scope)
 }

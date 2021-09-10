@@ -19,13 +19,13 @@ package uk.gov.hmrc.testuser.pages
 import uk.gov.hmrc.testuser.helpers.WebPage
 import org.openqa.selenium.By
 
-object CreateTestUserPage extends WebPage {
-
-  override val url: String = "http://localhost:6001/api-test-user"
+class CreateTestUserPage(port: Int) extends WebPage {
+  override val url: String = s"http://localhost:$port/api-test-user"
 
   override def isCurrentPage: Boolean = find(cssSelector("h1")).fold(false)(_.text == "Create a test user")
+}
 
+object CreateTestUserPage {
   val individualCheckbox: By = By.id("Individual")
-
   val organisationCheckbox: By = By.id("Organisation")
 }
