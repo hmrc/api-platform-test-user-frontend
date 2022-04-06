@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
 import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 import uk.gov.hmrc.testuser.ApplicationLogger
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,7 +40,8 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
                                    messagesControllerComponents: MessagesControllerComponents,
                                    helpersReportAProblemLink: ReportAProblemLink,
                                    createTestUser: CreateTestUserView,
-                                   testUser: TestUserView)
+                                   testUser: TestUserView,
+                                   config: ApplicationConfig)
                                   (implicit val ec: ExecutionContext)
   extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger {
 

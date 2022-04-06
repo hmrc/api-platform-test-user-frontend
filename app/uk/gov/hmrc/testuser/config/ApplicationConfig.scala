@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,15 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class FooterConfig @Inject()(config: Configuration) {
+class ApplicationConfig @Inject()(config: Configuration) {
 
   private lazy val urlFooterConfig = config.underlying.getConfig("urls.footer")
+  private lazy val feedbackSurveyConfig = config.underlying.getConfig("feedbackBanner.generic")
 
   lazy val cookies: String         = urlFooterConfig.getString("cookies")
   lazy val privacy: String         = urlFooterConfig.getString("privacy")
   lazy val termsConditions: String = urlFooterConfig.getString("termsConditions")
   lazy val govukHelp: String       = urlFooterConfig.getString("govukHelp")
   lazy val accessibility: String   = urlFooterConfig.getString("accessibility")
+  lazy val feedbackSurveyUrl = feedbackSurveyConfig.getString("surveyUrl")
 }

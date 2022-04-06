@@ -28,16 +28,20 @@ import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 import play.api.test.Helpers._
 
-import scala.concurrent.Future.{successful,failed}
+import scala.concurrent.Future.{failed, successful}
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import akka.stream.Materializer
+import org.jsoup.nodes.Document
 import uk.gov.hmrc.testuser.views.html.TestUserView
 import uk.gov.hmrc.testuser.views.html.CreateTestUserView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.testuser.ApplicationLogger
+import uk.gov.hmrc.testuser.config.ApplicationConfig
+
+import scala.collection.JavaConverters.asScalaBufferConverter
 
 class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 
@@ -54,7 +58,10 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
   trait Setup {
     implicit val materializer = app.injector.instanceOf[Materializer]
     private val csrfAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
-    
+
+    val config: ApplicationConfig = mock[ApplicationConfig]
+    when(config.feedbackSurveyUrl).thenReturn("#")
+
     val navLinks = Seq(NavLink("sign-in", "http://sign-in"))
     val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(INDIVIDUAL, ORGANISATION)))
 
@@ -74,18 +81,21 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       mcc,
       app.injector.instanceOf[ReportAProblemLink],
       createTestUserView,
-      testUserView
+      testUserView,
+      config
     )
 
     when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(individual))
     when(mockTestUserService.createUser(eqTo(ORGANISATION))(*)).thenReturn(successful(organisation))
     when(mockNavigationService.headerNavigation()(*)).thenReturn(successful(navLinks))
 
+    def elementExistsById(doc: Document, id: String): Boolean = doc.select(s"#$id").asScala.nonEmpty
+
     def execute[T <: play.api.mvc.AnyContent](action: Action[AnyContent], request: FakeRequest[T] = FakeRequest()) = csrfAddToken(action)(request)
   }
 
   "showCreateTestUser" should {
-    "display the Create test user page" in new Setup {
+    "display the Create test user page with feedback banner" in new Setup {
       val result = execute(underTest.showCreateUserPage())
       val page = contentAsString(result)
 
@@ -95,6 +105,10 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
 
       document.getElementById("Individual").hasAttr("checked") shouldBe false
       document.getElementById("Organisation").hasAttr("checked") shouldBe false
+
+      elementExistsById(document, "feedback") shouldBe true
+      elementExistsById(document, "show-survey") shouldBe true
+      document.getElementById("feedback-title").text() shouldBe "Your feedback helps us improve our service"
     }
 
     "display the logged in navigation links" in new Setup {
@@ -146,6 +160,16 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       val result = execute(underTest.createUser(), individualRequest)
 
       contentAsString(result) should include(navLinks.head.label)
+    }
+
+    "display the feedback banner" in new Setup {
+      val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
+      val page: String = contentAsString(execute(underTest.createUser(), individualRequest))
+      val document = Jsoup.parse(page)
+
+      elementExistsById(document, "feedback") shouldBe true
+      elementExistsById(document, "show-survey") shouldBe true
+      document.getElementById("feedback-title").text() shouldBe "Your feedback helps us improve our service"
     }
 
     "display the page without the links when retrieving the links fail" in new Setup {

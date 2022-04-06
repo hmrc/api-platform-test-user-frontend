@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.testuser
+package uk.gov.hmrc.testuser.models.views
 
-package object controllers {
-  object FormKeys {
-    val createUserTypeNoChoiceKey = "create.user.type.no.choice.field"
-  }
+sealed trait FeedbackBanner {
+  val description: String
+  val surveyUrlKey: String
 }
 
+case object GenericFeedbackBanner extends FeedbackBanner {
+  override val description: String = "Take our survey and answer questions about the service."
+  override val surveyUrlKey: String = "feedbackBanner.generic.surveyUrl"
+}
