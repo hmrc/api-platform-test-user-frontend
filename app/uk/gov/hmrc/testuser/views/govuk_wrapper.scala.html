@@ -32,8 +32,7 @@
         siteHelper: siteHelper,
         footerLinks: FooterLinks,
         hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
-        feedbackBannerView: FeedbackBannerView,
-        config: ApplicationConfig
+        feedbackBannerView: FeedbackBannerView
 )
 @(
         pageTitle: Option[String] = None,
@@ -46,7 +45,7 @@
         bodyEndBlock: Option[Html] = None,
         scriptsBlock: Option[Html] = None,
         feedbackBanner: Option[FeedbackBanner] = None
-)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
 
 @head = {
     <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' media="screen" rel="stylesheet" type="text/css" />
@@ -78,7 +77,7 @@
     <div class="govuk-!-margin-top-8">
     @feedbackBanner match {
         case Some(fb) => {
-            @feedbackBannerView(fb, config)
+            @feedbackBannerView(fb)
         }
         case _ => {}
     }

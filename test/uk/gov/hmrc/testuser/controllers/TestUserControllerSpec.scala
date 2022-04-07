@@ -45,7 +45,7 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 
 class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 
-  private val individualFields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
+  private val individualFields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "", "CC333333C"), Field("vrn", "", "999902541"))
   val individual = TestIndividual("ind-user", "ind-password", individualFields)
 
   private val organisationFields = Seq(
@@ -73,6 +73,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     val mockNavigationService = mock[NavigationService]
     val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
 
+    implicit val appConfig = config
+
     val underTest = new TestUserController(
       app.injector.instanceOf[MessagesApi],
       mockTestUserService,
@@ -81,8 +83,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       mcc,
       app.injector.instanceOf[ReportAProblemLink],
       createTestUserView,
-      testUserView,
-      config
+      testUserView
     )
 
     when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(individual))
@@ -148,7 +149,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
 
     "display an error message when the user type is not defined" in new Setup {
       val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", ""))
-      
+
       val result = execute(underTest.createUser(), request)
 
       contentAsString(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey)(Lang.defaultLang))

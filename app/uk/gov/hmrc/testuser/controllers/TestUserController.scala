@@ -40,13 +40,12 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
                                    messagesControllerComponents: MessagesControllerComponents,
                                    helpersReportAProblemLink: ReportAProblemLink,
                                    createTestUser: CreateTestUserView,
-                                   testUser: TestUserView,
-                                   config: ApplicationConfig)
-                                  (implicit val ec: ExecutionContext)
+                                   testUser: TestUserView)
+                                  (implicit val ec: ExecutionContext, config: ApplicationConfig)
   extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger {
 
   def showCreateUserPage() = headerNavigation { implicit request =>
-    navLinks => 
+    navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
   }
 

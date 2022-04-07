@@ -23,11 +23,11 @@
 @import uk.gov.hmrc.testuser.views.html.includes.FeedbackBannerView
 @import uk.gov.hmrc.testuser.models.views.FeedbackBanner
 @import uk.gov.hmrc.testuser.models.views.GenericFeedbackBanner
+@import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 @this(govUkWrapper: govuk_wrapper, feedbackBannerView: FeedbackBannerView)
 
-
-@(navLinks: Seq[NavLink], user: TestUser, feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages)
+@(navLinks: Seq[NavLink], user: TestUser, feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
 
 @title = {Generated @user.label.toLowerCase}
 
