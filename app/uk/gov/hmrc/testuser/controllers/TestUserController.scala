@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
 import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 import uk.gov.hmrc.testuser.ApplicationLogger
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,11 +41,11 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
                                    helpersReportAProblemLink: ReportAProblemLink,
                                    createTestUser: CreateTestUserView,
                                    testUser: TestUserView)
-                                  (implicit val ec: ExecutionContext)
+                                  (implicit val ec: ExecutionContext, config: ApplicationConfig)
   extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger {
 
   def showCreateUserPage() = headerNavigation { implicit request =>
-    navLinks => 
+    navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
   }
 

@@ -1,81 +1,96 @@
 @*
- * Copyright 2021 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *@
-
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
 @import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.views.html.components.{siteHeader, siteFooter, siteHelper}
 @import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
 @import uk.gov.hmrc.testuser.views.FooterLinks
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Meta
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.{Footer, FooterItem}
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukLayout
+@import uk.gov.hmrc.testuser.views.html.includes.FeedbackBannerView
+@import uk.gov.hmrc.testuser.models.views.FeedbackBanner
+@import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 @this(
-  govukLayout: GovukLayout,
-  siteHeader: siteHeader,
-  siteFooter: siteFooter,
-  siteHelper: siteHelper,
-  footerLinks: FooterLinks,
-  hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
+        govukLayout: GovukLayout,
+        siteHeader: siteHeader,
+        siteFooter: siteFooter,
+        siteHelper: siteHelper,
+        footerLinks: FooterLinks,
+        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+        feedbackBannerView: FeedbackBannerView
 )
-
 @(
-  pageTitle: Option[String] = None,
-  headBlock: Option[Html] = None,
-  headerBlock: Option[Html] = None,
-  beforeContentBlock: Option[Html] = None,
-  navLinks: Seq[NavLink] = Seq.empty,
-  footerBlock: Option[Html] = None,
-  footerItems: Seq[FooterItem] = Seq.empty,
-  bodyEndBlock: Option[Html] = None,
-  scriptsBlock: Option[Html] = None
-)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+        pageTitle: Option[String] = None,
+        headBlock: Option[Html] = None,
+        headerBlock: Option[Html] = None,
+        beforeContentBlock: Option[Html] = None,
+        navLinks: Seq[NavLink] = Seq.empty,
+        footerBlock: Option[Html] = None,
+        footerItems: Seq[FooterItem] = Seq.empty,
+        bodyEndBlock: Option[Html] = None,
+        scriptsBlock: Option[Html] = None,
+        feedbackBanner: Option[FeedbackBanner] = None
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
 
 @head = {
-  <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' media="screen" rel="stylesheet" type="text/css" />
-  @hmrcTrackingConsentSnippet()
+    <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' media="screen" rel="stylesheet" type="text/css" />
+@hmrcTrackingConsentSnippet()
 }
 
 @scripts = {
-  <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-  <script>window.GOVUKFrontend.initAll();</script>
+    <script src='@routes.Assets.versioned("javascripts/feedback.js")' type="text/javascript"></script>
+    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script>window.GOVUKFrontend.initAll();</script>
 }
 
 @beforeContentBlock = {
-  <div class="service-info">
-    <div class="header__menu__proposition--sub-header">
-      <ul class="govuk-auth-links">
-        @headerNavLinks(navLinks, Some("link-style"))
-      </ul>
+    <div class="service-info">
+        <div class="header__menu__proposition--sub-header">
+            <ul class="govuk-auth-links">
+            @headerNavLinks(navLinks, Some("link-style"))
+            </ul>
+        </div>
     </div>
-  </div>
 }
 
 @content = {
-  @contentBlock
-  @siteHelper()
+@contentBlock
+@siteHelper()
 }
 
 @footerBlock = {
-  @siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
+    <div class="govuk-!-margin-top-8">
+    @feedbackBanner match {
+        case Some(fb) => {
+            @feedbackBannerView(fb)
+        }
+        case _ => {}
+    }
+    </div>
+@siteFooter(new Footer(meta = Some(Meta(items = Some(footerLinks.items)))))
 }
 
 @govukLayout(
-  pageTitle = pageTitle,
-  headBlock = Some(head),
-  beforeContentBlock = Some(beforeContentBlock),
-  bodyEndBlock = bodyEndBlock,
-  scriptsBlock = Some(scripts),
-  headerBlock = Some(siteHeader()),
-  footerBlock = Some(footerBlock)
+    pageTitle = pageTitle,
+    headBlock = Some(head),
+    beforeContentBlock = Some(beforeContentBlock),
+    bodyEndBlock = bodyEndBlock,
+    scriptsBlock = Some(scripts),
+    headerBlock = Some(siteHeader()),
+    footerBlock = Some(footerBlock)
 )(content)

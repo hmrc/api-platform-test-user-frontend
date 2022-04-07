@@ -20,13 +20,18 @@
 
 @import uk.gov.hmrc.testuser.views.html.field
 @import uk.gov.hmrc.testuser.views.html.govuk_wrapper
+@import uk.gov.hmrc.testuser.views.html.includes.FeedbackBannerView
+@import uk.gov.hmrc.testuser.models.views.FeedbackBanner
+@import uk.gov.hmrc.testuser.models.views.GenericFeedbackBanner
+@import uk.gov.hmrc.testuser.config.ApplicationConfig
 
-@this(govUkWrapper: govuk_wrapper)
+@this(govUkWrapper: govuk_wrapper, feedbackBannerView: FeedbackBannerView)
 
-@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages)
+@(navLinks: Seq[NavLink], user: TestUser, feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+
 @title = {Generated @user.label.toLowerCase}
 
-@govUkWrapper(Some(s"$title  - HMRC Developer Hub - GOV.UK"), navLinks = navLinks) {
+@govUkWrapper(Some(s"$title  - HMRC Developer Hub - GOV.UK"), navLinks = navLinks, feedbackBanner = feedbackBanner) {
   <h1 class="govuk-heading-xl">@title</h1>
 
   <p class="govuk-body">

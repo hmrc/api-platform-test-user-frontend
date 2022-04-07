@@ -22,6 +22,7 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 import uk.gov.hmrc.test.utils.HmrcSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 class ErrorTemplateSpec @Inject()(errorTemplate: ErrorTemplate) extends HmrcSpec with GuiceOneAppPerSuite {
   "Error template page" should {
@@ -29,8 +30,8 @@ class ErrorTemplateSpec @Inject()(errorTemplate: ErrorTemplate) extends HmrcSpec
       val message = "Error Message"
 
       val messages = app.injector.instanceOf[Messages]
-
-      val page = errorTemplate.render("", "", message, FakeRequest(), messages)
+      val config: ApplicationConfig = app.injector.instanceOf[ApplicationConfig]
+      val page = errorTemplate.render("", "", message, FakeRequest(), messages, config)
 
       page.body should include(message)
     }

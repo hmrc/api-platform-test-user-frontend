@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,13 +36,14 @@ import com.google.inject.name.Named
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.{Configuration, Environment}
+import play.api.Environment
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
 import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.bootstrap.config.{AuthRedirects, HttpAuditEvent}
+import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -52,8 +53,8 @@ class ErrorHandler @Inject()(
   val messagesApi: MessagesApi,
   val auditConnector: AuditConnector,
   @Named("appName") val appName: String,
-  errorTemplate: ErrorTemplate)(implicit val config: Configuration, ec: ExecutionContext)
-    extends FrontendErrorHandler with AuthRedirects with ErrorAuditing {
+  errorTemplate: ErrorTemplate)(implicit val appConfig: ApplicationConfig, executionContext: ExecutionContext)
+    extends FrontendErrorHandler with ErrorAuditing {
 
   override def onClientError(
     request: RequestHeader,
@@ -64,8 +65,9 @@ class ErrorHandler @Inject()(
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(
-    implicit request: Request[_]) =
+    implicit request: Request[_]) = {
     errorTemplate(pageTitle, heading, message)
+  }
 }
 
 object EventTypes {

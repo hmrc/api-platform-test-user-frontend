@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package uk.gov.hmrc.testuser.views
 
 import javax.inject.Inject
 import play.api.i18n.Messages
-import uk.gov.hmrc.testuser.config.FooterConfig
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
 
-class FooterLinks @Inject()(appConfig: FooterConfig) {
+class FooterLinks @Inject()(appConfig: ApplicationConfig) {
 
   def cookieLink(implicit messages: Messages): FooterItem = FooterItem(
     Some(messages("footer.cookies")),
