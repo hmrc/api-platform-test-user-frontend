@@ -8,20 +8,21 @@ object AppDependencies {
   lazy val appDependencies: Seq[ModuleID] = compile ++ test
 
   lazy val scope: String = "test, it"
+  lazy val bootStrapVersion = "5.24.0"
 
   lazy val compile = Seq(
     ws,
-    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28"   % "5.13.0",
-    "uk.gov.hmrc"             %% "play-partials"                % "8.2.0-play-28",
-    "uk.gov.hmrc"             %% "domain"                       % "6.2.0-play-28",
-    "uk.gov.hmrc"             %% "govuk-template"               % "5.70.0-play-28",
-    "uk.gov.hmrc"             %% "play-ui"                      % "9.7.0-play-28",
-    "uk.gov.hmrc"             %% "play-frontend-govuk"          % "1.0.0-play-28",
-    "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "1.6.0-play-28"
+    "uk.gov.hmrc"             %% "bootstrap-frontend-play-28"   % bootStrapVersion,
+    "uk.gov.hmrc"             %% "play-partials"                % "8.3.0-play-28",
+    "uk.gov.hmrc"             %% "domain"                       % "8.1.0-play-28",
+    "uk.gov.hmrc"             %% "govuk-template"               % "5.77.0-play-28",
+    "uk.gov.hmrc"             %% "play-ui"                      % "9.9.0-play-28",
+    "uk.gov.hmrc"             %% "play-frontend-govuk"          % "2.0.0-play-28",
+    "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "3.20.0-play-28"
   )
 
   lazy val test = Seq(
-    "uk.gov.hmrc"             %% "bootstrap-test-play-28"       % "5.13.0",
+    "uk.gov.hmrc"             %% "bootstrap-test-play-28"       % bootStrapVersion,
     "org.jsoup"               %  "jsoup"                        % "1.8.1",
     "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.31.0",
     "org.seleniumhq.selenium" %  "selenium-java"                % "3.141.59",
