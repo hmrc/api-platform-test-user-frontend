@@ -16,21 +16,22 @@
 
 package uk.gov.hmrc.testuser.controllers
 
-import javax.inject.Inject
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.http.BadRequestException
+import uk.gov.hmrc.play.bootstrap.controller.WithDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
+import uk.gov.hmrc.testuser.ApplicationLogger
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
-import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
-import uk.gov.hmrc.testuser.ApplicationLogger
-import uk.gov.hmrc.testuser.config.ApplicationConfig
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TestUserController @Inject()(override val messagesApi: MessagesApi,
@@ -42,7 +43,7 @@ class TestUserController @Inject()(override val messagesApi: MessagesApi,
                                    createTestUser: CreateTestUserView,
                                    testUser: TestUserView)
                                   (implicit val ec: ExecutionContext, config: ApplicationConfig)
-  extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger {
+  extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger with WithDefaultFormBinding   {
 
   def showCreateUserPage() = headerNavigation { implicit request =>
     navLinks =>
