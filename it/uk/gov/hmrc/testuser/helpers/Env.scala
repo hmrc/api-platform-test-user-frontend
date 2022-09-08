@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.helpers
 import java.net.URL
 
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
-import org.openqa.selenium.remote.{DesiredCapabilities, RemoteWebDriver}
+import org.openqa.selenium.remote.{RemoteWebDriver}
 import org.openqa.selenium.{Dimension, WebDriver}
 
 import scala.util.{Properties, Try}
@@ -41,13 +41,19 @@ trait Env {
   }
 
   def createRemoteChromeDriver() = {
-    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.chrome)
+    val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
+    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
+    
     driver.manage().window().setSize(windowSize)
     driver
   }
 
   def createRemoteFirefoxDriver() = {
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), DesiredCapabilities.firefox)
+    val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
+    val driver = new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
+       
+    driver.manage().window().setSize(windowSize)
+    driver
   }
 
   def createChromeDriver(): WebDriver = {
