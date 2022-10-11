@@ -17,8 +17,8 @@
 package uk.gov.hmrc.testuser
 
 package object controllers {
+
   object FormKeys {
     val createUserTypeNoChoiceKey = "create.user.type.no.choice.field"
   }
 }
-

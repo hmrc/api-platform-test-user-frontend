@@ -36,20 +36,21 @@ class TestUserServiceSpec extends AsyncHmrcSpec {
     Service(service1, "Service 1", Seq(INDIVIDUAL)),
     Service(service2, "Service 2", Seq(INDIVIDUAL, ORGANISATION)),
     Service(service3, "Service 3", Seq(ORGANISATION)),
-    Service(service4, "Service 4", Seq(AGENT)))
+    Service(service4, "Service 4", Seq(AGENT))
+  )
 
   trait Setup {
-    implicit val hc = HeaderCarrier()
+    implicit val hc                      = HeaderCarrier()
     val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
-    val underTest = new TestUserService(mockApiPlatformTestUserConnector)
+    val underTest                        = new TestUserService(mockApiPlatformTestUserConnector)
 
     when(mockApiPlatformTestUserConnector.getServices()(*)).thenReturn(successful(services))
   }
 
   "createUser" should {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
-      private val fields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "","CC333333C"), Field("vrn", "", "999902541"))
-      val individual = TestIndividual("user", "password", fields)
+      private val fields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "", "CC333333C"), Field("vrn", "", "999902541"))
+      val individual     = TestIndividual("user", "password", fields)
       when(mockApiPlatformTestUserConnector.createIndividual(eqTo(Seq(service1, service2)))(*)).thenReturn(successful(individual))
 
       val result = await(underTest.createUser(INDIVIDUAL))

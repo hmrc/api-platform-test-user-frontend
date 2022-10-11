@@ -46,31 +46,32 @@ import scala.collection.JavaConverters.asScalaBufferConverter
 class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 
   private val individualFields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "", "CC333333C"), Field("vrn", "", "999902541"))
-  val individual = TestIndividual("ind-user", "ind-password", individualFields)
+  val individual               = TestIndividual("ind-user", "ind-password", individualFields)
 
   private val organisationFields = Seq(
     Field("saUtr", "Self Assessment UTR", "1555369053"),
     Field("empRef", "Employer Ref", "555/EIA000"),
     Field("ctUtr", "CT UTR", "1555369054"),
-    Field("vrn", "", "999902541"))
-  val organisation = TestOrganisation("org-user", "org-password", organisationFields)
+    Field("vrn", "", "999902541")
+  )
+  val organisation               = TestOrganisation("org-user", "org-password", organisationFields)
 
   trait Setup {
     implicit val materializer = app.injector.instanceOf[Materializer]
-    private val csrfAddToken = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
+    private val csrfAddToken  = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
 
     val config: ApplicationConfig = mock[ApplicationConfig]
     when(config.feedbackSurveyUrl).thenReturn("#")
 
-    val navLinks = Seq(NavLink("sign-in", "http://sign-in"))
+    val navLinks         = Seq(NavLink("sign-in", "http://sign-in"))
     val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(INDIVIDUAL, ORGANISATION)))
 
-    val mcc = app.injector.instanceOf[MessagesControllerComponents]
+    val mcc                = app.injector.instanceOf[MessagesControllerComponents]
     val createTestUserView = app.injector.instanceOf[CreateTestUserView]
-    val testUserView = app.injector.instanceOf[TestUserView]
+    val testUserView       = app.injector.instanceOf[TestUserView]
 
-    val mockTestUserService = mock[TestUserService]
-    val mockNavigationService = mock[NavigationService]
+    val mockTestUserService              = mock[TestUserService]
+    val mockNavigationService            = mock[NavigationService]
     val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
 
     implicit val appConfig = config
@@ -98,7 +99,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
   "showCreateTestUser" should {
     "display the Create test user page with feedback banner" in new Setup {
       val result = execute(underTest.showCreateUserPage())
-      val page = contentAsString(result)
+      val page   = contentAsString(result)
 
       page should include("Create test user")
 
@@ -165,8 +166,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
 
     "display the feedback banner" in new Setup {
       val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
-      val page: String = contentAsString(execute(underTest.createUser(), individualRequest))
-      val document = Jsoup.parse(page)
+      val page: String      = contentAsString(execute(underTest.createUser(), individualRequest))
+      val document          = Jsoup.parse(page)
 
       elementExistsById(document, "feedback") shouldBe true
       elementExistsById(document, "show-survey") shouldBe true

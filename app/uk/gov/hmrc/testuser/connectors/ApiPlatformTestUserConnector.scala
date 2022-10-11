@@ -30,11 +30,13 @@ import scala.concurrent.Future
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
-class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClient,
-                                             appConfig: AppConfig,
-                                             configuration: Configuration,
-                                             environment: Environment,
-                                             servicesConfig: ServicesConfig) {
+class ApiPlatformTestUserConnector @Inject() (
+    proxiedHttpClient: ProxiedHttpClient,
+    appConfig: AppConfig,
+    configuration: Configuration,
+    environment: Environment,
+    servicesConfig: ServicesConfig
+  ) {
   private val serviceKey = "api-platform-test-user"
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
@@ -53,7 +55,7 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     post(s"$serviceUrl/individuals", payload) map { response =>
       response.status match {
         case CREATED => response.json.as[TestIndividual]
-        case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+        case _       => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
       }
     }
   }
@@ -64,16 +66,16 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     post(s"$serviceUrl/organisations", payload) map { response =>
       response.status match {
         case CREATED => response.json.as[TestOrganisation]
-        case _ => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+        case _       => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
       }
     }
   }
 
   def getServices()(implicit hc: HeaderCarrier): Future[Seq[Service]] = {
-    httpClient.GET[Either[UpstreamErrorResponse,HttpResponse]](s"$serviceUrl/services") map { 
-      case Right(response) if(response.status == OK)     => response.json.as[Seq[Service]]
-      case Right(response)                               => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
-      case Left(UpstreamErrorResponse(body, status,_,_)) => throw new RuntimeException(s"Unexpected response code=${status} message=${body}")
+    httpClient.GET[Either[UpstreamErrorResponse, HttpResponse]](s"$serviceUrl/services") map {
+      case Right(response) if (response.status == OK)      => response.json.as[Seq[Service]]
+      case Right(response)                                 => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+      case Left(UpstreamErrorResponse(body, status, _, _)) => throw new RuntimeException(s"Unexpected response code=${status} message=${body}")
     }
   }
 
@@ -81,4 +83,3 @@ class ApiPlatformTestUserConnector @Inject()(proxiedHttpClient: ProxiedHttpClien
     httpClient.POST[CreateUserRequest, HttpResponse](url, payload, Seq("Content-Type" -> "application/json"))
   }
 }
-

@@ -9,10 +9,10 @@ class TestUserSpec extends AsyncHmrcSpec {
   "Mapping test individual from Json" should {
 
     trait TestIndividualFromJson {
-      val userId = "userId1"
-      val password = "password1"
-      val saUtr = "sautr123"
-      val nino = "nino123"
+      val userId         = "userId1"
+      val password       = "password1"
+      val saUtr          = "sautr123"
+      val nino           = "nino123"
       val jsonIndividual = Json.parse(s"""
                                          |{
                                          |  "userId":"$userId",
@@ -33,7 +33,7 @@ class TestUserSpec extends AsyncHmrcSpec {
                                          |}""".stripMargin)
 
       val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)))
-      val testUser = Json.fromJson[TestIndividual](jsonIndividual)(new TestIndividualJsonMapper(fieldDefinitions).testIndividualReads).get
+      val testUser         = Json.fromJson[TestIndividual](jsonIndividual)(new TestIndividualJsonMapper(fieldDefinitions).testIndividualReads).get
     }
 
     "set userId" in new TestIndividualFromJson {
@@ -64,18 +64,18 @@ class TestUserSpec extends AsyncHmrcSpec {
   "Mapping test organisation from Json" should {
 
     trait TestOrganisationFromJson {
-      val userId = "userId1"
+      val userId   = "userId1"
       val password = "password1"
-      val saUtr = "sautr123"
-      val nino = "nino123"
-      val jsonOrg = Json.parse(s"""
-                                         |{
-                                         |  "userId":"$userId",
-                                         |  "password":"$password",
-                                         |  "saUtr":"$saUtr",
-                                         |  "nino":"$nino",
-                                         |  "vrn":"vrn"
-                                         |}""".stripMargin)
+      val saUtr    = "sautr123"
+      val nino     = "nino123"
+      val jsonOrg  = Json.parse(s"""
+                                  |{
+                                  |  "userId":"$userId",
+                                  |  "password":"$password",
+                                  |  "saUtr":"$saUtr",
+                                  |  "nino":"$nino",
+                                  |  "vrn":"vrn"
+                                  |}""".stripMargin)
 
       val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)))
 

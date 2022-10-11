@@ -18,9 +18,10 @@ package uk.gov.hmrc.testuser.models
 
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION, UserType}
 
-case class FieldDefinition (key: String, name: String, allowedUserTypes: Seq[UserType])
+case class FieldDefinition(key: String, name: String, allowedUserTypes: Seq[UserType])
 
 object FieldDefinitions {
+
   // I'm pushing the field definitions out to here from elsewhere, essentially they were originally in the view.
   // eventually they'll be pushed over to api-platform-test-user
   def get(): Seq[FieldDefinition] = Seq(
@@ -29,7 +30,7 @@ object FieldDefinitions {
     FieldDefinition("vrn", "VAT Registration Number", Seq(INDIVIDUAL, ORGANISATION)),
     FieldDefinition("empRef", "Employer Reference", Seq(ORGANISATION)),
     FieldDefinition("ctUtr", "Corporation Tax UTR", Seq(ORGANISATION)),
-    FieldDefinition("eoriNumber","Economic Operator Registration and Identification (EORI) number", Seq(INDIVIDUAL, ORGANISATION)),
+    FieldDefinition("eoriNumber", "Economic Operator Registration and Identification (EORI) number", Seq(INDIVIDUAL, ORGANISATION)),
     FieldDefinition("userFullName", "Full Name", Seq(INDIVIDUAL, ORGANISATION)),
     FieldDefinition("emailAddress", "Email Address", Seq(INDIVIDUAL, ORGANISATION)),
     FieldDefinition("mtdItId", "Making Tax Digital Income Tax ID", Seq(INDIVIDUAL, ORGANISATION)),
@@ -39,5 +40,6 @@ object FieldDefinitions {
     FieldDefinition("pensionSchemeAdministratorIdentifier", "Pension Scheme Administrator Identifier", Seq(ORGANISATION)),
     FieldDefinition("organisationDetails", "Organisation Details", Seq()),
     FieldDefinition("individualDetails", "Individual Details", Seq()),
-    FieldDefinition("groupIdentifier", "Group Identifier", Seq(INDIVIDUAL, ORGANISATION)))
+    FieldDefinition("groupIdentifier", "Group Identifier", Seq(INDIVIDUAL, ORGANISATION))
+  )
 }
