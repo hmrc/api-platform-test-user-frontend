@@ -22,13 +22,13 @@ import uk.gov.hmrc.testuser.connectors.ThirdPartyDeveloperFrontendConnector
 import uk.gov.hmrc.testuser.models.NavLink
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import scala.concurrent.Future.{successful, failed}
+import scala.concurrent.Future.{failed, successful}
 
 class NavigationServiceSpec extends AsyncHmrcSpec {
 
   trait Setup {
-    implicit val hc = HeaderCarrier()
-    val connector = mock[ThirdPartyDeveloperFrontendConnector]
+    implicit val hc   = HeaderCarrier()
+    val connector     = mock[ThirdPartyDeveloperFrontendConnector]
     val configuration = mock[Configuration]
 
     val underTest = new NavigationService(connector, configuration)
@@ -61,7 +61,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec {
 
       when(connector.fetchNavLinks()(*)).thenReturn(failed(new RuntimeException("test failure")))
 
-      intercept[RuntimeException]{await(underTest.headerNavigation())}
+      intercept[RuntimeException] { await(underTest.headerNavigation()) }
     }
   }
 }

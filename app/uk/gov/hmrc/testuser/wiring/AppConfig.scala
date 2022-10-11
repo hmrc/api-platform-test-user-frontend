@@ -34,15 +34,15 @@ trait AppConfig {
   val reportAProblemNonJSUrl: String
 }
 
-class AppConfigImpl @Inject()(config: ServicesConfig) extends AppConfig {
+class AppConfigImpl @Inject() (config: ServicesConfig) extends AppConfig {
   val appName = config.getString("appName")
 
-  val contactHost = config.getString("contact-frontend.host")
+  val contactHost                  = config.getString("contact-frontend.host")
   val contactFormServiceIdentifier = "MyService"
 
   val analyticsToken = config.getString("google-analytics.token")
-  val analyticsHost = config.getString("google-analytics.host")
+  val analyticsHost  = config.getString("google-analytics.host")
 
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  val reportAProblemNonJSUrl   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 }

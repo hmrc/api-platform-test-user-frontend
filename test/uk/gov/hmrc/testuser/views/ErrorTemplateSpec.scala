@@ -24,14 +24,14 @@ import uk.gov.hmrc.test.utils.HmrcSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.testuser.config.ApplicationConfig
 
-class ErrorTemplateSpec @Inject()(errorTemplate: ErrorTemplate) extends HmrcSpec with GuiceOneAppPerSuite {
+class ErrorTemplateSpec @Inject() (errorTemplate: ErrorTemplate) extends HmrcSpec with GuiceOneAppPerSuite {
   "Error template page" should {
     "render correctly when given title, heading and message" in {
       val message = "Error Message"
 
-      val messages = app.injector.instanceOf[Messages]
+      val messages                  = app.injector.instanceOf[Messages]
       val config: ApplicationConfig = app.injector.instanceOf[ApplicationConfig]
-      val page = errorTemplate.render("", "", message, FakeRequest(), messages, config)
+      val page                      = errorTemplate.render("", "", message, FakeRequest(), messages, config)
 
       page.body should include(message)
     }

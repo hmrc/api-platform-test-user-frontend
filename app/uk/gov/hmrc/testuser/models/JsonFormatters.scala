@@ -29,7 +29,7 @@ object EnumJson {
           JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not contain '$s'")
       }
     }
-    case _ => JsError("String value expected")
+    case _           => JsError("String value expected")
   }
 
   def enumWrites[E <: Enumeration]: Writes[E#Value] = (v: E#Value) => JsString(v.toString)
@@ -41,8 +41,8 @@ object EnumJson {
 }
 
 object JsonFormatters {
-  implicit val formatNavLinks = Json.format[NavLink]
+  implicit val formatNavLinks                  = Json.format[NavLink]
   implicit val formatCreateUserServicesRequest = Json.format[CreateUserRequest]
-  implicit val formatUserType =  EnumJson.enumFormat(UserTypes)
-  implicit val formatService = Json.format[Service]
+  implicit val formatUserType                  = EnumJson.enumFormat(UserTypes)
+  implicit val formatService                   = Json.format[Service]
 }

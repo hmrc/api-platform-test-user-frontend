@@ -27,12 +27,8 @@ import uk.gov.hmrc.play.http.ws.{WSProxy, WSProxyConfiguration}
 import play.api.http.HeaderNames
 
 @Singleton
-class ProxiedHttpClient @Inject()(config: Configuration,
-                                  auditConnector: HttpAuditing,
-                                  wsClient: WSClient,
-                                  environment: play.api.Environment,
-                                  actorSystem: ActorSystem)
-  extends DefaultHttpClient(config, auditConnector, wsClient, actorSystem) with WSProxy {
+class ProxiedHttpClient @Inject() (config: Configuration, auditConnector: HttpAuditing, wsClient: WSClient, environment: play.api.Environment, actorSystem: ActorSystem)
+    extends DefaultHttpClient(config, auditConnector, wsClient, actorSystem) with WSProxy {
 
   import ProxiedHttpClient._
 
@@ -52,11 +48,12 @@ class ProxiedHttpClient @Inject()(config: Configuration,
 }
 
 object ProxiedHttpClient {
-  def removeAnyAuthHeader(in: Seq[(String,String)]): Seq[(String, String)] = {
-    in.filterNot( hdr => hdr._1 == HeaderNames.AUTHORIZATION)
+
+  def removeAnyAuthHeader(in: Seq[(String, String)]): Seq[(String, String)] = {
+    in.filterNot(hdr => hdr._1 == HeaderNames.AUTHORIZATION)
   }
 
-  def replaceAnyAuthHeader(newValue: Option[Authorization])(in: Seq[(String,String)]): Seq[(String, String)] =
+  def replaceAnyAuthHeader(newValue: Option[Authorization])(in: Seq[(String, String)]): Seq[(String, String)] =
     removeAnyAuthHeader(in) ++
       newValue.map(auth => (HeaderNames.AUTHORIZATION -> auth.value)).toSeq
 

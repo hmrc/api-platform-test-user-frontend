@@ -21,7 +21,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
 
-class FooterLinks @Inject()(appConfig: ApplicationConfig) {
+class FooterLinks @Inject() (appConfig: ApplicationConfig) {
 
   def cookieLink(implicit messages: Messages): FooterItem = FooterItem(
     Some(messages("footer.cookies")),

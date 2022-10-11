@@ -30,10 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class ThirdPartyDeveloperFrontendConnector @Inject()(httpClient: HttpClient,
-                                                     runModeConfiguration: Configuration,
-                                                     environment: Environment,
-                                                     servicesConfig: ServicesConfig) {
+class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient, runModeConfiguration: Configuration, environment: Environment, servicesConfig: ServicesConfig) {
   lazy val serviceUrl = servicesConfig.baseUrl("third-party-developer-frontend")
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = {

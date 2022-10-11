@@ -24,7 +24,7 @@ import uk.gov.hmrc.testuser.models.{Service, TestUser, UserTypes}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class TestUserService @Inject()(apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
+class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
   def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
     for {
@@ -36,7 +36,7 @@ class TestUserService @Inject()(apiPlatformTestUserConnector: ApiPlatformTestUse
 
   private def createUserWithServices(userType: UserType, services: Seq[Service])(implicit hc: HeaderCarrier) = {
     userType match {
-      case INDIVIDUAL => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(INDIVIDUAL, services))
+      case INDIVIDUAL             => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(INDIVIDUAL, services))
       case UserTypes.ORGANISATION => apiPlatformTestUserConnector.createOrganisation(serviceKeysForUserType(ORGANISATION, services))
     }
   }
@@ -45,4 +45,3 @@ class TestUserService @Inject()(apiPlatformTestUserConnector: ApiPlatformTestUse
     services.filter(s => s.allowedUserTypes.contains(userType)).map(s => s.key)
   }
 }
-
