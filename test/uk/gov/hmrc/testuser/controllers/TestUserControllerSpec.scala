@@ -25,7 +25,6 @@ import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 import play.api.test.Helpers._
 
 import scala.concurrent.Future.{failed, successful}
@@ -82,7 +81,6 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       mockNavigationService,
       mockApiPlatformTestUserConnector,
       mcc,
-      app.injector.instanceOf[ReportAProblemLink],
       createTestUserView,
       testUserView
     )

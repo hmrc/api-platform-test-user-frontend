@@ -23,7 +23,6 @@ import play.api.mvc._
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.controller.WithDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import uk.gov.hmrc.play.views.html.helpers.ReportAProblemLink
 import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
@@ -40,7 +39,6 @@ class TestUserController @Inject() (
     navigationService: NavigationService,
     apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
     messagesControllerComponents: MessagesControllerComponents,
-    helpersReportAProblemLink: ReportAProblemLink,
     createTestUser: CreateTestUserView,
     testUser: TestUserView
   )(implicit val ec: ExecutionContext,
