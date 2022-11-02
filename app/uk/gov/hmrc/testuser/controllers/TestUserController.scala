@@ -21,7 +21,7 @@ import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.http.BadRequestException
-import uk.gov.hmrc.play.bootstrap.controller.WithDefaultFormBinding
+import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding 
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.config.ApplicationConfig
@@ -43,7 +43,7 @@ class TestUserController @Inject() (
     testUser: TestUserView
   )(implicit val ec: ExecutionContext,
     config: ApplicationConfig
-  ) extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger with WithDefaultFormBinding {
+  ) extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger with WithUnsafeDefaultFormBinding  {
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))

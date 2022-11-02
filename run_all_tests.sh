@@ -1,4 +1,3 @@
 #!/bin/bash
 
-sbt -Dtest_driver=chrome clean compile coverage test it:test coverageReport
-
+sbt -Dbrowser=chrome clean compile coverage test it:test coverageReport

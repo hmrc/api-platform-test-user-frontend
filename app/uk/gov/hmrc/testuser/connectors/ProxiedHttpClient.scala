@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.connectors
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.libs.ws.{WSClient, WSProxyServer, WSRequest => PlayWSRequest}
+import play.api.libs.ws.{WSClient, WSProxyServer, WSRequest }
 import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -38,9 +38,9 @@ class ProxiedHttpClient @Inject() (config: Configuration, auditConnector: HttpAu
     override val authorization = Some(Authorization(s"Bearer $bearerToken"))
   }
 
-  override def wsProxyServer: Option[WSProxyServer] = WSProxyConfiguration("proxy", config)
+  override def wsProxyServer: Option[WSProxyServer] = WSProxyConfiguration.buildWsProxyServer(config)
 
-  override def buildRequest[A](url: String, headers: Seq[(String, String)]): PlayWSRequest = {
+  override def buildRequest(url: String, headers: Seq[(String, String)]): WSRequest = {
     val effectiveHeaders = ACCEPT_HMRC_JSON_HEADER +: replaceAnyAuthHeader(authorization)(headers)
 
     super.buildRequest(url, effectiveHeaders)
