@@ -37,7 +37,7 @@ trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterAll with BeforeAndAfter
 
   override protected def newServerForTest(app: Application, testData: TestData): RunningServer = MyTestServerFactory.start(app)
 
-  implicit val webDriver: WebDriver = Env.driver
+  implicit lazy val webDriver: WebDriver = Env.driver
 
   val wireMockServer = new WireMockServer(wireMockConfig()
     .port(stubPort))

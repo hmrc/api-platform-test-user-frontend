@@ -25,9 +25,6 @@ lazy val microservice = (project in file("."))
     scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    parallelExecution in Test := false,
-    fork in Test := false,
     majorVersion := 0
   )
   .settings(SilencerSettings(): _*)
@@ -45,7 +42,9 @@ lazy val microservice = (project in file("."))
     Test / unmanagedSourceDirectories += baseDirectory.value / "test",
     Test / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
     Test / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
-    Test / sourceDirectory := baseDirectory.value / "test"
+    Test / sourceDirectory := baseDirectory.value / "test",
+    Test / parallelExecution := false,
+    Test / fork := false
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
@@ -57,7 +56,7 @@ lazy val microservice = (project in file("."))
     IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "it",
     IntegrationTest / unmanagedSourceDirectories += baseDirectory.value / "test-utils",
     IntegrationTest / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
-    IntegrationTest / testGrouping := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
+    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     addTestReportOption(IntegrationTest, "int-test-reports")
   )
 

@@ -17,9 +17,7 @@ object AppDependencies {
     "uk.gov.hmrc"             %% "bootstrap-frontend-play-28"   % bootStrapVersion,
     "uk.gov.hmrc"             %% "play-partials"                % "8.3.0-play-28",
     "uk.gov.hmrc"             %% "domain"                       % "8.1.0-play-28",
-    "org.mockito"             %% "mockito-scala-scalatest"      % "1.7.1",
     "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "3.24.0-play-28",
-    "uk.gov.hmrc"             %% "play-frontend-govuk"          % "2.0.0-play-28",
     "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "3.20.0-play-28"
 
   )

@@ -31,7 +31,7 @@ trait Env {
   lazy val windowSize = new Dimension(1024, 800)
   lazy val driver: WebDriver = createWebDriver()
 
-  private lazy val  browser = Properties.propOrElse("browser","chrome")
+  private lazy val browser = Properties.propOrElse("browser","chrome")
   private lazy val accessibilityTest = Properties.propOrElse("accessibility.test","false") == "true"
 
   private def createWebDriver(): WebDriver = {
