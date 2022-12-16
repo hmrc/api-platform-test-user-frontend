@@ -67,7 +67,12 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
       Seq(test),
       SubProcess(
         ForkOptions().withRunJVMOptions(
-          Vector(s"-Dtest.name={test.name}", s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}"))
+          Vector(
+            s"-Dtest.name={test.name}",
+            s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}",
+            s"-Daccessibility.test=${Properties.propOrElse("accessibility.test", "false")}"
+          )
+        )
       )
     )
   }
