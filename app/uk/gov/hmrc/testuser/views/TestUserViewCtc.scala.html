@@ -34,11 +34,6 @@
 @govUkWrapper(Some(s"$title  - HMRC Developer Hub - GOV.UK"), navLinks = navLinks, feedbackBanner = feedbackBanner) {
   <h1 class="govuk-heading-xl">@title</h1>
 
-  <p class="govuk-body">
-    Use these credentials in the <a class="govuk-link" href="/api-documentation/docs/authorisation/user-restricted-endpoints#user-restricted">
-    OAuth Authorize flow</a> to generate an OAuth access token for this @(user.label.toLowerCase).
-  </p>
-
   <ul class="govuk-list govuk-list--bullet govuk-list--no-style">
     @field(Field("userid", "User ID", user.userId))
     @field(Field("password", "Password", user.password))
