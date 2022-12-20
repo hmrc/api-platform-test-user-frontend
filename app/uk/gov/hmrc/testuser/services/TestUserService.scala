@@ -33,6 +33,13 @@ class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUs
     } yield testUser
 
   }
+  def createUserCtc(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
+    for {
+      services <- apiPlatformTestUserConnector.getServices()
+      testUser <- createUserWithServices(userType, services.filter(x => x.key == "common-transit-convention-traders"))
+    } yield testUser
+
+  }
 
   private def createUserWithServices(userType: UserType, services: Seq[Service])(implicit hc: HeaderCarrier) = {
     userType match {

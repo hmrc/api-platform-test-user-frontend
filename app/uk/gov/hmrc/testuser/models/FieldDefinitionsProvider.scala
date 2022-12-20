@@ -42,4 +42,13 @@ object FieldDefinitions {
     FieldDefinition("individualDetails", "Individual Details", Seq()),
     FieldDefinition("groupIdentifier", "Group Identifier", Seq(INDIVIDUAL, ORGANISATION))
   )
+
+  def getCtc(): Seq[FieldDefinition] = Seq(
+    FieldDefinition("eoriNumber", "Economic Operator Registration and Identification (EORI) number", Seq(INDIVIDUAL, ORGANISATION)),
+    FieldDefinition("userFullName", "Full Name", Seq(INDIVIDUAL, ORGANISATION)),
+    FieldDefinition("emailAddress", "Email Address", Seq(INDIVIDUAL, ORGANISATION)),
+    FieldDefinition("organisationDetails", "Organisation Details", Seq(ORGANISATION)),
+    FieldDefinition("individualDetails", "Individual Details", Seq(INDIVIDUAL)),
+    FieldDefinition("groupIdentifier", "Group Identifier", Seq(INDIVIDUAL, ORGANISATION))
+  )
 }

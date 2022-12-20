@@ -19,7 +19,6 @@ object AppDependencies {
     "uk.gov.hmrc"             %% "domain"                       % "8.1.0-play-28",
     "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "3.24.0-play-28",
     "uk.gov.hmrc"             %% "play-frontend-hmrc"           % "3.20.0-play-28"
-
   )
 
   lazy val test = Seq(
