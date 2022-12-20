@@ -32,8 +32,7 @@ import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import akka.stream.Materializer
 import org.jsoup.nodes.Document
-import uk.gov.hmrc.testuser.views.html.TestUserView
-import uk.gov.hmrc.testuser.views.html.CreateTestUserView
+import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, CreateTestUserViewCtc, TestUserView, TestUserViewCtc}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.UpstreamErrorResponse
@@ -67,7 +66,10 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
 
     val mcc                = app.injector.instanceOf[MessagesControllerComponents]
     val createTestUserView = app.injector.instanceOf[CreateTestUserView]
+    val createTestUserViewCtc = app.injector.instanceOf[CreateTestUserViewCtc]
+
     val testUserView       = app.injector.instanceOf[TestUserView]
+    val testUserViewCtc       = app.injector.instanceOf[TestUserViewCtc]
 
     val mockTestUserService              = mock[TestUserService]
     val mockNavigationService            = mock[NavigationService]
@@ -82,7 +84,9 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       mockApiPlatformTestUserConnector,
       mcc,
       createTestUserView,
-      testUserView
+      createTestUserViewCtc,
+      testUserView,
+      testUserViewCtc
     )
 
     when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(individual))
