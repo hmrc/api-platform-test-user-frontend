@@ -26,6 +26,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
+  def services(implicit hc: HeaderCarrier) = apiPlatformTestUserConnector.getServices()
+
   def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
     for {
       services <- apiPlatformTestUserConnector.getServices()
@@ -33,10 +35,11 @@ class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUs
     } yield testUser
 
   }
-  def createUserCtc(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
+  def createUserGeneric(userType: UserType, selectedServices: Seq[String])(implicit hc: HeaderCarrier): Future[TestUser] = {
+    println(s"ACHI: $selectedServices")
     for {
       services <- apiPlatformTestUserConnector.getServices()
-      testUser <- createUserWithServices(userType, services.filter(x => x.key == "common-transit-convention-traders"))
+      testUser <- createUserWithServices(userType, services.filter(x => selectedServices.contains(x.key)))
     } yield testUser
 
   }

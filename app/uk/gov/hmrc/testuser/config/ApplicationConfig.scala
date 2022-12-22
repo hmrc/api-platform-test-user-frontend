@@ -25,11 +25,12 @@ class ApplicationConfig @Inject() (config: Configuration) {
   private lazy val urlFooterConfig      = config.underlying.getConfig("urls.footer")
   private lazy val feedbackSurveyConfig = config.underlying.getConfig("feedbackBanner.generic")
 
-  lazy val cookies: String         = urlFooterConfig.getString("cookies")
-  lazy val privacy: String         = urlFooterConfig.getString("privacy")
-  lazy val termsConditions: String = urlFooterConfig.getString("termsConditions")
-  lazy val govukHelp: String       = urlFooterConfig.getString("govukHelp")
-  lazy val accessibility: String   = urlFooterConfig.getString("accessibility")
-  lazy val feedbackSurveyUrl       = feedbackSurveyConfig.getString("surveyUrl")
-  lazy val ctcLoginUrl             = config.getOptional[String]("ctc-login-url")
+  lazy val cookies: String          = urlFooterConfig.getString("cookies")
+  lazy val privacy: String          = urlFooterConfig.getString("privacy")
+  lazy val termsConditions: String  = urlFooterConfig.getString("termsConditions")
+  lazy val govukHelp: String        = urlFooterConfig.getString("govukHelp")
+  lazy val accessibility: String    = urlFooterConfig.getString("accessibility")
+  lazy val feedbackSurveyUrl        = feedbackSurveyConfig.getString("surveyUrl")
+  lazy val ctcLoginUrl              = config.getOptional[String]("ctc-login-url")
+  lazy val serviceKeys: Seq[String] = config.getOptional[String]("services").getOrElse("").split(",").toSeq
 }

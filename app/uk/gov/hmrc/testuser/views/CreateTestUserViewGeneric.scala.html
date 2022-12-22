@@ -23,37 +23,63 @@
 @import uk.gov.hmrc.testuser.models.views.FeedbackBanner
 @import uk.gov.hmrc.testuser.models.views.GenericFeedbackBanner
 @import uk.gov.hmrc.testuser.config.ApplicationConfig
+@import uk.gov.hmrc.testuser.models.Service
 
 
 @this(govUkWrapper: govuk_wrapper, feedbackBannerView: FeedbackBannerView)
 
-@(navLinks: Seq[NavLink], form: Form[CreateUserForm], feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+@(services: Seq[Service], navLinks: Seq[NavLink], form: Form[CreateUserForm], feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
 
 @govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub - GOV.UK"), navLinks = navLinks, feedbackBanner = feedbackBanner) {
-    <h1 class="govuk-heading-xl">Create a CTC test user</h1>
+    <h1 class="govuk-heading-xl">Create a test user for a given service</h1>
     @errorSummary(form)
     <p class="govuk-body">
-        A CTC test user is a dummy Government Gateway user ID used for testing NCTS in the sandbox with the CTC enrolment.
+        A test user is a dummy Government Gateway user ID used for testing a given service in the sandbox with the required enrolment.
     </p>
     <p class="govuk-body">
-        A test CTC user ID has:
+        A test user ID has:
     </p>
     <ul class="govuk-list govuk-list--bullet">
         <li>a type - individual, organisation or agent</li>
         <li>a password</li>
-        <li>a service enrolment for CTC</li>
+        <li>a service enrolment</li>
     </ul>
     <p class="govuk-body">
         Test users and other test data are no longer cleared down every two weeks.
     </p>
 
-    @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUserCtc()) {
+
+    @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUserGeneric()) {
         @helper.CSRF.formField
+
+       <div class="govuk-form-group @if(form.errors("serviceSelection").nonEmpty) {govuk-form-group--error}">
+            <fieldset id="serviceSelection" class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h2 class="govuk-fieldset__heading">
+                        Choose the service you need
+                    </h2>
+                </legend>
+                @fieldError(form.errors, "serviceSelection")
+                <div class="govuk-radios">
+                @services.map(s =>
+                <p>
+                    <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" type="radio" id={ s.key } name="serviceSelection" value= { s.key }/>
+                    <label class="govuk-label govuk-radios__label" for="Individual" data-type="individual">
+                        <b> { s.name } </b>
+                    </label>
+                </div>
+                </p>
+                )
+                </div>
+            </fieldset>
+      </div>
+
         <div class="govuk-form-group @if(form.errors("userType").nonEmpty) {govuk-form-group--error}">
             <fieldset id="userType" class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                     <h2 class="govuk-fieldset__heading">
-                        Choose a type of CTC test user
+                        Choose a type of test user
                     </h2>
                 </legend>
                 @fieldError(form.errors, "userType")
@@ -70,14 +96,12 @@
                                 <ul class="govuk-list govuk-list--bullet">
                                     <li>User ID</li>
                                     <li>Password</li>
-                                    @FieldDefinitions.getCtc().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                                    @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
                                         <li>@field.name</li>
                                     }
                                 </ul>
                                 <p class="govuk-body">
-                                    Enrols them for CTC
-                                    <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
-                                        Create Test User API endpoint</a>.
+                                    Enrols them for the selected service
                                 </p>
                             </div>
                         </details>
@@ -94,14 +118,12 @@
                                 <ul class="govuk-list govuk-list--bullet">
                                     <li>User ID</li>
                                     <li>Password</li>
-                                    @FieldDefinitions.getCtc().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                                    @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
                                         <li>@field.name</li>
                                     }
                                 </ul>
                                 <p class="govuk-body">
-                                    Enrols them for CTC
-                                    <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
-                                        Create Test User API endpoint</a>.
+                                    Enrols them for the selected service
                                 </p>
                             </div>
                         </details>
