@@ -46,7 +46,12 @@
     </a>
   </p>
 
-  <p class="govuk-body">
-      <a class="govuk-link" target="_blank" href="@config.ctcLoginUrl">Login to NCTS</a> to manage your movements.
-  </p>
+  @config.serviceKeys.map(key =>
+  config.routingLoginUrls.map(url =>
+    if(url.contains(key)) {
+        <p class="govuk-body">
+            Login to <a class="govuk-link" target="_blank" href={ url.split(",")(1) } > {  url.split(",")(0).replace("-", " ") } </a>
+        </p>
+    }
+  ))
 }
