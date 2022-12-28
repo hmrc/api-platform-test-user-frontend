@@ -23,6 +23,7 @@ import uk.gov.hmrc.testuser.models.NavLink
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
 import scala.concurrent.Future.{failed, successful}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class NavigationServiceSpec extends AsyncHmrcSpec {
 

@@ -29,6 +29,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
