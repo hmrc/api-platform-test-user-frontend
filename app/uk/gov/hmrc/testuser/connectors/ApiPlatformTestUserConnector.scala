@@ -25,8 +25,7 @@ import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.wiring.AppConfig
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
@@ -36,7 +35,7 @@ class ApiPlatformTestUserConnector @Inject() (
     configuration: Configuration,
     environment: Environment,
     servicesConfig: ServicesConfig
-  ) {
+  )(implicit ec: ExecutionContext) {
   private val serviceKey = "api-platform-test-user"
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")

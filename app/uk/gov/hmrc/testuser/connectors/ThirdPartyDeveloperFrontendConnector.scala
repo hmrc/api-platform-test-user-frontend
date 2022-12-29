@@ -23,14 +23,15 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
-
 import uk.gov.hmrc.http.HttpReads.Implicits._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient, runModeConfiguration: Configuration, environment: Environment, servicesConfig: ServicesConfig) {
+class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient,
+                                                      runModeConfiguration: Configuration,
+                                                      environment: Environment,
+                                                      servicesConfig: ServicesConfig)(implicit ec: ExecutionContext) {
   lazy val serviceUrl = servicesConfig.baseUrl("third-party-developer-frontend")
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = {
