@@ -26,6 +26,6 @@ class CreateTestUserPage(port: Int) extends WebPage {
 }
 
 object CreateTestUserPage {
-  val individualCheckbox: By = By.id("Individual")
+  val individualCheckbox: By   = By.id("Individual")
   val organisationCheckbox: By = By.id("Organisation")
 }

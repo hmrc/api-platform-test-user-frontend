@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.connectors
 import akka.actor.ActorSystem
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.libs.ws.{WSClient, WSProxyServer, WSRequest }
+import play.api.libs.ws.{WSClient, WSProxyServer, WSRequest}
 import uk.gov.hmrc.http.Authorization
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
@@ -28,7 +28,8 @@ import play.api.http.HeaderNames
 
 @Singleton
 class ProxiedHttpClient @Inject() (config: Configuration, auditConnector: HttpAuditing, wsClient: WSClient, environment: play.api.Environment, actorSystem: ActorSystem)
-    extends DefaultHttpClient(config, auditConnector, wsClient, actorSystem) with WSProxy {
+    extends DefaultHttpClient(config, auditConnector, wsClient, actorSystem)
+    with WSProxy {
 
   import ProxiedHttpClient._
 

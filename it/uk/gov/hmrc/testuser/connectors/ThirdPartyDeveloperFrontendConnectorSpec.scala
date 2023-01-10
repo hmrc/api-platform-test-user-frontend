@@ -38,7 +38,7 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with Wiremo
     GuiceApplicationBuilder()
       .configure(("metrics.jvm", false))
       .build()
-  
+
   trait Setup {
     implicit val hc = HeaderCarrier()
 

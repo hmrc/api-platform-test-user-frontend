@@ -34,7 +34,7 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
     goo to page
   }
 
-  def clickOnSubmit() (implicit webDriver: WebDriver) = {
+  def clickOnSubmit()(implicit webDriver: WebDriver) = {
     webDriver.findElement(By.id("submit")).click()
   }
 

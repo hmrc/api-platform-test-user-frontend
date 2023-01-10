@@ -25,8 +25,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
-class NavigationService @Inject() (connector: ThirdPartyDeveloperFrontendConnector,
-                                   configuration: Configuration)(implicit ec: ExecutionContext) {
+class NavigationService @Inject() (connector: ThirdPartyDeveloperFrontendConnector, configuration: Configuration)(implicit ec: ExecutionContext) {
 
   lazy val developerFrontendUrl: String = configuration.getOptional[String]("third-party-developer-frontend.host") match {
     case Some(s) => s

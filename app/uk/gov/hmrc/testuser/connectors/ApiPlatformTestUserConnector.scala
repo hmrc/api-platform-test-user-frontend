@@ -35,7 +35,7 @@ class ApiPlatformTestUserConnector @Inject() (
     configuration: Configuration,
     environment: Environment,
     servicesConfig: ServicesConfig
-  )(implicit ec: ExecutionContext) {
+)(implicit ec: ExecutionContext) {
   private val serviceKey = "api-platform-test-user"
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")

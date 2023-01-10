@@ -28,10 +28,9 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient,
-                                                      runModeConfiguration: Configuration,
-                                                      environment: Environment,
-                                                      servicesConfig: ServicesConfig)(implicit ec: ExecutionContext) {
+class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient, runModeConfiguration: Configuration, environment: Environment, servicesConfig: ServicesConfig)(
+    implicit ec: ExecutionContext
+) {
   lazy val serviceUrl = servicesConfig.baseUrl("third-party-developer-frontend")
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = {

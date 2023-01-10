@@ -25,10 +25,14 @@ import uk.gov.hmrc.testuser.models.NavLink
 object ThirdPartyDeveloperFrontendStub {
 
   def givenTheUserNavigationLinks(navLinks: Seq[NavLink]) = {
-    stubFor(get(urlPathEqualTo("/developer/user-navlinks"))
-      .willReturn(aResponse()
-        .withStatus(OK)
-        .withHeader("Content-Type", "application/json")
-        .withBody(stringify(toJson(navLinks)))))
+    stubFor(
+      get(urlPathEqualTo("/developer/user-navlinks"))
+        .willReturn(
+          aResponse()
+            .withStatus(OK)
+            .withHeader("Content-Type", "application/json")
+            .withBody(stringify(toJson(navLinks)))
+        )
+    )
   }
 }

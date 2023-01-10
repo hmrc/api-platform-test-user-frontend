@@ -24,37 +24,34 @@ import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNa
 
 class CreateTestUserSpec extends BaseSpec {
 
-  private val individualUserId = "individual"
+  private val individualUserId   = "individual"
   private val individualPassword = "pwd"
-  private val individualSaUtr = "1555369052"
-  private val individualNino = "CC333333C"
-  private val vrn = "999902541"
+  private val individualSaUtr    = "1555369052"
+  private val individualNino     = "CC333333C"
+  private val vrn                = "999902541"
 
-  private val organisationId = "organisation"
+  private val organisationId       = "organisation"
   private val organisationPassword = "pws2"
-  private val organisationSaUtr = "1555369053"
+  private val organisationSaUtr    = "1555369053"
 
-  private val empRef = "555/EIA000"
+  private val empRef            = "555/EIA000"
   private val organisationCtUtr = "1555369054"
 
   val userNavigationLinks = Seq(NavLink("sign-in", "/sign-in"))
-  val services = Seq(
-    Service("service1", "Service 1", Seq(UserTypes.INDIVIDUAL)),
-    Service("service2", "Service 2", Seq(UserTypes.ORGANISATION)))
+  val services            = Seq(Service("service1", "Service 1", Seq(UserTypes.INDIVIDUAL)), Service("service2", "Service 2", Seq(UserTypes.ORGANISATION)))
 
   Feature("Create a test user") {
     Scenario("Create a test individual") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
-      givenTestIndividualIsGenerated(
-        s"""
-          |{
-          |  "userId":"$individualUserId",
-          |  "password":"$individualPassword",
-          |  "saUtr":"$individualSaUtr",
-          |  "nino":"$individualNino",
-          |  "vrn":"$vrn"
-          |}
+      givenTestIndividualIsGenerated(s"""
+                                        |{
+                                        |  "userId":"$individualUserId",
+                                        |  "password":"$individualPassword",
+                                        |  "saUtr":"$individualSaUtr",
+                                        |  "nino":"$individualNino",
+                                        |  "vrn":"$vrn"
+                                        |}
         """.stripMargin)
 
       goOn(new CreateTestUserPage(port))
@@ -71,16 +68,15 @@ class CreateTestUserSpec extends BaseSpec {
     Scenario("Create a test organisation") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)
-      givenTestOrganisationIsGenerated(
-        s"""
-           |{
-           |  "userId":"$organisationId",
-           |  "password":"$organisationPassword",
-           |  "saUtr":"$organisationSaUtr",
-           |  "empRef":"$empRef",
-           |  "ctUtr":"$organisationCtUtr",
-           |  "vrn":"$vrn"
-           |}
+      givenTestOrganisationIsGenerated(s"""
+                                          |{
+                                          |  "userId":"$organisationId",
+                                          |  "password":"$organisationPassword",
+                                          |  "saUtr":"$organisationSaUtr",
+                                          |  "empRef":"$empRef",
+                                          |  "ctUtr":"$organisationCtUtr",
+                                          |  "vrn":"$vrn"
+                                          |}
         """.stripMargin)
 
       goOn(new CreateTestUserPage(port))

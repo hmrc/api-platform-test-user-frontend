@@ -21,7 +21,7 @@ import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.http.BadRequestException
-import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding 
+import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.config.ApplicationConfig
@@ -41,9 +41,11 @@ class TestUserController @Inject() (
     messagesControllerComponents: MessagesControllerComponents,
     createTestUser: CreateTestUserView,
     testUser: TestUserView
-  )(implicit val ec: ExecutionContext,
-    config: ApplicationConfig
-  ) extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger with WithUnsafeDefaultFormBinding  {
+)(implicit val ec: ExecutionContext, config: ApplicationConfig)
+    extends FrontendController(messagesControllerComponents)
+    with I18nSupport
+    with ApplicationLogger
+    with WithUnsafeDefaultFormBinding {
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
@@ -70,10 +72,9 @@ class TestUserController @Inject() (
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie => hc.withExtraHeaders(COOKIE -> cookie) }
       navigationService.headerNavigation()(newHc) flatMap { navLinks =>
         f(request)(navLinks)
-      } recoverWith {
-        case ex =>
-          logger.error("User navigation links can not be rendered due to service call failure", ex)
-          f(request)(Seq.empty)
+      } recoverWith { case ex =>
+        logger.error("User navigation links can not be rendered due to service call failure", ex)
+        f(request)(Seq.empty)
       }
     }
   }
