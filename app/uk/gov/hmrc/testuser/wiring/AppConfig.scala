@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.testuser.wiring
 
-import com.google.inject.ImplementedBy
 import javax.inject.Inject
+
+import com.google.inject.ImplementedBy
+
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @ImplementedBy(classOf[AppConfigImpl])

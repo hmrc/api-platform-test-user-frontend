@@ -17,12 +17,13 @@
 package uk.gov.hmrc.testuser.services
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
 import play.api.Configuration
+import uk.gov.hmrc.http.HeaderCarrier
+
 import uk.gov.hmrc.testuser.connectors.ThirdPartyDeveloperFrontendConnector
 import uk.gov.hmrc.testuser.models.NavLink
-
-import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class NavigationService @Inject() (connector: ThirdPartyDeveloperFrontendConnector, configuration: Configuration)(implicit ec: ExecutionContext) {

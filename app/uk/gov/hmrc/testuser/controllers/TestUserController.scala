@@ -16,6 +16,9 @@
 
 package uk.gov.hmrc.testuser.controllers
 
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -23,15 +26,13 @@ import play.api.mvc._
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
-
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
 
 class TestUserController @Inject() (
     override val messagesApi: MessagesApi,

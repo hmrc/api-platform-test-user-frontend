@@ -32,20 +32,22 @@ package uk.gov.hmrc.testuser
  * limitations under the License.
  */
 
-import com.google.inject.name.Named
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
+import com.google.inject.name.Named
+
+import play.api.Environment
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.Environment
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
-import uk.gov.hmrc.testuser.views.html.ErrorTemplate
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
-import uk.gov.hmrc.testuser.config.ApplicationConfig
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.testuser.config.ApplicationConfig
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 
 @Singleton
 class ErrorHandler @Inject() (
