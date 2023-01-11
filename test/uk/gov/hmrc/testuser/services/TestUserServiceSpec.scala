@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.testuser.services
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.successful
+
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes._
 import uk.gov.hmrc.testuser.models.{Field, Service, TestIndividual, TestOrganisation}
-import uk.gov.hmrc.test.utils.AsyncHmrcSpec
-
-import scala.concurrent.Future.successful
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class TestUserServiceSpec extends AsyncHmrcSpec {
 

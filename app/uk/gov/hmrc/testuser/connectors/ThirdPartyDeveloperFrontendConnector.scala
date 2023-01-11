@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,20 @@
 package uk.gov.hmrc.testuser.connectors
 
 import javax.inject.{Inject, Singleton}
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models.NavLink
-import uk.gov.hmrc.http.HttpReads.Implicits._
-
 import scala.concurrent.{ExecutionContext, Future}
 
+import play.api.{Configuration, Environment}
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models.NavLink
+
 @Singleton
-class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient,
-                                                      runModeConfiguration: Configuration,
-                                                      environment: Environment,
-                                                      servicesConfig: ServicesConfig)(implicit ec: ExecutionContext) {
+class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient, runModeConfiguration: Configuration, environment: Environment, servicesConfig: ServicesConfig)(
+    implicit ec: ExecutionContext
+) {
   lazy val serviceUrl = servicesConfig.baseUrl("third-party-developer-frontend")
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = {

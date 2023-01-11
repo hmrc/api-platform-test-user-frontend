@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,20 +32,22 @@ package uk.gov.hmrc.testuser
  * limitations under the License.
  */
 
-import com.google.inject.name.Named
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
+
+import com.google.inject.name.Named
+
+import play.api.Environment
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.Environment
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
-import uk.gov.hmrc.testuser.views.html.ErrorTemplate
-import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
-import uk.gov.hmrc.testuser.config.ApplicationConfig
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
-import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.testuser.config.ApplicationConfig
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 
 @Singleton
 class ErrorHandler @Inject() (
@@ -54,15 +56,15 @@ class ErrorHandler @Inject() (
     val auditConnector: AuditConnector,
     @Named("appName") val appName: String,
     errorTemplate: ErrorTemplate
-  )(implicit val appConfig: ApplicationConfig,
-    executionContext: ExecutionContext
-  ) extends FrontendErrorHandler with ErrorAuditing {
+)(implicit val appConfig: ApplicationConfig, executionContext: ExecutionContext)
+    extends FrontendErrorHandler
+    with ErrorAuditing {
 
   override def onClientError(
       request: RequestHeader,
       statusCode: Int,
       message: String
-    ): Future[Result] = {
+  ): Future[Result] = {
     auditClientError(request, statusCode, message)
     super.onClientError(request, statusCode, message)
   }
@@ -71,8 +73,7 @@ class ErrorHandler @Inject() (
       pageTitle: String,
       heading: String,
       message: String
-    )(implicit request: Request[_]
-    ) = {
+  )(implicit request: Request[_]) = {
     errorTemplate(pageTitle, heading, message)
   }
 }
@@ -98,8 +99,7 @@ trait ErrorAuditing extends HttpAuditEvent {
   def auditServerError(
       request: RequestHeader,
       ex: Throwable
-    )(implicit ec: ExecutionContext
-    ): Unit = {
+  )(implicit ec: ExecutionContext): Unit = {
     val eventType       = ex match {
       case _: NotFoundException     => ResourceNotFound
       case _: JsValidationException => ServerValidationError
@@ -125,8 +125,7 @@ trait ErrorAuditing extends HttpAuditEvent {
       request: RequestHeader,
       statusCode: Int,
       message: String
-    )(implicit ec: ExecutionContext
-    ): Unit = {
+  )(implicit ec: ExecutionContext): Unit = {
     import play.api.http.Status._
     statusCode match {
       case NOT_FOUND   =>

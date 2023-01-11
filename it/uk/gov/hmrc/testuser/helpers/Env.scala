@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,17 +28,17 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import uk.gov.hmrc.webdriver.SingletonDriver
 
 trait Env {
-  lazy val windowSize = new Dimension(1024, 800)
+  lazy val windowSize        = new Dimension(1024, 800)
   lazy val driver: WebDriver = createWebDriver()
 
-  private lazy val browser = Properties.propOrElse("browser","chrome")
-  private lazy val accessibilityTest = Properties.propOrElse("accessibility.test","false") == "true"
+  private lazy val browser           = Properties.propOrElse("browser", "chrome")
+  private lazy val accessibilityTest = Properties.propOrElse("accessibility.test", "false") == "true"
 
   private def createWebDriver(): WebDriver = {
     val driver = browser match {
-      case "chrome" => if(accessibilityTest) SingletonDriver.getInstance() else createChromeDriver()
-      case "remote-chrome" => createRemoteChromeDriver()
-      case "firefox" => createFirefoxDriver()
+      case "chrome"         => if (accessibilityTest) SingletonDriver.getInstance() else createChromeDriver()
+      case "remote-chrome"  => createRemoteChromeDriver()
+      case "firefox"        => createFirefoxDriver()
       case "remote-firefox" => createRemoteFirefoxDriver()
     }
     driver.manage().deleteAllCookies()

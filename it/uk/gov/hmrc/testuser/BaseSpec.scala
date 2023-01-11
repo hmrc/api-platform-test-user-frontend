@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,14 +39,16 @@ trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterAll with BeforeAndAfter
 
   implicit lazy val webDriver: WebDriver = Env.driver
 
-  val wireMockServer = new WireMockServer(wireMockConfig()
-    .port(stubPort))
+  val wireMockServer = new WireMockServer(
+    wireMockConfig()
+      .port(stubPort)
+  )
 
   override def newAppForTest(testData: TestData): Application = {
     GuiceApplicationBuilder()
       .configure(
-        "run.mode" -> "Stub",
-        "microservice.services.api-platform-test-user.port" -> stubPort,
+        "run.mode"                                                  -> "Stub",
+        "microservice.services.api-platform-test-user.port"         -> stubPort,
         "microservice.services.third-party-developer-frontend.port" -> stubPort
       )
       .in(Mode.Prod)

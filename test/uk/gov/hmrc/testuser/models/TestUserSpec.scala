@@ -1,8 +1,9 @@
 package uk.gov.hmrc.testuser.models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+
+import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 
 class TestUserSpec extends AsyncHmrcSpec {
 

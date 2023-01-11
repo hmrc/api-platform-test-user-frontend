@@ -16,14 +16,15 @@
 
 package uk.gov.hmrc.testuser.common
 
-import ch.qos.logback.classic.{Level, Logger}
+import scala.collection.JavaConverters._
+import scala.collection.mutable
+
 import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.classic.{Level, Logger}
 import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
-import play.api.LoggerLike
 
-import scala.collection.mutable
-import scala.collection.JavaConverters._
+import play.api.LoggerLike
 
 class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggingEvent] {
   private val suppressedEntries = new mutable.MutableList[ILoggingEvent]()

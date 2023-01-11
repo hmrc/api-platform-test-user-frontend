@@ -1,6 +1,7 @@
 import play.core.PlayVersion
 import play.sbt.PlayImport._
 import sbt.Tests.{Group, SubProcess}
+import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
@@ -13,6 +14,16 @@ import bloop.integrations.sbt.BloopDefaults
 
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val appName = "api-platform-test-user-frontend"
+
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+ 
+inThisBuild(
+  List(
+    scalaVersion := "2.12.12",
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision
+  )
+)
 
 lazy val microservice = (project in file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
@@ -47,7 +58,7 @@ lazy val microservice = (project in file("."))
     Test / fork := false
   )
   .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .settings(DefaultBuildSettings.integrationTestSettings())
   .settings(inConfig(IntegrationTest)(BloopDefaults.configSettings))
   .settings(
     IntegrationTest / sourceDirectory := baseDirectory.value / "it",
