@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.testuser.common
 
-import scala.collection.JavaConverters._
-import scala.collection.mutable
+import scala.jdk.CollectionConverters._
 
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.{Level, Logger}
@@ -27,11 +26,11 @@ import ch.qos.logback.core.spi.FilterReply
 import play.api.LoggerLike
 
 class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggingEvent] {
-  private val suppressedEntries = new mutable.MutableList[ILoggingEvent]()
+  private var suppressedEntries = List[ILoggingEvent]()
 
   override def decide(event: ILoggingEvent): FilterReply = {
     if (event.getMessage.contains(messagesContaining)) {
-      suppressedEntries += event
+      suppressedEntries = suppressedEntries :+ event
       FilterReply.DENY
     } else {
       FilterReply.NEUTRAL
@@ -53,7 +52,7 @@ class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggin
 
 trait LogSuppressing {
 
-  def withSuppressedLoggingFrom(logger: Logger, messagesContaining: String)(body: (=> SuppressedLogFilter) => Unit) {
+  def withSuppressedLoggingFrom(logger: Logger, messagesContaining: String)(body: (=> SuppressedLogFilter) => Unit): Unit = {
 
     val appenders            = logger.iteratorForAppenders().asScala.toList
     val appendersWithFilters = appenders.map(appender => appender -> appender.getCopyOfAttachedFiltersList)
@@ -70,7 +69,7 @@ trait LogSuppressing {
     }
   }
 
-  def withSuppressedLoggingFrom(logger: LoggerLike, messagesContaining: String)(body: (=> SuppressedLogFilter) => Unit) {
+  def withSuppressedLoggingFrom(logger: LoggerLike, messagesContaining: String)(body: (=> SuppressedLogFilter) => Unit): Unit = {
     withSuppressedLoggingFrom(logger.logger.asInstanceOf[Logger], messagesContaining)(body)
   }
 }

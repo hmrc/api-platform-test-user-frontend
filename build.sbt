@@ -15,16 +15,12 @@ import bloop.integrations.sbt.BloopDefaults
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val appName = "api-platform-test-user-frontend"
 
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
- 
-inThisBuild(
-  List(
-    scalaVersion := "2.12.12",
-    semanticdbEnabled := true,
-    semanticdbVersion := scalafixSemanticdb.revision
-  )
-)
+scalaVersion := "2.13.8"
 
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+ 
 lazy val microservice = (project in file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .settings(
@@ -33,12 +29,10 @@ lazy val microservice = (project in file("."))
     playSettings,
     scalaSettings,
     publishingSettings,
-    scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     majorVersion := 0
   )
-  .settings(SilencerSettings(): _*)
   .settings(ScoverageSettings(): _*)
   .settings(
     TwirlKeys.templateImports ++= Seq(
@@ -69,6 +63,14 @@ lazy val microservice = (project in file("."))
     IntegrationTest / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
     IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     addTestReportOption(IntegrationTest, "int-test-reports")
+  )
+  .settings(
+    scalacOptions ++= Seq(
+      "-Wconf:cat=unused&src=views/.*\\.scala:s",
+      "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
+      "-Wconf:cat=unused&src=.*Routes\\.scala:s",
+      "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s"
+    )
   )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
