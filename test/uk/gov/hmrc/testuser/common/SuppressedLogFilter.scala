@@ -24,13 +24,14 @@ import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 
 import play.api.LoggerLike
+import scala.collection.mutable.ListBuffer
 
 class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggingEvent] {
-  private var suppressedEntries = List[ILoggingEvent]()
+  private val suppressedEntries = ListBuffer[ILoggingEvent]()
 
   override def decide(event: ILoggingEvent): FilterReply = {
     if (event.getMessage.contains(messagesContaining)) {
-      suppressedEntries = suppressedEntries :+ event
+      suppressedEntries += event
       FilterReply.DENY
     } else {
       FilterReply.NEUTRAL
