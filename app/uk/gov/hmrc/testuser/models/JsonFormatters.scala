@@ -20,13 +20,13 @@ import play.api.libs.json.{Format, JsError, JsSuccess, Writes, _}
 
 object EnumJson {
 
-  def enumReads[E <: Enumeration](enum: E): Reads[E#Value] = {
+  def enumReads[E <: Enumeration](enumValue: E): Reads[E#Value] = {
     case JsString(s) => {
       try {
-        JsSuccess(enum.withName(s))
+        JsSuccess(enumValue.withName(s))
       } catch {
         case _: NoSuchElementException =>
-          JsError(s"Enumeration expected of type: '${enum.getClass}', but it does not contain '$s'")
+          JsError(s"Enumeration expected of type: '${enumValue.getClass}', but it does not contain '$s'")
       }
     }
     case _           => JsError("String value expected")
@@ -34,8 +34,8 @@ object EnumJson {
 
   def enumWrites[E <: Enumeration]: Writes[E#Value] = (v: E#Value) => JsString(v.toString)
 
-  def enumFormat[E <: Enumeration](enum: E): Format[E#Value] = {
-    Format(enumReads(enum), enumWrites)
+  def enumFormat[E <: Enumeration](enumValue: E): Format[E#Value] = {
+    Format(enumReads(enumValue), enumWrites)
   }
 
 }
