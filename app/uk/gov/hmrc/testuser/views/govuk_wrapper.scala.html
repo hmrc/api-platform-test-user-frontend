@@ -25,6 +25,7 @@
 @import uk.gov.hmrc.testuser.views.html.includes.FeedbackBannerView
 @import uk.gov.hmrc.testuser.models.views.FeedbackBanner
 @import uk.gov.hmrc.testuser.config.ApplicationConfig
+@import views.html.helper.CSPNonce
 
 @this(
         govukLayout: GovukLayout,
@@ -46,7 +47,7 @@
         bodyEndBlock: Option[Html] = None,
         scriptsBlock: Option[Html] = None,
         feedbackBanner: Option[FeedbackBanner] = None
-)(contentBlock: Html)(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages, config: ApplicationConfig, requestHeader: RequestHeader)
 
 @head = {
     <link href='@controllers.routes.Assets.versioned("stylesheets/main.css")' media="screen" rel="stylesheet" type="text/css" />
@@ -54,9 +55,9 @@
 }
 
 @scripts = {
-    <script src='@routes.Assets.versioned("javascripts/feedback.js")'></script>
-    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
-    <script>window.GOVUKFrontend.initAll();</script>
+    <script @CSPNonce.attr src='@routes.Assets.versioned("javascripts/feedback.js")'></script>
+    <script @CSPNonce.attr src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script @CSPNonce.attr>window.GOVUKFrontend.initAll();</script>
 }
 
 @beforeContentBlock = {
