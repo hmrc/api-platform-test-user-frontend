@@ -32,4 +32,5 @@ class ApplicationConfig @Inject() (config: Configuration) {
   lazy val govukHelp: String       = urlFooterConfig.getString("govukHelp")
   lazy val accessibility: String   = urlFooterConfig.getString("accessibility")
   lazy val feedbackSurveyUrl       = feedbackSurveyConfig.getString("surveyUrl")
+  lazy val ctcLoginUrl             = config.getOptional[String]("ctc-login-url")
 }

@@ -32,7 +32,7 @@ import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
+import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, CreateTestUserViewCtc, TestUserView, TestUserViewCtc}
 
 class TestUserController @Inject() (
     override val messagesApi: MessagesApi,
@@ -41,7 +41,9 @@ class TestUserController @Inject() (
     apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
     messagesControllerComponents: MessagesControllerComponents,
     createTestUser: CreateTestUserView,
-    testUser: TestUserView
+    createTestUserCtc: CreateTestUserViewCtc,
+    testUser: TestUserView,
+    testUserCtc: TestUserViewCtc
 )(implicit val ec: ExecutionContext, config: ApplicationConfig)
     extends FrontendController(messagesControllerComponents)
     with I18nSupport
@@ -50,6 +52,10 @@ class TestUserController @Inject() (
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
+  }
+
+  def showCreateUserPageCtc() = headerNavigation { implicit request => navLinks =>
+    Future.successful(Ok(createTestUserCtc(navLinks, CreateUserForm.form)))
   }
 
   def createUser() = headerNavigation { implicit request => navLinks =>
@@ -62,6 +68,20 @@ class TestUserController @Inject() (
 
     def invalidForm(invalidForm: Form[CreateUserForm]) = {
       Future.successful(BadRequest(createTestUser(navLinks, invalidForm)))
+    }
+
+    CreateUserForm.form.bindFromRequest().fold(invalidForm, validForm)
+  }
+  def createUserCtc() = headerNavigation { implicit request => navLinks =>
+    def validForm(form: CreateUserForm) = {
+      UserTypes.from(form.userType.getOrElse("")) match {
+        case Some(uType) => testUserService.createUserCtc(uType) map (user => Ok(testUserCtc(navLinks, user)))
+        case _           => Future.failed(new BadRequestException("Invalid request"))
+      }
+    }
+
+    def invalidForm(invalidForm: Form[CreateUserForm]) = {
+      Future.successful(BadRequest(createTestUserCtc(navLinks, invalidForm)))
     }
 
     CreateUserForm.form.bindFromRequest().fold(invalidForm, validForm)

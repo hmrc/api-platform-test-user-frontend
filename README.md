@@ -13,6 +13,8 @@ This should start this service and any dependent services.
 
 Once the script has finished, the service will be available on http://localhost:9618/api-test-user
 
+For CTC users, the service will be available on http://localhost:9618/api-test-user/ctc
+
 
 ## Running tests
 

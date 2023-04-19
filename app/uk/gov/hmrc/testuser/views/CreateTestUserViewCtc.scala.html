@@ -1,0 +1,115 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.testuser.models.NavLink
+@import uk.gov.hmrc.testuser.controllers.CreateUserForm
+@import uk.gov.hmrc.testuser.views.html.includes._
+@import uk.gov.hmrc.testuser.models.FieldDefinitions
+@import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+@import uk.gov.hmrc.testuser.views.html.govuk_wrapper
+@import uk.gov.hmrc.testuser.models.views.FeedbackBanner
+@import uk.gov.hmrc.testuser.models.views.GenericFeedbackBanner
+@import uk.gov.hmrc.testuser.config.ApplicationConfig
+
+
+@this(govUkWrapper: govuk_wrapper, feedbackBannerView: FeedbackBannerView)
+
+@(navLinks: Seq[NavLink], form: Form[CreateUserForm], feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+
+@govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub - GOV.UK"), navLinks = navLinks, feedbackBanner = feedbackBanner) {
+    <h1 class="govuk-heading-xl">Create a CTC test user</h1>
+    @errorSummary(form)
+    <p class="govuk-body">
+        A CTC test user is a dummy Government Gateway user ID used for testing NCTS in the sandbox with the CTC enrolment.
+    </p>
+    <p class="govuk-body">
+        A test CTC user ID has:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>a type - individual, organisation or agent</li>
+        <li>a password</li>
+        <li>a service enrolment for CTC</li>
+    </ul>
+    <p class="govuk-body">
+        Test users and other test data are no longer cleared down every two weeks.
+    </p>
+
+    @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUserCtc()) {
+        @helper.CSRF.formField
+        <div class="govuk-form-group @if(form.errors("userType").nonEmpty) {govuk-form-group--error}">
+            <fieldset id="userType" class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                    <h2 class="govuk-fieldset__heading">
+                        Choose a type of CTC test user
+                    </h2>
+                </legend>
+                @fieldError(form.errors, "userType")
+                <div class="govuk-radios">
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="Individual" value="INDIVIDUAL" name="userType" type="radio" aria-describedby="individual-type-hint">
+                        <label class="govuk-label govuk-radios__label" for="Individual" data-type="individual">
+                            <b>Individual</b>
+                        </label>
+                        <details id="individual-type-hint">
+                            <summary class="govuk-summary-text">What dummy data is generated?</summary>
+                            <div class="govuk-inset-text">
+                                <p class="govuk-body">Creates a test user with a:</p>
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>User ID</li>
+                                    <li>Password</li>
+                                    @FieldDefinitions.getCtc().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                                        <li>@field.name</li>
+                                    }
+                                </ul>
+                                <p class="govuk-body">
+                                    Enrols them for CTC
+                                    <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
+                                        Create Test User API endpoint</a>.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="Organisation" value="ORGANISATION" name="userType" type="radio" aria-describedby="organisation-type-hint">
+                        <label class="govuk-label govuk-radios__label" for="Organisation" data-type="organisation">
+                            <b>Organisation</b>
+                        </label>
+                        <details id="organisation-type-hint">
+                            <summary class="govuk-summary-text">What dummy data is generated?</summary>
+                            <div class="govuk-inset-text">
+                                <p class="govuk-body">Creates a test user with a:</p>
+                                <ul class="govuk-list govuk-list--bullet">
+                                    <li>User ID</li>
+                                    <li>Password</li>
+                                    @FieldDefinitions.getCtc().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                                        <li>@field.name</li>
+                                    }
+                                </ul>
+                                <p class="govuk-body">
+                                    Enrols them for CTC
+                                    <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
+                                        Create Test User API endpoint</a>.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <button id="submit" class="govuk-button" data-module="govuk-button" type="submit">Create</button>
+    }
+}

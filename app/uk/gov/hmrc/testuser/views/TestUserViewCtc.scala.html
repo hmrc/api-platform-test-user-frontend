@@ -1,0 +1,52 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.testuser.models.TestUser
+@import uk.gov.hmrc.testuser.models.NavLink
+@import uk.gov.hmrc.testuser.models.Field
+
+@import uk.gov.hmrc.testuser.views.html.field
+@import uk.gov.hmrc.testuser.views.html.govuk_wrapper
+@import uk.gov.hmrc.testuser.views.html.includes.FeedbackBannerView
+@import uk.gov.hmrc.testuser.models.views.FeedbackBanner
+@import uk.gov.hmrc.testuser.models.views.GenericFeedbackBanner
+@import uk.gov.hmrc.testuser.config.ApplicationConfig
+
+@this(govUkWrapper: govuk_wrapper, feedbackBannerView: FeedbackBannerView)
+
+@(navLinks: Seq[NavLink], user: TestUser, feedbackBanner: Option[FeedbackBanner] = Some(GenericFeedbackBanner))(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+
+@title = {Generated @user.label.toLowerCase}
+
+@govUkWrapper(Some(s"$title  - HMRC Developer Hub - GOV.UK"), navLinks = navLinks, feedbackBanner = feedbackBanner) {
+  <h1 class="govuk-heading-xl">@title</h1>
+
+  <ul class="govuk-list govuk-list--bullet govuk-list--no-style">
+    @field(Field("userid", "User ID", user.userId))
+    @field(Field("password", "Password", user.password))
+    @user.fields.map(f => field(f))
+  </ul>
+
+  <p class="govuk-body govuk-!-padding-bottom-4">
+    <a class="govuk-link" href="@uk.gov.hmrc.testuser.controllers.routes.TestUserController.showCreateUserPage()">
+      Add a new user
+    </a>
+  </p>
+
+  <p class="govuk-body">
+      <a class="govuk-link" target="_blank" href="@config.ctcLoginUrl">Login to NCTS</a> to manage your movements.
+  </p>
+}
