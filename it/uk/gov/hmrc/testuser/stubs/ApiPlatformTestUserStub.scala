@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,27 +25,39 @@ import uk.gov.hmrc.testuser.models.Service
 object ApiPlatformTestUserStub {
 
   def givenTestIndividualIsGenerated(jsonIndividual: String) = {
-    stubFor(post(urlPathEqualTo("/individuals"))
-      .willReturn(aResponse()
-        .withStatus(SC_CREATED)
-        .withHeader("Content-Type", "application/json")
-        .withBody(jsonIndividual)))
+    stubFor(
+      post(urlPathEqualTo("/individuals"))
+        .willReturn(
+          aResponse()
+            .withStatus(SC_CREATED)
+            .withHeader("Content-Type", "application/json")
+            .withBody(jsonIndividual)
+        )
+    )
   }
 
   def givenTestOrganisationIsGenerated(jsonOrganisation: String) = {
-    stubFor(post(urlPathEqualTo("/organisations"))
-      .willReturn(aResponse()
-        .withStatus(SC_CREATED)
-        .withHeader("Content-Type", "application/json")
-        .withBody(jsonOrganisation)))
+    stubFor(
+      post(urlPathEqualTo("/organisations"))
+        .willReturn(
+          aResponse()
+            .withStatus(SC_CREATED)
+            .withHeader("Content-Type", "application/json")
+            .withBody(jsonOrganisation)
+        )
+    )
   }
 
   def givenTheServicesEndpointReturnsServices(services: Seq[Service]) = {
-    stubFor(get(urlPathEqualTo("/services"))
-    .willReturn(aResponse()
-      .withStatus(SC_OK)
-      .withHeader("Content-Type", "application/json")
-      .withBody(Json.toJson(services).toString())))
+    stubFor(
+      get(urlPathEqualTo("/services"))
+        .willReturn(
+          aResponse()
+            .withStatus(SC_OK)
+            .withHeader("Content-Type", "application/json")
+            .withBody(Json.toJson(services).toString())
+        )
+    )
   }
 
 }

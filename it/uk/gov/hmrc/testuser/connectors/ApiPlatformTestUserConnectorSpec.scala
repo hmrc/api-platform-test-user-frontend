@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
@@ -36,21 +37,21 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     GuiceApplicationBuilder()
       .configure(("metrics.jvm", false))
       .build()
-  
-  private val individualUserId = "individual"
+
+  private val individualUserId   = "individual"
   private val individualPassword = "pwd"
-  private val individualSaUtr = "1555369052"
-  private val individualNino = "CC333333C"
-  private val individualVrn = "999902541"
+  private val individualSaUtr    = "1555369052"
+  private val individualNino     = "CC333333C"
+  private val individualVrn      = "999902541"
 
   private val jsonTestIndividual = s"""
-      |{
-      |  "userId":"$individualUserId",
-      |  "password":"$individualPassword",
-      |  "saUtr":"$individualSaUtr",
-      |  "nino":"$individualNino",
-      |  "vrn":"$individualVrn"
-      |}
+                                      |{
+                                      |  "userId":"$individualUserId",
+                                      |  "password":"$individualPassword",
+                                      |  "saUtr":"$individualSaUtr",
+                                      |  "nino":"$individualNino",
+                                      |  "vrn":"$individualVrn"
+                                      |}
     """.stripMargin
 
   trait Setup {
@@ -73,12 +74,12 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
       stubFor(
         post(urlEqualTo("/individuals"))
-        .withRequestBody(equalToJson(requestPayload))
-        .willReturn(
-          aResponse()
-          .withStatus(CREATED)
-          .withBody(jsonTestIndividual)
-        )
+          .withRequestBody(equalToJson(requestPayload))
+          .willReturn(
+            aResponse()
+              .withStatus(CREATED)
+              .withBody(jsonTestIndividual)
+          )
       )
 
       val result = await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
@@ -92,21 +93,21 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
       stubFor(
         post(urlEqualTo("/individuals"))
-        .willReturn(
-          aResponse()
-          .withStatus(OK)
-        )
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+          )
       )
 
-      intercept[RuntimeException](await(underTest.createIndividual(Seq( "national-insurance", "self-assessment", "mtd-income-tax"))))
+      intercept[RuntimeException](await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
     }
   }
 
   "createOrganisation" should {
     "return a generated organisation" in new Setup {
-      private val saUtr = "1555369052"
-      private val empRef = "555/EIA000"
-      private val userId = "user"
+      private val saUtr    = "1555369052"
+      private val empRef   = "555/EIA000"
+      private val userId   = "user"
       private val password = "password"
 
       val requestPayload =
@@ -118,26 +119,33 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
            |  ]
            |}""".stripMargin
 
-      stubFor(post(urlEqualTo("/organisations")).withRequestBody(equalToJson(requestPayload))
-        .willReturn(aResponse().withStatus(CREATED).withBody(s"""
-          |{
-          |  "userId":"$userId",
-          |  "password":"$password",
-          |  "individualDetails": {
-          |    "firstName": "Ida",
-          |    "lastName": "Newton",
-          |    "dateOfBirth": "1960-06-01",
-          |    "address": {
-          |      "line1": "45 Springfield Rise",
-          |      "line2": "Glasgow",
-          |      "postcode": "TS1 1PA"
-          |    }
-          |  },
-          |  "saUtr":"1555369052",
-          |  "empRef":"555/EIA000",
-          |  "ctUtr":"1555369053",
-          |  "vrn":"999902541"
-          |}""".stripMargin)))
+      stubFor(
+        post(urlEqualTo("/organisations"))
+          .withRequestBody(equalToJson(requestPayload))
+          .willReturn(
+            aResponse()
+              .withStatus(CREATED)
+              .withBody(s"""
+                           |{
+                           |  "userId":"$userId",
+                           |  "password":"$password",
+                           |  "individualDetails": {
+                           |    "firstName": "Ida",
+                           |    "lastName": "Newton",
+                           |    "dateOfBirth": "1960-06-01",
+                           |    "address": {
+                           |      "line1": "45 Springfield Rise",
+                           |      "line2": "Glasgow",
+                           |      "postcode": "TS1 1PA"
+                           |    }
+                           |  },
+                           |  "saUtr":"1555369052",
+                           |  "empRef":"555/EIA000",
+                           |  "ctUtr":"1555369053",
+                           |  "vrn":"999902541"
+                           |}""".stripMargin)
+          )
+      )
 
       val result = await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
@@ -150,10 +158,10 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
       stubFor(
         post(urlEqualTo("/organisations"))
-        .willReturn(
-          aResponse()
-          .withStatus(OK)
-        )
+          .willReturn(
+            aResponse()
+              .withStatus(OK)
+          )
       )
 
       intercept[RuntimeException](await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
@@ -167,13 +175,13 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
         stubFor(
           get(urlEqualTo("/services"))
-          .willReturn(
-            aResponse()
-            .withBody(
-              Json.toJson(services).toString()
+            .willReturn(
+              aResponse()
+                .withBody(
+                  Json.toJson(services).toString()
+                )
+                .withStatus(OK)
             )
-            .withStatus(OK)
-          )
         )
 
         val result = await(underTest.getServices())
@@ -186,10 +194,10 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
       "throw runtime exception" in new Setup {
         stubFor(
           get(urlEqualTo("/services"))
-          .willReturn(
-            aResponse()
-            .withStatus(CREATED)
-          )
+            .willReturn(
+              aResponse()
+                .withStatus(CREATED)
+            )
         )
 
         intercept[RuntimeException](await(underTest.getServices()))

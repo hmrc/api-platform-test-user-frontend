@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
     goo to page
   }
 
-  def clickOnSubmit() (implicit webDriver: WebDriver) = {
+  def clickOnSubmit()(implicit webDriver: WebDriver) = {
     webDriver.findElement(By.id("submit")).click()
   }
 

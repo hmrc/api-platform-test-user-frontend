@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 
@@ -37,7 +38,7 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with Wiremo
     GuiceApplicationBuilder()
       .configure(("metrics.jvm", false))
       .build()
-  
+
   trait Setup {
     implicit val hc = HeaderCarrier()
 

@@ -16,13 +16,15 @@
 
 package uk.gov.hmrc.testuser.services
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future.{failed, successful}
+
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.testuser.connectors.ThirdPartyDeveloperFrontendConnector
-import uk.gov.hmrc.testuser.models.NavLink
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import scala.concurrent.Future.{failed, successful}
+import uk.gov.hmrc.testuser.connectors.ThirdPartyDeveloperFrontendConnector
+import uk.gov.hmrc.testuser.models.NavLink
 
 class NavigationServiceSpec extends AsyncHmrcSpec {
 

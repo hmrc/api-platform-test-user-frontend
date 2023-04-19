@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 package uk.gov.hmrc.testuser.services
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
+
 import uk.gov.hmrc.http.HeaderCarrier
+
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION, UserType}
 import uk.gov.hmrc.testuser.models.{Service, TestUser, UserTypes}
-
-import scala.concurrent.{ExecutionContext, Future}
 
 class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
