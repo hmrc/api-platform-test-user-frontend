@@ -32,24 +32,30 @@ import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
+import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, CreateTestUserViewGeneric, TestUserView, TestUserViewGeneric}
 
 class TestUserController @Inject() (
-    override val messagesApi: MessagesApi,
-    testUserService: TestUserService,
-    navigationService: NavigationService,
-    apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
-    messagesControllerComponents: MessagesControllerComponents,
-    createTestUser: CreateTestUserView,
-    testUser: TestUserView
-)(implicit val ec: ExecutionContext, config: ApplicationConfig)
-    extends FrontendController(messagesControllerComponents)
-    with I18nSupport
-    with ApplicationLogger
-    with WithUnsafeDefaultFormBinding {
+                                     override val messagesApi: MessagesApi,
+                                     testUserService: TestUserService,
+                                     navigationService: NavigationService,
+                                     apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
+                                     messagesControllerComponents: MessagesControllerComponents,
+                                     createTestUser: CreateTestUserView,
+                                     createTestUserGeneric: CreateTestUserViewGeneric,
+                                     testUser: TestUserView,
+                                     testUserGeneric: TestUserViewGeneric
+  )(implicit val ec: ExecutionContext,
+    config: ApplicationConfig
+  ) extends FrontendController(messagesControllerComponents) with I18nSupport with ApplicationLogger with WithUnsafeDefaultFormBinding  {
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
+  }
+
+  def showCreateUserPageGeneric() = headerNavigation { implicit request =>navLinks =>
+    testUserService.services.flatMap(services =>
+      Future.successful(Ok(createTestUserGeneric(services.filter(s => config.serviceKeys.contains(s.key)), navLinks, CreateUserForm.form)))
+    )
   }
 
   def createUser() = headerNavigation { implicit request => navLinks =>
@@ -62,6 +68,26 @@ class TestUserController @Inject() (
 
     def invalidForm(invalidForm: Form[CreateUserForm]) = {
       Future.successful(BadRequest(createTestUser(navLinks, invalidForm)))
+    }
+
+    CreateUserForm.form.bindFromRequest().fold(invalidForm, validForm)
+  }
+  def createUserGeneric() = headerNavigation { implicit request =>navLinks =>
+    def validForm(form: CreateUserForm) = {
+      val x = UserTypes.from(form.userType.getOrElse(""))
+      val y = form.services
+
+      (x, y) match {
+        case (Some(uType), Some(services)) =>
+          testUserService.createUserGeneric(uType, services.split(",").toSeq) map (user => Ok(testUserGeneric(navLinks, user)))
+        case _ => Future.failed(new BadRequestException("Invalid request"))
+      }
+    }
+
+    def invalidForm(invalidForm: Form[CreateUserForm]) = {
+      testUserService.services.flatMap(services =>
+        Future.successful(BadRequest(createTestUserGeneric(services.filter(s => config.serviceKeys.contains(s.key)), navLinks, invalidForm)))
+      )
     }
 
     CreateUserForm.form.bindFromRequest().fold(invalidForm, validForm)
@@ -81,13 +107,14 @@ class TestUserController @Inject() (
   }
 }
 
-case class CreateUserForm(userType: Option[String])
+case class CreateUserForm(userType: Option[String], services: Option[String])
 
 object CreateUserForm {
 
   val form: Form[CreateUserForm] = Form(
     mapping(
-      "userType" -> optional(text).verifying(FormKeys.createUserTypeNoChoiceKey, s => s.isDefined)
+      "userType" -> optional(text).verifying(FormKeys.createUserTypeNoChoiceKey, userType => userType.isDefined),
+      "serviceSelection" ->  optional(text).verifying(FormKeys.createServicesNoChoiceKey, selectedServices => selectedServices.isDefined),
     )(CreateUserForm.apply)(CreateUserForm.unapply)
   )
 }

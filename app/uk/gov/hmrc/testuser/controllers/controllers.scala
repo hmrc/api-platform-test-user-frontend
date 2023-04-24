@@ -20,5 +20,6 @@ package object controllers {
 
   object FormKeys {
     val createUserTypeNoChoiceKey = "create.user.type.no.choice.field"
+    val createServicesNoChoiceKey = "create.user.services.no.choice.field"
   }
 }

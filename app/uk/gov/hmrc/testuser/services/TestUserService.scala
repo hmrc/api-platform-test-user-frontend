@@ -27,10 +27,20 @@ import uk.gov.hmrc.testuser.models.{Service, TestUser, UserTypes}
 
 class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
+  def services(implicit hc: HeaderCarrier) = apiPlatformTestUserConnector.getServices()
+
   def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
     for {
       services <- apiPlatformTestUserConnector.getServices()
       testUser <- createUserWithServices(userType, services)
+    } yield testUser
+
+  }
+  def createUserGeneric(userType: UserType, selectedServices: Seq[String])(implicit hc: HeaderCarrier): Future[TestUser] = {
+    println(s"ACHI: $selectedServices")
+    for {
+      services <- apiPlatformTestUserConnector.getServices()
+      testUser <- createUserWithServices(userType, services.filter(x => selectedServices.contains(x.key)))
     } yield testUser
 
   }
