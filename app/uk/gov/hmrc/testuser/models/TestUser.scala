@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json._
-
 import scala.collection.immutable
+
+import play.api.libs.json._
 
 case class Field(key: String, label: String, value: String)
 

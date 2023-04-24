@@ -17,18 +17,17 @@
 package uk.gov.hmrc.testuser.connectors
 
 import javax.inject.Inject
-import play.api.{Configuration, Environment}
-import play.api.http.Status.{CREATED, OK}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.testuser.models._
-import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.wiring.AppConfig
+import scala.concurrent.{ExecutionContext, Future}
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import uk.gov.hmrc.http.UpstreamErrorResponse
+import play.api.http.Status.{CREATED, OK}
+import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ApiPlatformTestUserConnector @Inject() (
     proxiedHttpClient: ProxiedHttpClient,
@@ -36,7 +35,7 @@ class ApiPlatformTestUserConnector @Inject() (
     configuration: Configuration,
     environment: Environment,
     servicesConfig: ServicesConfig
-  ) {
+)(implicit ec: ExecutionContext) {
   private val serviceKey = "api-platform-test-user"
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")

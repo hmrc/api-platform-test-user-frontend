@@ -17,9 +17,11 @@
 package uk.gov.hmrc.testuser.views
 
 import javax.inject.Inject
+
 import play.api.i18n.Messages
-import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
+
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 
 class FooterLinks @Inject() (appConfig: ApplicationConfig) {
 

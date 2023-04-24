@@ -17,12 +17,15 @@
 package uk.gov.hmrc.testuser.views
 
 import javax.inject.Inject
+
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+
 import play.api.i18n.Messages
 import play.api.test.FakeRequest
-import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 import uk.gov.hmrc.test.utils.HmrcSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+
 import uk.gov.hmrc.testuser.config.ApplicationConfig
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 
 class ErrorTemplateSpec @Inject() (errorTemplate: ErrorTemplate) extends HmrcSpec with GuiceOneAppPerSuite {
   "Error template page" should {

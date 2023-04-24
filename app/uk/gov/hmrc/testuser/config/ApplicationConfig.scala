@@ -17,6 +17,7 @@
 package uk.gov.hmrc.testuser.config
 
 import javax.inject.{Inject, Singleton}
+
 import play.api.Configuration
 
 @Singleton

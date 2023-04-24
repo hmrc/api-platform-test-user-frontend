@@ -1,5 +1,6 @@
 import bloop.integrations.sbt.BloopDefaults
 import sbt.Tests.{Group, SubProcess}
+import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
@@ -11,6 +12,12 @@ import scala.util.Properties
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val appName = "api-platform-test-user-frontend"
 
+scalaVersion := "2.13.8"
+
+ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
+ 
 lazy val microservice = (project in file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
   .settings(
@@ -19,12 +26,10 @@ lazy val microservice = (project in file("."))
     playSettings,
     scalaSettings,
     publishingSettings,
-    scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     majorVersion := 0
   )
-  .settings(SilencerSettings(): _*)
   .settings(ScoverageSettings(): _*)
   .settings(
     TwirlKeys.templateImports ++= Seq(
@@ -44,7 +49,7 @@ lazy val microservice = (project in file("."))
     Test / fork := false
   )
   .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .settings(DefaultBuildSettings.integrationTestSettings())
   .settings(inConfig(IntegrationTest)(BloopDefaults.configSettings))
   .settings(
     IntegrationTest / sourceDirectory := baseDirectory.value / "it",
@@ -55,6 +60,14 @@ lazy val microservice = (project in file("."))
     IntegrationTest / unmanagedResourceDirectories += baseDirectory.value / "test" / "resources",
     IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     addTestReportOption(IntegrationTest, "int-test-reports")
+  )
+  .settings(
+    scalacOptions ++= Seq(
+      "-Wconf:cat=unused&src=views/.*\\.scala:s",
+      "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
+      "-Wconf:cat=unused&src=.*Routes\\.scala:s",
+      "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s"
+    )
   )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =

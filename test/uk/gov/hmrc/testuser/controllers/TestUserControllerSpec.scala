@@ -16,30 +16,28 @@
 
 package uk.gov.hmrc.testuser.controllers
 
+import akka.stream.Materializer
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.UpstreamErrorResponse
+import uk.gov.hmrc.test.utils.AsyncHmrcSpec
+import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.common.LogSuppressing
+import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import play.api.test.Helpers._
-
-import scala.concurrent.Future.{failed, successful}
-import uk.gov.hmrc.test.utils.AsyncHmrcSpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import akka.stream.Materializer
-import org.jsoup.nodes.Document
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, CreateTestUserViewGeneric, TestUserView, TestUserViewGeneric}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import uk.gov.hmrc.http.UpstreamErrorResponse
-import uk.gov.hmrc.testuser.ApplicationLogger
-import uk.gov.hmrc.testuser.config.ApplicationConfig
-
-import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.concurrent.Future.{failed, successful}
+import scala.jdk.CollectionConverters._
 
 class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 
