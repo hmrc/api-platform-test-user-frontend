@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.testuser.common
 
+import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
 import ch.qos.logback.classic.spi.ILoggingEvent
@@ -24,7 +25,6 @@ import ch.qos.logback.core.filter.Filter
 import ch.qos.logback.core.spi.FilterReply
 
 import play.api.LoggerLike
-import scala.collection.mutable.ListBuffer
 
 class SuppressedLogFilter(val messagesContaining: String) extends Filter[ILoggingEvent] {
   private val suppressedEntries = ListBuffer[ILoggingEvent]()
@@ -64,7 +64,7 @@ trait LogSuppressing {
     try body(filter)
     finally {
       appendersWithFilters.foreach { case (appender, filters) =>
-        appender.clearAllFilters
+        appender.clearAllFilters()
         filters.asScala.foreach(appender.addFilter(_))
       }
     }
