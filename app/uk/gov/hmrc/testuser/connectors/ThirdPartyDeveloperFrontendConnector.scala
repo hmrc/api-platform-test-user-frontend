@@ -28,9 +28,13 @@ import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.NavLink
 
 @Singleton
-class ThirdPartyDeveloperFrontendConnector @Inject() (httpClient: HttpClient, runModeConfiguration: Configuration, environment: Environment, servicesConfig: ServicesConfig)(
-    implicit ec: ExecutionContext
-) {
+class ThirdPartyDeveloperFrontendConnector @Inject() (
+    httpClient: HttpClient,
+    runModeConfiguration: Configuration,
+    environment: Environment,
+    servicesConfig: ServicesConfig
+  )(implicit ec: ExecutionContext
+  ) {
   lazy val serviceUrl = servicesConfig.baseUrl("third-party-developer-frontend")
 
   def fetchNavLinks()(implicit hc: HeaderCarrier): Future[Seq[NavLink]] = {

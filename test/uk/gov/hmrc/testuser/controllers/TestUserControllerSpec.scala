@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.testuser.controllers
 
-import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
+import scala.jdk.CollectionConverters._
 
 import akka.stream.Materializer
 import org.jsoup.Jsoup

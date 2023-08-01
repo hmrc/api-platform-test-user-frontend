@@ -56,15 +56,16 @@ class ErrorHandler @Inject() (
     val auditConnector: AuditConnector,
     @Named("appName") val appName: String,
     errorTemplate: ErrorTemplate
-)(implicit val appConfig: ApplicationConfig, executionContext: ExecutionContext)
-    extends FrontendErrorHandler
+  )(implicit val appConfig: ApplicationConfig,
+    executionContext: ExecutionContext
+  ) extends FrontendErrorHandler
     with ErrorAuditing {
 
   override def onClientError(
       request: RequestHeader,
       statusCode: Int,
       message: String
-  ): Future[Result] = {
+    ): Future[Result] = {
     auditClientError(request, statusCode, message)
     super.onClientError(request, statusCode, message)
   }
@@ -73,7 +74,8 @@ class ErrorHandler @Inject() (
       pageTitle: String,
       heading: String,
       message: String
-  )(implicit request: Request[_]) = {
+    )(implicit request: Request[_]
+    ) = {
     errorTemplate(pageTitle, heading, message)
   }
 }
@@ -99,7 +101,8 @@ trait ErrorAuditing extends HttpAuditEvent {
   def auditServerError(
       request: RequestHeader,
       ex: Throwable
-  )(implicit ec: ExecutionContext): Unit = {
+    )(implicit ec: ExecutionContext
+    ): Unit = {
     val eventType       = ex match {
       case _: NotFoundException     => ResourceNotFound
       case _: JsValidationException => ServerValidationError
@@ -125,7 +128,8 @@ trait ErrorAuditing extends HttpAuditEvent {
       request: RequestHeader,
       statusCode: Int,
       message: String
-  )(implicit ec: ExecutionContext): Unit = {
+    )(implicit ec: ExecutionContext
+    ): Unit = {
     import play.api.http.Status._
     statusCode match {
       case NOT_FOUND   =>

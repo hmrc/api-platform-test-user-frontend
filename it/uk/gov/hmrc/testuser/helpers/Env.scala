@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.helpers
 import java.net.URL
 
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
-import org.openqa.selenium.remote.{RemoteWebDriver}
+import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.{Dimension, WebDriver}
 
 import scala.util.{Properties, Try}
