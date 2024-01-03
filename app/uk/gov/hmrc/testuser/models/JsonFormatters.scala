@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json.{Format, JsError, JsSuccess, OFormat, Writes, _}
+import play.api.libs.json._
 
 object EnumJson {
 

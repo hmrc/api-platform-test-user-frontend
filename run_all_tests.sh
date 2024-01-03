@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sbt -Dbrowser=chrome clean compile coverage test it:test coverageReport
+sbt -Dbrowser=chrome pre-commit
