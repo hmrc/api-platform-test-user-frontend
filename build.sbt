@@ -15,14 +15,14 @@ import bloop.integrations.sbt.BloopDefaults
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 lazy val appName = "api-platform-test-user-frontend"
 
-scalaVersion := "2.13.8"
+scalaVersion := "2.13.12"
 
-ThisBuild / scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.6.0"
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
  
 lazy val microservice = (project in file("."))
-  .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
+  .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .settings(
     name := appName,
     defaultSettings(),
