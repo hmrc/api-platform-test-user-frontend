@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.testuser.models
 
-import play.api.libs.json.{Format, JsError, JsSuccess, Writes, _}
+import play.api.libs.json.{Format, JsError, JsSuccess, OFormat, Writes, _}
 
 object EnumJson {
 
@@ -41,8 +41,8 @@ object EnumJson {
 }
 
 object JsonFormatters {
-  implicit val formatNavLinks                  = Json.format[NavLink]
-  implicit val formatCreateUserServicesRequest = Json.format[CreateUserRequest]
-  implicit val formatUserType                  = EnumJson.enumFormat(UserTypes)
-  implicit val formatService                   = Json.format[Service]
+  implicit val formatNavLinks: OFormat[NavLink]                            = Json.format[NavLink]
+  implicit val formatCreateUserServicesRequest: OFormat[CreateUserRequest] = Json.format[CreateUserRequest]
+  implicit val formatUserType: Format[UserTypes.Value]                     = EnumJson.enumFormat(UserTypes)
+  implicit val formatService: OFormat[Service]                             = Json.format[Service]
 }

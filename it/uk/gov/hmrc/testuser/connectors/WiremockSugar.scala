@@ -33,7 +33,7 @@ trait WiremockSugar extends BeforeAndAfterEach {
     WireMock.configureFor(stubHost, stubPort)
   }
 
-  override def afterEach() {
+  override def afterEach(): Unit = {
     wireMockServer.stop()
     wireMockServer.resetMappings()
   }

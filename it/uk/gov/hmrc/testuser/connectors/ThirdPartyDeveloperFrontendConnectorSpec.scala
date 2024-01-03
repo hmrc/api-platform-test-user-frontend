@@ -40,7 +40,7 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with Wiremo
       .build()
 
   trait Setup {
-    implicit val hc = HeaderCarrier()
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val underTest = new ThirdPartyDeveloperFrontendConnector(
       app.injector.instanceOf[HttpClient],
