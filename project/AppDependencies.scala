@@ -29,7 +29,8 @@ object AppDependencies {
     "org.seleniumhq.selenium" %  "selenium-api"                 % seleniumVersion,
     "org.seleniumhq.selenium" %  "selenium-firefox-driver"      % seleniumVersion,
     "org.seleniumhq.selenium" %  "selenium-chrome-driver"       % seleniumVersion,
-    "org.mockito"             %% "mockito-scala-scalatest"      % "1.7.1",
+    "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.29",
+    "org.scalatest"           %% "scalatest"                    % "3.2.17",
     "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2"
   ).map(_ % scope)
 }

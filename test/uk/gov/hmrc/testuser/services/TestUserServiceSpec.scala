@@ -41,7 +41,7 @@ class TestUserServiceSpec extends AsyncHmrcSpec {
   )
 
   trait Setup {
-    implicit val hc                      = HeaderCarrier()
+    implicit val hc: HeaderCarrier       = HeaderCarrier()
     val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
     val underTest                        = new TestUserService(mockApiPlatformTestUserConnector)
 

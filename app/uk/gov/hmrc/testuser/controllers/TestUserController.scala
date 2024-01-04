@@ -42,8 +42,9 @@ class TestUserController @Inject() (
     messagesControllerComponents: MessagesControllerComponents,
     createTestUser: CreateTestUserView,
     testUser: TestUserView
-)(implicit val ec: ExecutionContext, config: ApplicationConfig)
-    extends FrontendController(messagesControllerComponents)
+  )(implicit val ec: ExecutionContext,
+    config: ApplicationConfig
+  ) extends FrontendController(messagesControllerComponents)
     with I18nSupport
     with ApplicationLogger
     with WithUnsafeDefaultFormBinding {

@@ -29,9 +29,9 @@ import uk.gov.hmrc.testuser.models.NavLink
 class NavigationServiceSpec extends AsyncHmrcSpec {
 
   trait Setup {
-    implicit val hc   = HeaderCarrier()
-    val connector     = mock[ThirdPartyDeveloperFrontendConnector]
-    val configuration = mock[Configuration]
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val connector                  = mock[ThirdPartyDeveloperFrontendConnector]
+    val configuration              = mock[Configuration]
 
     val underTest = new NavigationService(connector, configuration)
   }

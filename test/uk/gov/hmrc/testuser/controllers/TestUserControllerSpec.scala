@@ -55,8 +55,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
   val organisation               = TestOrganisation("org-user", "org-password", organisationFields)
 
   trait Setup {
-    implicit val materializer = app.injector.instanceOf[Materializer]
-    private val csrfAddToken  = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
+    implicit val materializer: Materializer = app.injector.instanceOf[Materializer]
+    private val csrfAddToken                = app.injector.instanceOf[play.filters.csrf.CSRFAddToken]
 
     val config: ApplicationConfig = mock[ApplicationConfig]
     when(config.feedbackSurveyUrl).thenReturn("#")
@@ -72,7 +72,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     val mockNavigationService            = mock[NavigationService]
     val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
 
-    implicit val appConfig = config
+    implicit val appConfig: ApplicationConfig = config
 
     val underTest = new TestUserController(
       app.injector.instanceOf[MessagesApi],
