@@ -25,7 +25,6 @@ object AppDependencies {
     "org.jsoup"               %  "jsoup"                        % "1.8.1",
     "com.github.tomakehurst"  %  "wiremock-jre8-standalone"     % "2.31.0",
     "org.scalatestplus"       %% "selenium-4-2"                 % "3.2.13.0",
-    "uk.gov.hmrc"             %% "webdriver-factory"            % "0.41.0",
     "org.seleniumhq.selenium" %  "selenium-api"                 % seleniumVersion,
     "org.seleniumhq.selenium" %  "selenium-firefox-driver"      % seleniumVersion,
     "org.seleniumhq.selenium" %  "selenium-chrome-driver"       % seleniumVersion,
