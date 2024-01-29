@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sbt -Dbrowser=chrome pre-commit
+sbt -Dbrowser=remote-chrome pre-commit
