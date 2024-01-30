@@ -18,14 +18,68 @@ package uk.gov.hmrc.testuser.pages
 
 import uk.gov.hmrc.testuser.helpers.WebPage
 import org.openqa.selenium.By
+import uk.gov.hmrc.selenium.webdriver.Driver
+
+import scala.jdk.CollectionConverters._
 
 class CreateTestUserPage(port: Int) extends WebPage {
+
   override val url: String = s"http://localhost:$port/api-test-user"
 
-  override def isCurrentPage: Boolean = find(cssSelector("h1")).fold(false)(_.text == "Create a test user")
-}
+  override val pageTitle = "Create a test user"
 
-object CreateTestUserPage {
-  val individualCheckbox: By   = By.id("Individual")
-  val organisationCheckbox: By = By.id("Organisation")
+  override def isCurrentPage: Boolean = {
+    println("**********************************")
+    println(Driver.instance.getPageSource)
+    println("**********************************")
+    Driver.instance.findElements(By.tagName("h1")).asScala.headOption.fold(false)(_.getText() == pageTitle)
+  }
+
+  def selectIndividual(): Unit = {
+    println(getCurrentUrl)
+    println(getPageSource)
+    selectCheckbox(By.id("Individual"))
+  }
+
+  def selectOrganisation(): Unit = {
+    println(getCurrentUrl)
+    println(getPageSource)
+    selectCheckbox(By.id("Organisation"))
+  }
+
+  def clickOnSubmit(): Unit = {
+    click(By.id("submit"))
+  }
+
+  def getPassword(): String = {
+    getByCssSelector("data-password")
+  }
+
+  def getUserId(): String = {
+    getByCssSelector("data-userid")
+  }
+
+  def getSaUtr(): String = {
+    getByCssSelector("data-sautr")
+  }
+
+  def getCtUtr(): String = {
+    getByCssSelector("data-ctutr")
+  }
+
+  def getEmpRef(): String = {
+    getByCssSelector("data-empref")
+  }
+
+  def getVrn(): String = {
+    getByCssSelector("data-vrn")
+  }
+
+  def getNino(): String = {
+    getByCssSelector("data-nino")
+  }
+
+  private def getByCssSelector(fieldName: String): String = {
+    getText(By.cssSelector(s"[$fieldName]"))
+  }
 }

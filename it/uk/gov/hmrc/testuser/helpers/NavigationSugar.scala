@@ -30,8 +30,8 @@ trait NavigationSugar extends WebBrowser with Eventually with Assertions with Ma
     on(page)
   }
 
-  def go(page: WebLink)(implicit webDriver: WebDriver) = {
-    goo to page
+  def go(page: WebPage)(implicit webDriver: WebDriver) = {
+    goo to page.url
   }
 
   def clickOnSubmit()(implicit webDriver: WebDriver) = {

@@ -16,24 +16,42 @@
 
 package uk.gov.hmrc.testuser.helpers
 
+import uk.gov.hmrc.selenium.component.PageObject
+import org.openqa.selenium.By
+import org.openqa.selenium.support.ui.Wait
+import org.openqa.selenium.support.ui.FluentWait
+import uk.gov.hmrc.selenium.webdriver.Driver
+import java.time.Duration
 import org.openqa.selenium.WebDriver
-import org.scalatestplus.selenium.{Page, WebBrowser}
-import org.scalatest.matchers.should.Matchers
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.support.ui.ExpectedConditions
 
-case class Link(href: String, text: String)
+trait WebPage extends PageObject {
 
-trait WebLink extends Page with WebBrowser with Matchers {
-  implicit val webDriver: WebDriver = Env.driver
+  def url: String
 
-  override def toString = this.getClass.getSimpleName
-}
-
-trait WebPage extends WebLink {
+  def pageTitle: String
 
   def isCurrentPage: Boolean
 
-  def heading = tagName("h1").element.text
+  def heading = getText(By.tagName("h1"))
 
-  def bodyText = tagName("body").element.text
+  def bodyText = getText(By.tagName("body"))
 
+  def goTo(): Unit = {
+    get(url)
+    println("**********************************")
+    println(Driver.instance.getPageSource)
+    println("**********************************")
+    waitForElementToBePresent(By.cssSelector("service-info"))
+  }
+
+  private def waitForElementToBePresent(locator: By): WebElement = {
+    fluentWait.until(ExpectedConditions.presenceOfElementLocated(locator))
+  }
+
+  // protected val continueButton: By = By.id("continue-button")
+  private def fluentWait: Wait[WebDriver] = new FluentWait[WebDriver](Driver.instance)
+    .withTimeout(Duration.ofSeconds(3))
+    .pollingEvery(Duration.ofSeconds(1))
 }

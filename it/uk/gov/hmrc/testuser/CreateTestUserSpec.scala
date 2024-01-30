@@ -18,7 +18,6 @@ package uk.gov.hmrc.testuser
 
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.pages.CreateTestUserPage
-import uk.gov.hmrc.testuser.pages.CreateTestUserPage._
 import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub._
 import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
 
@@ -54,15 +53,17 @@ class CreateTestUserSpec extends BaseSpec {
                                         |}
         """.stripMargin)
 
-      goOn(new CreateTestUserPage(port))
-      clickOnElement(individualCheckbox)
-      clickOnSubmit()
+      val page = new CreateTestUserPage(port)
+      page.goTo()
+      page.isCurrentPage shouldBe true
+      page.selectIndividual()
+      page.clickOnSubmit()
 
-      verifyText("data-userid", individualUserId)
-      verifyText("data-password", individualPassword)
-      verifyText("data-sautr", individualSaUtr)
-      verifyText("data-nino", individualNino)
-      verifyText("data-vrn", vrn)
+      page.getPassword() shouldBe individualPassword
+      page.getUserId() shouldBe individualUserId
+      page.getSaUtr() shouldBe individualSaUtr
+      page.getNino() shouldBe individualNino
+      page.getVrn() shouldBe vrn
     }
 
     Scenario("Create a test organisation") {
@@ -79,16 +80,20 @@ class CreateTestUserSpec extends BaseSpec {
                                           |}
         """.stripMargin)
 
-      goOn(new CreateTestUserPage(port))
-      clickOnElement(organisationCheckbox)
-      clickOnSubmit()
+      val page = new CreateTestUserPage(port)
+      page.goTo()
+      page.isCurrentPage shouldBe true
 
-      verifyText("data-password", organisationPassword)
-      verifyText("data-userid", organisationId)
-      verifyText("data-sautr", organisationSaUtr)
-      verifyText("data-ctutr", organisationCtUtr)
-      verifyText("data-empref", s"$empRef")
-      verifyText("data-vrn", vrn)
+      page.selectOrganisation()
+
+      page.clickOnSubmit()
+
+      page.getPassword() shouldBe organisationPassword
+      page.getUserId() shouldBe organisationId
+      page.getSaUtr() shouldBe organisationSaUtr
+      page.getCtUtr() shouldBe organisationCtUtr
+      page.getEmpRef() shouldBe empRef
+      page.getVrn() shouldBe vrn
     }
   }
 
