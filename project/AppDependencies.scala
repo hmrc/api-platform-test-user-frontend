@@ -10,7 +10,6 @@ object AppDependencies {
   
   lazy val scope: String = "test, it"
   lazy val bootStrapVersion = "8.4.0"
-  // val seleniumVersion = "4.2.2"
   lazy val seleniumVersion = "4.14.0"
 
   lazy  val compile = Seq(
@@ -33,6 +32,7 @@ object AppDependencies {
     // "org.scalatest"           %% "scalatest"                    % "3.2.17",
     // "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2",
     "org.seleniumhq.selenium" % "selenium-java"                 % "4.17.0",
-    "uk.gov.hmrc"             %% "ui-test-runner"               % "0.10.0"
+    "com.titusfortner"        % "selenium-logger"               % "2.3.0",
+    // "uk.gov.hmrc"             %% "ui-test-runner"               % "0.10.0"
   ).map(_ % scope)
 }
