@@ -25,10 +25,13 @@ import org.openqa.selenium.{Dimension, WebDriver}
 import scala.util.{Properties, Try}
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.firefox.FirefoxDriver
+import com.titusfortner.logging.SeleniumLogger
 
 trait Env {
+  SeleniumLogger.enable()
+
   lazy val windowSize        = new Dimension(1024, 800)
-  lazy val driver: WebDriver = createWebDriver()
+  lazy val driver: WebDriver = createChromeDriver()
 
   private lazy val browser = Properties.propOrElse("browser", "chrome")
 
