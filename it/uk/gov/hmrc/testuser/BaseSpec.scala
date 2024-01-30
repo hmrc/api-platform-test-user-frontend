@@ -19,25 +19,31 @@ package uk.gov.hmrc.testuser
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
-import org.openqa.selenium.WebDriver
+
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.{Application, Mode}
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
-import uk.gov.hmrc.testuser.helpers.NavigationSugar
-import uk.gov.hmrc.testuser.helpers.Env
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestData}
 import org.scalatest.matchers.should.Matchers
 import play.api.test.RunningServer
+import uk.gov.hmrc.selenium.webdriver.{Browser, Driver, ScreenshotOnFailure}
 
-trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterAll with BeforeAndAfterEach with Matchers with NavigationSugar with GuiceOneServerPerTest {
+import java.time.Duration
+
+trait BaseSpec
+    extends AnyFeatureSpec
+    with BeforeAndAfterAll
+    with BeforeAndAfterEach
+    with Matchers
+    with GuiceOneServerPerTest
+    with Browser
+    with ScreenshotOnFailure {
 
   val stubPort = 11111
   val stubHost = "localhost"
 
   override protected def newServerForTest(app: Application, testData: TestData): RunningServer = MyTestServerFactory.start(app)
-
-  implicit lazy val webDriver: WebDriver = Env.driver
 
   val wireMockServer = new WireMockServer(
     wireMockConfig()
@@ -55,17 +61,23 @@ trait BaseSpec extends AnyFeatureSpec with BeforeAndAfterAll with BeforeAndAfter
       .build()
   }
 
-  override def beforeAll() = {
+  override def beforeAll(): Unit = {
     wireMockServer.start()
     WireMock.configureFor(stubHost, stubPort)
   }
 
-  override def afterAll() = {
+  override def afterAll(): Unit = {
     wireMockServer.stop()
   }
 
-  override def beforeEach() = {
-    webDriver.manage().deleteAllCookies()
+  override def beforeEach(): Unit = {
+    startBrowser()
+    Driver.instance.manage().deleteAllCookies()
     WireMock.reset()
   }
+
+  override def afterEach(): Unit = {
+    quitBrowser()
+  }
+
 }

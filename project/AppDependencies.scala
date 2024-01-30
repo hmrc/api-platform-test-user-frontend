@@ -31,8 +31,8 @@ object AppDependencies {
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.29",
     // "org.scalatest"           %% "scalatest"                    % "3.2.17",
     // "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2",
-    "org.seleniumhq.selenium" % "selenium-java"                 % "4.17.0",
+//    "org.seleniumhq.selenium" % "selenium-java"                 % "4.17.0",
     "com.titusfortner"        % "selenium-logger"               % "2.3.0",
-    // "uk.gov.hmrc"             %% "ui-test-runner"               % "0.10.0"
+     "uk.gov.hmrc"             %% "ui-test-runner"               % "0.16.0"
   ).map(_ % scope)
 }

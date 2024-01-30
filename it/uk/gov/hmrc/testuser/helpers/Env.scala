@@ -17,7 +17,6 @@
 package uk.gov.hmrc.testuser.helpers
 
 import java.net.URL
-
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.{Dimension, WebDriver}
@@ -25,61 +24,66 @@ import org.openqa.selenium.{Dimension, WebDriver}
 import scala.util.{Properties, Try}
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.firefox.FirefoxDriver
-import com.titusfortner.logging.SeleniumLogger
+
+import java.time.Duration
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
 
 trait Env {
-  SeleniumLogger.enable()
-
-  lazy val windowSize        = new Dimension(1024, 800)
-  lazy val driver: WebDriver = createChromeDriver()
-
-  private lazy val browser = Properties.propOrElse("browser", "chrome")
-
-  private def createWebDriver(): WebDriver = {
-    val driver = browser match {
-      case "chrome"         => createChromeDriver()
-      case "remote-chrome"  => createRemoteChromeDriver()
-      case "firefox"        => createFirefoxDriver()
-      case "remote-firefox" => createRemoteFirefoxDriver()
-    }
-    driver.manage().deleteAllCookies()
-    driver.manage().window().setSize(new Dimension(1280, 720))
-    driver
-  }
-
-  def createFirefoxDriver(): WebDriver = {
-    val options = new FirefoxOptions().setAcceptInsecureCerts(true)
-    new FirefoxDriver(options)
-  }
-
-  def createRemoteFirefoxDriver() = {
-    val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
-    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
-  }
-
-  private def createChromeDriver(): WebDriver = {
-    val options = new ChromeOptions()
-    options.addArguments("--headless")
-    options.addArguments("--proxy-server='direct://'")
-    options.addArguments("--proxy-bypass-list=*")
-    options.addArguments("--remote-allow-origins=*")
-    new ChromeDriver(options)
-  }
-
-  private def createRemoteChromeDriver() = {
-    val browserOptions: ChromeOptions = new ChromeOptions()
-    browserOptions.addArguments("--headless")
-    browserOptions.addArguments("--proxy-server='direct://'")
-    browserOptions.addArguments("--proxy-bypass-list=*")
-
-    new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), browserOptions)
-  }
-
-  def shutdown = Try(driver.quit())
-
-  sys addShutdownHook {
-    shutdown
-  }
+//  //SeleniumLogger.all()
+//
+//  lazy val windowSize        = new Dimension(1024, 800)
+//  lazy val driver: WebDriver = createWebDriver()
+//
+//  private lazy val browser = Properties.propOrElse("browser", "remote-chrome")
+//
+//  private def createWebDriver(): WebDriver = {
+//    val driver = browser match {
+//      case "chrome"         => createRemoteChromeDriver()
+//      case "remote-chrome"  => createRemoteChromeDriver()
+//      case "firefox"        => createFirefoxDriver()
+//      case "remote-firefox" => createRemoteFirefoxDriver()
+//    }
+//    driver.manage().deleteAllCookies()
+//    driver.manage().window().setSize(new Dimension(1280, 720))
+//    driver.manage.timeouts.implicitlyWait(Duration.of(5, ChronoUnit.SECONDS))
+//    driver.manage.timeouts.pageLoadTimeout(Duration.of(5, ChronoUnit.SECONDS))
+//    driver
+//  }
+//
+//  def createFirefoxDriver(): WebDriver = {
+//    val options = new FirefoxOptions().setAcceptInsecureCerts(true)
+//    new FirefoxDriver(options)
+//  }
+//
+//  def createRemoteFirefoxDriver() = {
+//    val browserOptions = new FirefoxOptions().setAcceptInsecureCerts(true)
+//    new RemoteWebDriver(new URL(s"http://localhost:4444/wd/hub"), browserOptions)
+//  }
+//
+////  private def createChromeDriver(): WebDriver = {
+////    val options = new ChromeOptions()
+////    options.addArguments("--headless=new")
+////    options.addArguments("--proxy-server='direct://'")
+////    options.addArguments("--proxy-bypass-list=*")
+////    options.addArguments("--remote-allow-origins=*")
+////    new ChromeDriver(options)
+////  }
+//
+//  private def createRemoteChromeDriver() = {
+//    val browserOptions: ChromeOptions = new ChromeOptions()
+//    browserOptions.addArguments("--headless")
+//    browserOptions.addArguments("--proxy-server='direct://'")
+//    browserOptions.addArguments("--proxy-bypass-list=*")
+//
+//    new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), browserOptions)
+//  }
+//
+//  def shutdown = Try(driver.quit())
+//
+//  sys addShutdownHook {
+//    shutdown
+//  }
 }
 
 object Env extends Env
