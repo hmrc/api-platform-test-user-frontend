@@ -16,34 +16,20 @@
 
 package uk.gov.hmrc.testuser.pages
 
-import uk.gov.hmrc.testuser.helpers.WebPage
+import uk.gov.hmrc.testuser.helpers.{WebPage, Env}
 import org.openqa.selenium.By
-import uk.gov.hmrc.selenium.webdriver.Driver
 
-import scala.jdk.CollectionConverters._
 
-class CreateTestUserPage(port: Int) extends WebPage {
-
-  override val url: String = s"http://localhost:$port/api-test-user"
+object CreateTestUserPage extends WebPage {
+  override val url: String = s"http://localhost:${Env.port}/api-test-user"
 
   override val pageTitle = "Create a test user"
 
-  override def isCurrentPage: Boolean = {
-    println("**********************************")
-    println(Driver.instance.getPageSource)
-    println("**********************************")
-    Driver.instance.findElements(By.tagName("h1")).asScala.headOption.fold(false)(_.getText() == pageTitle)
-  }
-
   def selectIndividual(): Unit = {
-    println(getCurrentUrl)
-    println(getPageSource)
     selectCheckbox(By.id("Individual"))
   }
 
   def selectOrganisation(): Unit = {
-    println(getCurrentUrl)
-    println(getPageSource)
     selectCheckbox(By.id("Organisation"))
   }
 

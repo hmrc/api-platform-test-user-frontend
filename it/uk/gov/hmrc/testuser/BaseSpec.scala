@@ -28,8 +28,7 @@ import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestData}
 import org.scalatest.matchers.should.Matchers
 import play.api.test.RunningServer
 import uk.gov.hmrc.selenium.webdriver.{Browser, Driver, ScreenshotOnFailure}
-
-import java.time.Duration
+import uk.gov.hmrc.testuser.helpers.WebPage
 
 trait BaseSpec
     extends AnyFeatureSpec
@@ -78,6 +77,10 @@ trait BaseSpec
 
   override def afterEach(): Unit = {
     quitBrowser()
+  }
+
+  def isCurrentPage(page: WebPage): Unit = {
+    page.heading shouldBe page.pageTitle
   }
 
 }
