@@ -25,6 +25,7 @@ import java.time.Duration
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
+import scala.jdk.CollectionConverters._
 
 trait WebPage extends PageObject {
 
@@ -32,25 +33,25 @@ trait WebPage extends PageObject {
 
   def pageTitle: String
 
-  def isCurrentPage: Boolean
-
+  def getCurrentTitle: String = getText(By.tagName("h1"))
+  
   def heading = getText(By.tagName("h1"))
 
   def bodyText = getText(By.tagName("body"))
 
   def goTo(): Unit = {
     get(url)
-    println("**********************************")
-    println(Driver.instance.getPageSource)
-    println("**********************************")
-    waitForElementToBePresent(By.cssSelector("service-info"))
+    waitForElementToBePresent(By.cssSelector("div[class='service-info']"))
+  }
+
+  protected def findElements(location: By): List[WebElement] ={
+    Driver.instance.findElements(location).asScala.toList
   }
 
   private def waitForElementToBePresent(locator: By): WebElement = {
     fluentWait.until(ExpectedConditions.presenceOfElementLocated(locator))
   }
 
-  // protected val continueButton: By = By.id("continue-button")
   private def fluentWait: Wait[WebDriver] = new FluentWait[WebDriver](Driver.instance)
     .withTimeout(Duration.ofSeconds(3))
     .pollingEvery(Duration.ofSeconds(1))

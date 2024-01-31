@@ -17,7 +17,7 @@
 package uk.gov.hmrc.testuser
 
 import uk.gov.hmrc.testuser.models._
-import uk.gov.hmrc.testuser.pages.CreateTestUserPage
+import uk.gov.hmrc.testuser.pages._
 import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub._
 import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
 
@@ -53,17 +53,17 @@ class CreateTestUserSpec extends BaseSpec {
                                         |}
         """.stripMargin)
 
-      val page = new CreateTestUserPage(port)
-      page.goTo()
-      page.isCurrentPage shouldBe true
-      page.selectIndividual()
-      page.clickOnSubmit()
+      CreateTestUserPage.goTo()
+      isCurrentPage(CreateTestUserPage)
+      CreateTestUserPage.selectIndividual()
+      CreateTestUserPage.clickOnSubmit()
 
-      page.getPassword() shouldBe individualPassword
-      page.getUserId() shouldBe individualUserId
-      page.getSaUtr() shouldBe individualSaUtr
-      page.getNino() shouldBe individualNino
-      page.getVrn() shouldBe vrn
+      isCurrentPage(ShowIndividualPage)
+      ShowIndividualPage.getPassword() shouldBe individualPassword
+      ShowIndividualPage.getUserId() shouldBe individualUserId
+      ShowIndividualPage.getSaUtr() shouldBe individualSaUtr
+      ShowIndividualPage.getNino() shouldBe individualNino
+      ShowIndividualPage.getVrn() shouldBe vrn
     }
 
     Scenario("Create a test organisation") {
@@ -80,20 +80,18 @@ class CreateTestUserSpec extends BaseSpec {
                                           |}
         """.stripMargin)
 
-      val page = new CreateTestUserPage(port)
-      page.goTo()
-      page.isCurrentPage shouldBe true
+      CreateTestUserPage.goTo()
+      isCurrentPage(CreateTestUserPage)
+      CreateTestUserPage.selectOrganisation()
+      CreateTestUserPage.clickOnSubmit()
 
-      page.selectOrganisation()
-
-      page.clickOnSubmit()
-
-      page.getPassword() shouldBe organisationPassword
-      page.getUserId() shouldBe organisationId
-      page.getSaUtr() shouldBe organisationSaUtr
-      page.getCtUtr() shouldBe organisationCtUtr
-      page.getEmpRef() shouldBe empRef
-      page.getVrn() shouldBe vrn
+      isCurrentPage(ShowOrganisationPage)
+      ShowOrganisationPage.getPassword() shouldBe organisationPassword
+      ShowOrganisationPage.getUserId() shouldBe organisationId
+      ShowOrganisationPage.getSaUtr() shouldBe organisationSaUtr
+      ShowOrganisationPage.getCtUtr() shouldBe organisationCtUtr
+      ShowOrganisationPage.getEmpRef() shouldBe empRef
+      ShowOrganisationPage.getVrn() shouldBe vrn
     }
   }
 

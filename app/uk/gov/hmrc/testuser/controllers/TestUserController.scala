@@ -50,7 +50,6 @@ class TestUserController @Inject() (
     with WithUnsafeDefaultFormBinding {
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
-    println("^^^^^^^^^ HELLOTEST ^^^^^^^^^^")
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
   }
 
