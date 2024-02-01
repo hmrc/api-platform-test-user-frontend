@@ -28,7 +28,6 @@ lazy val microservice = (project in file("."))
     defaultSettings(),
     playSettings,
     scalaSettings,
-    publishingSettings,
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     majorVersion := 0
