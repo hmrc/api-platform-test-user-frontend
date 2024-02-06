@@ -34,7 +34,7 @@ trait WebPage extends PageObject {
   def pageTitle: String
 
   def getCurrentTitle: String = getText(By.tagName("h1"))
-  
+
   def heading = getText(By.tagName("h1"))
 
   def bodyText = getText(By.tagName("body"))
@@ -44,7 +44,7 @@ trait WebPage extends PageObject {
     waitForElementToBePresent(By.cssSelector("div[class='service-info']"))
   }
 
-  protected def findElements(location: By): List[WebElement] ={
+  protected def findElements(location: By): List[WebElement] = {
     Driver.instance.findElements(location).asScala.toList
   }
 

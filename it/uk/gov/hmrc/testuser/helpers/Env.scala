@@ -17,5 +17,5 @@
 package uk.gov.hmrc.testuser.helpers
 
 object Env {
-    val port = 6001
+  val port = 6001
 }

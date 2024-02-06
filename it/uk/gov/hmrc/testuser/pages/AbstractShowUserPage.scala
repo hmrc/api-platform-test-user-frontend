@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.testuser.pages
 
-import uk.gov.hmrc.testuser.helpers.{WebPage, Env}
+import uk.gov.hmrc.testuser.helpers.{Env, WebPage}
 import org.openqa.selenium.By
-
 
 abstract class AbstractShowUserPage extends WebPage {
   override val url: String = s"http://localhost:${Env.port}/api-test-user/user"
