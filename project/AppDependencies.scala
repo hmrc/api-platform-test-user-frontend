@@ -7,17 +7,9 @@ object AppDependencies {
 
   lazy val appDependencies: Seq[ModuleID] = compile ++ test
   
-<<<<<<< HEAD
-
   lazy val scope: String = "test, it"
   lazy val bootStrapVersion = "8.4.0"
   lazy val seleniumVersion = "4.14.1"
-=======
-  
-  lazy val scope: String = "test, it"
-  lazy val bootStrapVersion = "8.4.0"
-  lazy val seleniumVersion = "4.14.0"
->>>>>>> 21934dd (Bobbins - wip)
 
   lazy  val compile = Seq(
     ws,
@@ -32,6 +24,6 @@ object AppDependencies {
     "org.jsoup"               %  "jsoup"                        % "1.8.1",
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.29",
     "com.titusfortner"        % "selenium-logger"               % "2.3.0",
-     "uk.gov.hmrc"             %% "ui-test-runner"               % "0.16.0"
+    "uk.gov.hmrc"             %% "ui-test-runner"               % "0.16.0"
   )  
 }

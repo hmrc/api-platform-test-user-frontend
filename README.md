@@ -18,7 +18,10 @@ Once the script has finished, the service will be available on http://localhost:
 
 Run all of the unit tests with `sbt test`
 
-Run all of the integration tests with `sbt it:test`
+Integration tests make use of docker-selenium-grid to spin up grid, chrome, firefox and edge.  See that repo for more details.
+N.B. The docker image start script will need port 6001 adding to TARGET_PORTS and any firewall you have must permit this port.
+
+Run all of the integration tests with `sbt -Dbrowser=chrome it:test`
 
 Run the unit and integration tests with code coverage reporting using `./run_all_tests.sh`
 
