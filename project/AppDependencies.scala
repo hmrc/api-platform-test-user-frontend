@@ -25,5 +25,5 @@ object AppDependencies {
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.29",
     "com.titusfortner"        % "selenium-logger"               % "2.3.0",
     "uk.gov.hmrc"             %% "ui-test-runner"               % "0.16.0"
-  )  
+  ).map(_ % scope)
 }
