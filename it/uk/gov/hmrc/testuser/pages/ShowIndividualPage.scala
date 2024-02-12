@@ -16,33 +16,9 @@
 
 package uk.gov.hmrc.testuser.pages
 
-import uk.gov.hmrc.testuser.helpers.{Env, WebPage}
-import org.openqa.selenium.By
+object ShowIndividualPage extends AbstractShowUserPage {
 
-object CreateTestUserPage extends WebPage {
-  override val url: String = s"http://localhost:${Env.port}/api-test-user"
-
-  override val pageTitle = "Create a test user"
-
-  def selectIndividual(): Unit = {
-    selectCheckbox(By.id("Individual"))
-  }
-
-  def selectOrganisation(): Unit = {
-    selectCheckbox(By.id("Organisation"))
-  }
-
-  def clickOnSubmit(): Unit = {
-    click(By.id("submit"))
-  }
-
-  def getPassword(): String = {
-    getByCssSelector("data-password")
-  }
-
-  def getUserId(): String = {
-    getByCssSelector("data-userid")
-  }
+  override val pageTitle = "Generated individual"
 
   def getSaUtr(): String = {
     getByCssSelector("data-sautr")
@@ -50,10 +26,6 @@ object CreateTestUserPage extends WebPage {
 
   def getCtUtr(): String = {
     getByCssSelector("data-ctutr")
-  }
-
-  def getEmpRef(): String = {
-    getByCssSelector("data-empref")
   }
 
   def getVrn(): String = {
@@ -64,7 +36,4 @@ object CreateTestUserPage extends WebPage {
     getByCssSelector("data-nino")
   }
 
-  private def getByCssSelector(fieldName: String): String = {
-    getText(By.cssSelector(s"[$fieldName]"))
-  }
 }

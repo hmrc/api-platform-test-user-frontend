@@ -16,24 +16,43 @@
 
 package uk.gov.hmrc.testuser.helpers
 
+import uk.gov.hmrc.selenium.component.PageObject
+import org.openqa.selenium.By
+import org.openqa.selenium.support.ui.Wait
+import org.openqa.selenium.support.ui.FluentWait
+import uk.gov.hmrc.selenium.webdriver.Driver
+import java.time.Duration
 import org.openqa.selenium.WebDriver
-import org.scalatestplus.selenium.{Page, WebBrowser}
-import org.scalatest.matchers.should.Matchers
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.support.ui.ExpectedConditions
+import scala.jdk.CollectionConverters._
 
-case class Link(href: String, text: String)
+trait WebPage extends PageObject {
 
-trait WebLink extends Page with WebBrowser with Matchers {
-  implicit val webDriver: WebDriver = Env.driver
+  def url: String
 
-  override def toString = this.getClass.getSimpleName
-}
+  def pageTitle: String
 
-trait WebPage extends WebLink {
+  def getCurrentTitle: String = getText(By.tagName("h1"))
 
-  def isCurrentPage: Boolean
+  def heading = getText(By.tagName("h1"))
 
-  def heading = tagName("h1").element.text
+  def bodyText = getText(By.tagName("body"))
 
-  def bodyText = tagName("body").element.text
+  def goTo(): Unit = {
+    get(url)
+    waitForElementToBePresent(By.cssSelector("div[class='service-info']"))
+  }
 
+  protected def findElements(location: By): List[WebElement] = {
+    Driver.instance.findElements(location).asScala.toList
+  }
+
+  private def waitForElementToBePresent(locator: By): WebElement = {
+    fluentWait.until(ExpectedConditions.presenceOfElementLocated(locator))
+  }
+
+  private def fluentWait: Wait[WebDriver] = new FluentWait[WebDriver](Driver.instance)
+    .withTimeout(Duration.ofSeconds(3))
+    .pollingEvery(Duration.ofSeconds(1))
 }

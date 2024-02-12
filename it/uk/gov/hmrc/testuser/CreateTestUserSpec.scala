@@ -17,8 +17,7 @@
 package uk.gov.hmrc.testuser
 
 import uk.gov.hmrc.testuser.models._
-import uk.gov.hmrc.testuser.pages.CreateTestUserPage
-import uk.gov.hmrc.testuser.pages.CreateTestUserPage._
+import uk.gov.hmrc.testuser.pages._
 import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub._
 import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
 
@@ -54,15 +53,17 @@ class CreateTestUserSpec extends BaseSpec {
                                         |}
         """.stripMargin)
 
-      goOn(new CreateTestUserPage(port))
-      clickOnElement(individualCheckbox)
-      clickOnSubmit()
+      CreateTestUserPage.goTo()
+      isCurrentPage(CreateTestUserPage)
+      CreateTestUserPage.selectIndividual()
+      CreateTestUserPage.clickOnSubmit()
 
-      verifyText("data-userid", individualUserId)
-      verifyText("data-password", individualPassword)
-      verifyText("data-sautr", individualSaUtr)
-      verifyText("data-nino", individualNino)
-      verifyText("data-vrn", vrn)
+      isCurrentPage(ShowIndividualPage)
+      ShowIndividualPage.getPassword() shouldBe individualPassword
+      ShowIndividualPage.getUserId() shouldBe individualUserId
+      ShowIndividualPage.getSaUtr() shouldBe individualSaUtr
+      ShowIndividualPage.getNino() shouldBe individualNino
+      ShowIndividualPage.getVrn() shouldBe vrn
     }
 
     Scenario("Create a test organisation") {
@@ -79,16 +80,18 @@ class CreateTestUserSpec extends BaseSpec {
                                           |}
         """.stripMargin)
 
-      goOn(new CreateTestUserPage(port))
-      clickOnElement(organisationCheckbox)
-      clickOnSubmit()
+      CreateTestUserPage.goTo()
+      isCurrentPage(CreateTestUserPage)
+      CreateTestUserPage.selectOrganisation()
+      CreateTestUserPage.clickOnSubmit()
 
-      verifyText("data-password", organisationPassword)
-      verifyText("data-userid", organisationId)
-      verifyText("data-sautr", organisationSaUtr)
-      verifyText("data-ctutr", organisationCtUtr)
-      verifyText("data-empref", s"$empRef")
-      verifyText("data-vrn", vrn)
+      isCurrentPage(ShowOrganisationPage)
+      ShowOrganisationPage.getPassword() shouldBe organisationPassword
+      ShowOrganisationPage.getUserId() shouldBe organisationId
+      ShowOrganisationPage.getSaUtr() shouldBe organisationSaUtr
+      ShowOrganisationPage.getCtUtr() shouldBe organisationCtUtr
+      ShowOrganisationPage.getEmpRef() shouldBe empRef
+      ShowOrganisationPage.getVrn() shouldBe vrn
     }
   }
 
