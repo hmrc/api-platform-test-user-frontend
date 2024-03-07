@@ -19,15 +19,16 @@ package uk.gov.hmrc.testuser
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestData}
+import org.scalatestplus.play.guice.GuiceOneServerPerTest
 
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.{Application, Mode}
-import org.scalatestplus.play.guice.GuiceOneServerPerTest
-import org.scalatest.featurespec.AnyFeatureSpec
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestData}
-import org.scalatest.matchers.should.Matchers
 import play.api.test.RunningServer
+import play.api.{Application, Mode}
 import uk.gov.hmrc.selenium.webdriver.{Browser, Driver, ScreenshotOnFailure}
+
 import uk.gov.hmrc.testuser.helpers.WebPage
 
 trait BaseSpec

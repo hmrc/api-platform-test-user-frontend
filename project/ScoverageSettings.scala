@@ -5,7 +5,7 @@ object ScoverageSettings {
     ScoverageKeys.coverageMinimumStmtTotal := 80.00,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com.kenshoo.play.metrics.*;" +
+    ScoverageKeys.coverageExcludedPackages :=
       ".*definition.*;" +
       "prod.*;" +
       "testOnlyDoNotUseInAppConf.*;" +

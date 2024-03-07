@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.testuser.pages
+package uk.gov.hmrc.testuser
 
-import uk.gov.hmrc.testuser.helpers.{Env, WebPage}
-import org.openqa.selenium.By
+import play.api.test.DefaultTestServerFactory
+import play.api.{Application, Mode}
+import play.core.server.ServerConfig
 
-abstract class AbstractShowUserPage extends WebPage {
-  override val url: String = s"http://localhost:${Env.port}/api-test-user/user"
+import uk.gov.hmrc.testuser.helpers.Env
 
-  def getPassword(): String = {
-    getByCssSelector("data-password")
-  }
+object MyTestServerFactory extends MyTestServer
 
-  def getUserId(): String = {
-    getByCssSelector("data-userid")
-  }
+class MyTestServer extends DefaultTestServerFactory {
 
-  protected def getByCssSelector(fieldName: String): String = {
-    getText(By.cssSelector(s"[$fieldName]"))
+  override protected def serverConfig(app: Application): ServerConfig = {
+    val sc = ServerConfig(port = Some(Env.port), sslPort = Some(6002), mode = Mode.Test, rootDir = app.path)
+    sc.copy(configuration = sc.configuration withFallback overrideServerConfiguration(app))
   }
 }

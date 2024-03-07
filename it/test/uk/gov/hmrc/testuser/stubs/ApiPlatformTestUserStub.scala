@@ -18,7 +18,9 @@ package uk.gov.hmrc.testuser.stubs
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import org.apache.http.HttpStatus.{SC_CREATED, SC_OK}
+
 import play.api.libs.json.Json
+
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models.Service
 
