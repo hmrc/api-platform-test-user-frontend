@@ -16,20 +16,22 @@
 
 package uk.gov.hmrc.testuser.connectors
 
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import com.github.tomakehurst.wiremock.client.WireMock._
-import play.api.{Configuration, Environment}
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+
 import play.api.http.Status._
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
+import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.testuser.models._
-import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.wiring.AppConfig
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
-import scala.concurrent.ExecutionContext.Implicits.global
+
+import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
 

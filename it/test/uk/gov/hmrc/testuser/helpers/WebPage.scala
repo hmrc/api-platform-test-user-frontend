@@ -16,16 +16,14 @@
 
 package uk.gov.hmrc.testuser.helpers
 
-import uk.gov.hmrc.selenium.component.PageObject
-import org.openqa.selenium.By
-import org.openqa.selenium.support.ui.Wait
-import org.openqa.selenium.support.ui.FluentWait
-import uk.gov.hmrc.selenium.webdriver.Driver
 import java.time.Duration
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebElement
-import org.openqa.selenium.support.ui.ExpectedConditions
 import scala.jdk.CollectionConverters._
+
+import org.openqa.selenium.support.ui.{ExpectedConditions, FluentWait, Wait}
+import org.openqa.selenium.{By, WebDriver, WebElement}
+
+import uk.gov.hmrc.selenium.component.PageObject
+import uk.gov.hmrc.selenium.webdriver.Driver
 
 trait WebPage extends PageObject {
 
