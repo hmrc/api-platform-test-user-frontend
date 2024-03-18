@@ -4,7 +4,7 @@
 
 .service-info {
     .header__menu__proposition-links {
-        margin-top: 0em;
+        margin-top: 0;
 
          .link-style {
             color: #005ea5;
@@ -14,12 +14,8 @@
     }
 }
 
-.govuk-summary-text {
-  color:#1d70b8;
-  &:hover {
-    color: #003078;
-    cursor: pointer;
-  }
+.govuk-details {
+  margin-bottom: 0;
 }
 
 .govuk-body {
