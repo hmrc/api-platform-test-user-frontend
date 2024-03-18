@@ -75,48 +75,56 @@
                         <label class="govuk-label govuk-radios__label" for="Individual" data-type="individual">
                             <b>Individual</b>
                         </label>
-                        <details id="individual-type-hint">
-                            <summary class="govuk-summary-text">What dummy data is generated?</summary>
-                            <div class="govuk-inset-text">
-                                <p class="govuk-body">Creates a test user with a:</p>
-                                <ul class="govuk-list govuk-list--bullet">
-                                    <li>User ID</li>
-                                    <li>Password</li>
-                                    @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
-                                        <li>@field.name</li>
-                                    }
-                                </ul>
-                                <p class="govuk-body">
-                                    Enrols them for all services available through the relevant
-                                    <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
-                                        Create Test User API endpoint</a>.
-                                </p>
-                            </div>
-                        </details>
+                        <div class="govuk-hint govuk-radios__hint">
+                            <details id="individual-type-hint" class="govuk-details">
+                                <summary class="govuk-details__summary">
+                                  <span class="govuk-details__summary-text">What dummy data is generated?</span>
+                                </summary>
+                                <div class="govuk-details__text">
+                                    <p class="govuk-body">Creates a test user with a:</p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>User ID</li>
+                                        <li>Password</li>
+                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                                            <li>@field.name</li>
+                                        }
+                                    </ul>
+                                    <p class="govuk-body">
+                                        Enrols them for all services available through the relevant
+                                        <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
+                                            Create Test User API endpoint</a>.
+                                    </p>
+                                </div>
+                            </details>
+                        </div>
                     </div>
                     <div class="govuk-radios__item">
                         <input class="govuk-radios__input" id="Organisation" value="ORGANISATION" name="userType" type="radio" aria-describedby="organisation-type-hint">
                         <label class="govuk-label govuk-radios__label" for="Organisation" data-type="organisation">
                             <b>Organisation</b>
                         </label>
-                        <details id="organisation-type-hint">
-                            <summary class="govuk-summary-text">What dummy data is generated?</summary>
-                            <div class="govuk-inset-text">
-                                <p class="govuk-body">Creates a test user with a:</p>
-                                <ul class="govuk-list govuk-list--bullet">
-                                    <li>User ID</li>
-                                    <li>Password</li>
-                                    @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
-                                        <li>@field.name</li>
-                                    }
-                                </ul>
-                                <p class="govuk-body">
-                                    Enrols them for all services available through the relevant
-                                    <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
-                                        Create Test User API endpoint</a>.
-                                </p>
-                            </div>
-                        </details>
+                        <div class="govuk-hint govuk-radios__hint">
+                            <details id="organisation-type-hint" class="govuk-details">
+                                <summary class="govuk-details__summary">
+                                  <span class="govuk-details__summary-text">What dummy data is generated?</span>
+                                </summary>
+                                <div class="govuk-details__text">
+                                    <p class="govuk-body">Creates a test user with a:</p>
+                                    <ul class="govuk-list govuk-list--bullet">
+                                        <li>User ID</li>
+                                        <li>Password</li>
+                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                                            <li>@field.name</li>
+                                        }
+                                    </ul>
+                                    <p class="govuk-body">
+                                        Enrols them for all services available through the relevant
+                                        <a class="govuk-link" href="/api-documentation/docs/api/service/api-platform-test-user/1.0#_create-a-test-user-which-is-an-organisation_post_accordion">
+                                            Create Test User API endpoint</a>.
+                                    </p>
+                                </div>
+                            </details>
+                        </div>
                     </div>
                 </div>
             </fieldset>
