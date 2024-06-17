@@ -51,7 +51,6 @@ lazy val it = (project in file("it"))
   .settings(
     name := "integration-tests",
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
-    Test / testGrouping := oneForkedJvmPerTest((Test / definedTests).value),
     DefaultBuildSettings.itSettings(),
     addTestReportOption(Test, "int-test-reports")
   )
