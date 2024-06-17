@@ -20,7 +20,7 @@ object AppDependencies {
     "org.jsoup"               %  "jsoup"                        % "1.8.1",
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.30",
     "com.titusfortner"        % "selenium-logger"               % "2.3.0",
-    "uk.gov.hmrc"             %% "ui-test-runner"               % "0.16.0"
+    "uk.gov.hmrc"             %% "ui-test-runner"               % "0.31.0"
   ).map(_ % "test")
 }
 
