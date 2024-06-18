@@ -45,30 +45,12 @@ lazy val microservice = Project(appName, file("."))
     )
   )
 
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
-  tests map { test =>
-    Group(
-      test.name,
-      Seq(test),
-      SubProcess(
-        ForkOptions().withRunJVMOptions(
-          Vector(
-            s"-Dtest.name={test.name}",
-            s"-Dbrowser=${Properties.propOrElse("browser", "chrome")}",
-            s"-Daccessibility.test=${Properties.propOrElse("accessibility.test", "false")}"
-          )
-        )
-      )
-    )
-  }
-
 lazy val it = (project in file("it"))
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
   .settings(
     name := "integration-tests",
     Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-eT"),
-    Test / testGrouping := oneForkedJvmPerTest((Test / definedTests).value),
     DefaultBuildSettings.itSettings(),
     addTestReportOption(Test, "int-test-reports")
   )
