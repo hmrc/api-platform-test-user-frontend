@@ -39,7 +39,7 @@ import com.google.inject.name.Named
 
 import play.api.Environment
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Request, RequestHeader, Result}
+import play.api.mvc.{RequestHeader, Result}
 import uk.gov.hmrc.http.{JsValidationException, NotFoundException}
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
@@ -57,9 +57,11 @@ class ErrorHandler @Inject() (
     @Named("appName") val appName: String,
     errorTemplate: ErrorTemplate
   )(implicit val appConfig: ApplicationConfig,
-    executionContext: ExecutionContext
+    val ec: ExecutionContext
   ) extends FrontendErrorHandler
     with ErrorAuditing {
+
+//  override implicit val ec: scala.concurrent.ExecutionContext = executionContext
 
   override def onClientError(
       request: RequestHeader,
@@ -74,9 +76,9 @@ class ErrorHandler @Inject() (
       pageTitle: String,
       heading: String,
       message: String
-    )(implicit request: Request[_]
+    )(implicit request: RequestHeader
     ) = {
-    errorTemplate(pageTitle, heading, message)
+    Future.successful(errorTemplate(pageTitle, heading, message))
   }
 }
 

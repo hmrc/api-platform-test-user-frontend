@@ -19,7 +19,7 @@
 
 @this(govuk_wrapper: govuk_wrapper)
 
-@(pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+@(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader, messages: Messages, config: ApplicationConfig)
 
 @govuk_wrapper(Some(pageTitle)) {
 
