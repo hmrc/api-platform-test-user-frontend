@@ -26,6 +26,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.{Application, Configuration, Environment}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
@@ -60,7 +61,7 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val underTest = new ApiPlatformTestUserConnector(
-      app.injector.instanceOf[ProxiedHttpClient],
+      app.injector.instanceOf[HttpClientV2],
       app.injector.instanceOf[AppConfig],
       app.injector.instanceOf[Configuration],
       app.injector.instanceOf[Environment],

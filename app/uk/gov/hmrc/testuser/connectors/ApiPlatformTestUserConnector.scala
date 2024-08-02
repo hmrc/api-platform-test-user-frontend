@@ -16,13 +16,16 @@
 
 package uk.gov.hmrc.testuser.connectors
 
+import java.net.URL
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.http.Status.{CREATED, OK}
+import play.api.libs.json.Json
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse, _}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import uk.gov.hmrc.testuser.models.JsonFormatters._
@@ -30,7 +33,7 @@ import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ApiPlatformTestUserConnector @Inject() (
-    proxiedHttpClient: ProxiedHttpClient,
+    httpClient: HttpClientV2,
     appConfig: AppConfig,
     configuration: Configuration,
     environment: Environment,
@@ -41,7 +44,8 @@ class ApiPlatformTestUserConnector @Inject() (
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
 
-  private val httpClient = proxiedHttpClient.withAuthorization(bearerToken)
+  private def configureEbridgeIfRequired(requestBuilder: RequestBuilder): RequestBuilder =
+    EbridgeConfigurator.configure(true, bearerToken)(requestBuilder)
 
   val serviceUrl: String = {
     val context = servicesConfig.getConfString(s"$serviceKey.context", "")
@@ -52,7 +56,7 @@ class ApiPlatformTestUserConnector @Inject() (
   def createIndividual(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestIndividual] = {
     val payload = CreateUserRequest(enrolments)
 
-    post(s"$serviceUrl/individuals", payload) map { response =>
+    post(url"$serviceUrl/individuals", payload) map { response =>
       response.status match {
         case CREATED => response.json.as[TestIndividual]
         case _       => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
@@ -63,7 +67,7 @@ class ApiPlatformTestUserConnector @Inject() (
   def createOrganisation(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestOrganisation] = {
     val payload = CreateUserRequest(enrolments)
 
-    post(s"$serviceUrl/organisations", payload) map { response =>
+    post(url"$serviceUrl/organisations", payload) map { response =>
       response.status match {
         case CREATED => response.json.as[TestOrganisation]
         case _       => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
@@ -72,14 +76,19 @@ class ApiPlatformTestUserConnector @Inject() (
   }
 
   def getServices()(implicit hc: HeaderCarrier): Future[Seq[Service]] = {
-    httpClient.GET[Either[UpstreamErrorResponse, HttpResponse]](s"$serviceUrl/services") map {
-      case Right(response) if (response.status == OK)      => response.json.as[Seq[Service]]
-      case Right(response)                                 => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
-      case Left(UpstreamErrorResponse(body, status, _, _)) => throw new RuntimeException(s"Unexpected response code=${status} message=${body}")
-    }
+    configureEbridgeIfRequired(httpClient.get(url"$serviceUrl/services"))
+      .execute[Either[UpstreamErrorResponse, HttpResponse]]
+      .map {
+        case Right(response) if (response.status == OK)      => response.json.as[Seq[Service]]
+        case Right(response)                                 => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+        case Left(UpstreamErrorResponse(body, status, _, _)) => throw new RuntimeException(s"Unexpected response code=${status} message=${body}")
+      }
   }
 
-  private def post(url: String, payload: CreateUserRequest)(implicit hc: HeaderCarrier) = {
-    httpClient.POST[CreateUserRequest, HttpResponse](url, payload, Seq("Content-Type" -> "application/json"))
+  private def post(url: URL, payload: CreateUserRequest)(implicit hc: HeaderCarrier) = {
+    configureEbridgeIfRequired(httpClient.post(url))
+      .setHeader("Content-Type" -> "application/json")
+      .withBody(Json.toJson(payload))
+      .execute[HttpResponse]
   }
 }

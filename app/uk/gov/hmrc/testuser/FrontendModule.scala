@@ -35,16 +35,11 @@ package uk.gov.hmrc.testuser
 import com.google.inject.AbstractModule
 
 import play.api.{Configuration, Environment, Logger}
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.bootstrap.http.DefaultHttpClient
 
 class FrontendModule(val environment: Environment, val configuration: Configuration) extends AbstractModule {
 
   override def configure(): Unit = {
     val appName = "api-platform-test-user-frontend"
     Logger(getClass).info(s"Starting microservice : $appName : in mode : ${environment.mode}")
-
-    bind(classOf[HttpGet]).to(classOf[DefaultHttpClient])
-    bind(classOf[HttpPost]).to(classOf[DefaultHttpClient])
   }
 }
