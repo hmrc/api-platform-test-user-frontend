@@ -18,7 +18,7 @@
 
 @this(hmrcReportTechnicalIssue: HmrcReportTechnicalIssue)
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @hmrcReportTechnicalIssue(ReportTechnicalIssue(
    serviceCode = "api-test-user"

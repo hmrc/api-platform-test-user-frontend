@@ -18,7 +18,7 @@
 
 @this()
 
-@(params: Footer = Footer())(implicit request: Request[_])
+@(params: Footer = Footer())(implicit request: RequestHeader)
 @import params._
 
 <footer class="govuk-footer " role="contentinfo">
