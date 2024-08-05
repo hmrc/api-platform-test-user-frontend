@@ -21,13 +21,10 @@ import uk.gov.hmrc.http.client.RequestBuilder
 
 object EbridgeConfigurator {
 
-  def configure(useProxy: Boolean, bearerToken: String)(requestBuilder: RequestBuilder): RequestBuilder =
-    if (useProxy)
-      requestBuilder
-        .withProxy
-        .setHeader(buildHeaders(bearerToken): _*)
-    else
-      requestBuilder
+  def configure(bearerToken: String)(requestBuilder: RequestBuilder): RequestBuilder =
+    requestBuilder
+      .withProxy
+      .setHeader(buildHeaders(bearerToken): _*)
 
   private def buildHeaders(bearerToken: String): Seq[(String, String)] = {
     Seq(

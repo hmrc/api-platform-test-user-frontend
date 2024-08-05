@@ -44,8 +44,8 @@ class ApiPlatformTestUserConnector @Inject() (
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
 
-  private def configureEbridgeIfRequired(requestBuilder: RequestBuilder): RequestBuilder =
-    EbridgeConfigurator.configure(true, bearerToken)(requestBuilder)
+  private def configureEbridge(requestBuilder: RequestBuilder): RequestBuilder =
+    EbridgeConfigurator.configure(bearerToken)(requestBuilder)
 
   val serviceUrl: String = {
     val context = servicesConfig.getConfString(s"$serviceKey.context", "")
@@ -76,7 +76,7 @@ class ApiPlatformTestUserConnector @Inject() (
   }
 
   def getServices()(implicit hc: HeaderCarrier): Future[Seq[Service]] = {
-    configureEbridgeIfRequired(httpClient.get(url"$serviceUrl/services"))
+    configureEbridge(httpClient.get(url"$serviceUrl/services"))
       .execute[Either[UpstreamErrorResponse, HttpResponse]]
       .map {
         case Right(response) if (response.status == OK)      => response.json.as[Seq[Service]]
@@ -86,7 +86,7 @@ class ApiPlatformTestUserConnector @Inject() (
   }
 
   private def post(url: URL, payload: CreateUserRequest)(implicit hc: HeaderCarrier) = {
-    configureEbridgeIfRequired(httpClient.post(url))
+    configureEbridge(httpClient.post(url))
       .setHeader("Content-Type" -> "application/json")
       .withBody(Json.toJson(payload))
       .execute[HttpResponse]
