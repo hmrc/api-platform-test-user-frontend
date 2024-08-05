@@ -61,8 +61,6 @@ class ErrorHandler @Inject() (
   ) extends FrontendErrorHandler
     with ErrorAuditing {
 
-//  override implicit val ec: scala.concurrent.ExecutionContext = executionContext
-
   override def onClientError(
       request: RequestHeader,
       statusCode: Int,
