@@ -25,7 +25,8 @@ import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json.{stringify, toJson}
 import play.api.{Application, Configuration, Environment}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
@@ -43,7 +44,7 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with Wiremo
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val underTest = new ThirdPartyDeveloperFrontendConnector(
-      app.injector.instanceOf[HttpClient],
+      app.injector.instanceOf[HttpClientV2],
       app.injector.instanceOf[Configuration],
       app.injector.instanceOf[Environment],
       app.injector.instanceOf[ServicesConfig]
