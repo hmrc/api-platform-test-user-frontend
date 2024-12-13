@@ -23,11 +23,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION, UserType}
-import uk.gov.hmrc.testuser.models.{Service, TestUser, UserTypes}
+import uk.gov.hmrc.testuser.models.{Service, TestUser}
 
 class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
-  def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[TestUser] = {
+  def createUser(userType: UserType)(implicit hc: HeaderCarrier): Future[Either[Int, TestUser]] = {
     for {
       services <- apiPlatformTestUserConnector.getServices()
       testUser <- createUserWithServices(userType, services)
@@ -35,10 +35,10 @@ class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUs
 
   }
 
-  private def createUserWithServices(userType: UserType, services: Seq[Service])(implicit hc: HeaderCarrier) = {
+  private def createUserWithServices(userType: UserType, services: Seq[Service])(implicit hc: HeaderCarrier): Future[Either[Int, TestUser]] = {
     userType match {
-      case INDIVIDUAL             => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(INDIVIDUAL, services))
-      case UserTypes.ORGANISATION => apiPlatformTestUserConnector.createOrganisation(serviceKeysForUserType(ORGANISATION, services))
+      case INDIVIDUAL   => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(INDIVIDUAL, services))
+      case ORGANISATION => apiPlatformTestUserConnector.createOrganisation(serviceKeysForUserType(ORGANISATION, services))
     }
   }
 

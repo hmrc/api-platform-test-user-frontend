@@ -28,6 +28,7 @@ import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse, _}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
+import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.wiring.AppConfig
@@ -37,9 +38,9 @@ class ApiPlatformTestUserConnector @Inject() (
     appConfig: AppConfig,
     configuration: Configuration,
     environment: Environment,
-    servicesConfig: ServicesConfig
+    servicesConfig: ServicesConfig,
   )(implicit ec: ExecutionContext
-  ) {
+  ) extends ApplicationLogger {
   private val serviceKey = "api-platform-test-user"
 
   private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
@@ -53,24 +54,28 @@ class ApiPlatformTestUserConnector @Inject() (
     else servicesConfig.baseUrl(serviceKey)
   }
 
-  def createIndividual(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestIndividual] = {
+  def createIndividual(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[Either[Int, TestIndividual]] = {
     val payload = CreateUserRequest(enrolments)
 
     post(url"$serviceUrl/individuals", payload) map { response =>
       response.status match {
-        case CREATED => response.json.as[TestIndividual]
-        case _       => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+        case CREATED => Right(response.json.as[TestIndividual])
+        case status  =>
+          logger.warn(s"Unexpected response code=${status} message=${response.body}")
+          Left(status)
       }
     }
   }
 
-  def createOrganisation(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[TestOrganisation] = {
+  def createOrganisation(enrolments: Seq[String])(implicit hc: HeaderCarrier): Future[Either[Int, TestOrganisation]] = {
     val payload = CreateUserRequest(enrolments)
 
     post(url"$serviceUrl/organisations", payload) map { response =>
       response.status match {
-        case CREATED => response.json.as[TestOrganisation]
-        case _       => throw new RuntimeException(s"Unexpected response code=${response.status} message=${response.body}")
+        case CREATED => Right(response.json.as[TestOrganisation])
+        case status  =>
+          logger.warn(s"Unexpected response code=${status} message=${response.body}")
+          Left(status)
       }
     }
   }

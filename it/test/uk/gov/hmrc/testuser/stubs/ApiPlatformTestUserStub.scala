@@ -37,6 +37,17 @@ object ApiPlatformTestUserStub {
         )
     )
   }
+  
+  def givenTestIndividualIsErrored(status:Int) = {
+    stubFor(
+      post(urlPathEqualTo("/individuals"))
+        .willReturn(
+          aResponse()
+            .withStatus(status)
+            .withHeader("Content-Type", "application/json")
+        )
+    )
+  }
 
   def givenTestOrganisationIsGenerated(jsonOrganisation: String) = {
     stubFor(

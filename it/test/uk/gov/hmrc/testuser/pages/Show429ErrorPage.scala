@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.test.utils
+package uk.gov.hmrc.testuser.pages
 
-import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.{EitherValues, OptionValues}
-import org.scalatestplus.play.WsScalaTestClient
+object Show429ErrorPage extends AbstractShowUserPage {
 
-import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
+  override val pageTitle = "Too many Requests"
 
-abstract class HmrcSpec extends AnyWordSpec with Matchers with OptionValues with EitherValues with WsScalaTestClient with MockitoSugar with ArgumentMatchersSugar
-
-abstract class AsyncHmrcSpec extends HmrcSpec with DefaultAwaitTimeout with FutureAwaits {}
+}

@@ -52,21 +52,21 @@ class TestUserServiceSpec extends AsyncHmrcSpec {
     "return a generated individual when type is INDIVIDUAL" in new Setup {
       private val fields = Seq(Field("saUtr", "Self Assessment UTR", "1555369052"), Field("nino", "", "CC333333C"), Field("vrn", "", "999902541"))
       val individual     = TestIndividual("user", "password", fields)
-      when(mockApiPlatformTestUserConnector.createIndividual(eqTo(Seq(service1, service2)))(*)).thenReturn(successful(individual))
+      when(mockApiPlatformTestUserConnector.createIndividual(eqTo(Seq(service1, service2)))(*)).thenReturn(successful(Right(individual)))
 
       val result = await(underTest.createUser(INDIVIDUAL))
 
-      result shouldBe individual
+      result shouldBe Right(individual)
     }
 
     "return a generated organisation when type is ORGANISATION" in new Setup {
       val organisation = TestOrganisation("org-user", "org-password", Seq(Field("saUtr", "Self Assessment UTR", "1555369053")))
 
-      when(mockApiPlatformTestUserConnector.createOrganisation(eqTo(Seq(service2, service3)))(*)).thenReturn(successful(organisation))
+      when(mockApiPlatformTestUserConnector.createOrganisation(eqTo(Seq(service2, service3)))(*)).thenReturn(successful(Right(organisation)))
 
       val result = await(underTest.createUser(ORGANISATION))
 
-      result shouldBe organisation
+      result shouldBe Right(organisation)
     }
   }
 
