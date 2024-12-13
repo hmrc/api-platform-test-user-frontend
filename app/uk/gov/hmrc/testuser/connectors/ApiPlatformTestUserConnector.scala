@@ -38,7 +38,7 @@ class ApiPlatformTestUserConnector @Inject() (
     appConfig: AppConfig,
     configuration: Configuration,
     environment: Environment,
-    servicesConfig: ServicesConfig,
+    servicesConfig: ServicesConfig
   )(implicit ec: ExecutionContext
   ) extends ApplicationLogger {
   private val serviceKey = "api-platform-test-user"
