@@ -87,10 +87,10 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
       val result = await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
-      result.userId shouldBe individualUserId
-      result.password shouldBe individualPassword
-      result.fields should contain(Field("saUtr", "Self Assessment UTR", individualSaUtr))
-      result.fields should contain(Field("nino", "National Insurance Number (NINO)", individualNino))
+      result.value.userId shouldBe individualUserId
+      result.value.password shouldBe individualPassword
+      result.value.fields should contain(Field("saUtr", "Self Assessment UTR", individualSaUtr))
+      result.value.fields should contain(Field("nino", "National Insurance Number (NINO)", individualNino))
     }
 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
@@ -102,7 +102,7 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
           )
       )
 
-      intercept[RuntimeException](await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
+      await(underTest.createIndividual(Seq("national-insurance", "self-assessment", "mtd-income-tax"))) shouldBe Left(OK)
     }
   }
 
@@ -152,10 +152,10 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
       val result = await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax")))
 
-      result.userId shouldBe userId
-      result.password shouldBe password
-      result.fields should contain(Field("saUtr", "Self Assessment UTR", saUtr))
-      result.fields should contain(Field("empRef", "Employer Reference", empRef))
+      result.value.userId shouldBe userId
+      result.value.password shouldBe password
+      result.value.fields should contain(Field("saUtr", "Self Assessment UTR", saUtr))
+      result.value.fields should contain(Field("empRef", "Employer Reference", empRef))
     }
 
     "fail when api-platform-test-user returns a response that is not 201 CREATED" in new Setup {
@@ -167,7 +167,7 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
           )
       )
 
-      intercept[RuntimeException](await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))))
+      await(underTest.createOrganisation(Seq("national-insurance", "self-assessment", "mtd-income-tax"))) shouldBe Left(OK)
     }
   }
 

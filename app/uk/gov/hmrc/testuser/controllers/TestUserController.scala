@@ -19,11 +19,13 @@ package uk.gov.hmrc.testuser.controllers
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+import cats.data.EitherT
+
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.http.BadRequestException
+import uk.gov.hmrc.http.{BadRequestException, InternalServerException, TooManyRequestException}
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -33,6 +35,7 @@ import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 
 class TestUserController @Inject() (
     override val messagesApi: MessagesApi,
@@ -41,7 +44,8 @@ class TestUserController @Inject() (
     apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
     messagesControllerComponents: MessagesControllerComponents,
     createTestUser: CreateTestUserView,
-    testUser: TestUserView
+    testUser: TestUserView,
+    errorTemplate: ErrorTemplate
   )(implicit val ec: ExecutionContext,
     config: ApplicationConfig
   ) extends FrontendController(messagesControllerComponents)
@@ -54,9 +58,16 @@ class TestUserController @Inject() (
   }
 
   def createUser() = headerNavigation { implicit request => navLinks =>
-    def validForm(form: CreateUserForm) = {
+    def validForm(form: CreateUserForm): Future[Result] = {
       UserTypes.from(form.userType.getOrElse("")) match {
-        case Some(uType) => testUserService.createUser(uType) map (user => Ok(testUser(navLinks, user)))
+        case Some(uType) =>
+          EitherT(testUserService.createUser(uType)).fold(
+            _ match {
+              case 429 => TooManyRequests(errorTemplate("Sorry, there is a problem with the service", "Too many Requests", "Please make sure you aren't using this for automated tests"))
+              case _   => throw new InternalServerException("Unknown Error Happened")
+            },
+            user => Ok(testUser(navLinks, user))
+          )
         case _           => Future.failed(new BadRequestException("Invalid request"))
       }
     }

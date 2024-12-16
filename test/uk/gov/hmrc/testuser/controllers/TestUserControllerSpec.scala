@@ -40,6 +40,7 @@ import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
+import uk.gov.hmrc.testuser.views.html.ErrorTemplate
 
 class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 
@@ -67,6 +68,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     val mcc                = app.injector.instanceOf[MessagesControllerComponents]
     val createTestUserView = app.injector.instanceOf[CreateTestUserView]
     val testUserView       = app.injector.instanceOf[TestUserView]
+    val errorTemplate      = app.injector.instanceOf[ErrorTemplate]
 
     val mockTestUserService              = mock[TestUserService]
     val mockNavigationService            = mock[NavigationService]
@@ -81,11 +83,12 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       mockApiPlatformTestUserConnector,
       mcc,
       createTestUserView,
-      testUserView
+      testUserView,
+      errorTemplate
     )
 
-    when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(individual))
-    when(mockTestUserService.createUser(eqTo(ORGANISATION))(*)).thenReturn(successful(organisation))
+    when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(Right(individual)))
+    when(mockTestUserService.createUser(eqTo(ORGANISATION))(*)).thenReturn(successful(Right(organisation)))
     when(mockNavigationService.headerNavigation()(*)).thenReturn(successful(navLinks))
 
     def elementExistsById(doc: Document, id: String): Boolean = doc.select(s"#$id").asScala.nonEmpty
