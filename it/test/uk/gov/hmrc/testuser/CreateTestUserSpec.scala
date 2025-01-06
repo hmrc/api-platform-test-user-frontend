@@ -65,7 +65,7 @@ class CreateTestUserSpec extends BaseSpec {
       ShowIndividualPage.getNino() shouldBe individualNino
       ShowIndividualPage.getVrn() shouldBe vrn
     }
-    
+
     Scenario("Fails to create a test individual due to too many requests") {
       givenTheServicesEndpointReturnsServices(services)
       givenTheUserNavigationLinks(userNavigationLinks)

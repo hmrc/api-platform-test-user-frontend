@@ -39,8 +39,7 @@ import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
-import uk.gov.hmrc.testuser.views.html.ErrorTemplate
+import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, ErrorTemplate, TestUserView}
 
 class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with LogSuppressing with ApplicationLogger {
 

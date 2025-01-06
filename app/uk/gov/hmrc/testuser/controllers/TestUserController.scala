@@ -25,7 +25,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.http.{BadRequestException, InternalServerException, TooManyRequestException}
+import uk.gov.hmrc.http.{BadRequestException, InternalServerException}
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -34,8 +34,7 @@ import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
-import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, TestUserView}
-import uk.gov.hmrc.testuser.views.html.ErrorTemplate
+import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, ErrorTemplate, TestUserView}
 
 class TestUserController @Inject() (
     override val messagesApi: MessagesApi,
@@ -63,7 +62,8 @@ class TestUserController @Inject() (
         case Some(uType) =>
           EitherT(testUserService.createUser(uType)).fold(
             _ match {
-              case 429 => TooManyRequests(errorTemplate("Sorry, there is a problem with the service", "Too many Requests", "Please make sure you aren't using this for automated tests"))
+              case 429 =>
+                TooManyRequests(errorTemplate("Sorry, there is a problem with the service", "Too many Requests", "Please make sure you aren't using this for automated tests"))
               case _   => throw new InternalServerException("Unknown Error Happened")
             },
             user => Ok(testUser(navLinks, user))
