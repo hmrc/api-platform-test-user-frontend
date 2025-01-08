@@ -37,8 +37,8 @@ object ApiPlatformTestUserStub {
         )
     )
   }
-  
-  def givenTestIndividualIsErrored(status:Int) = {
+
+  def givenTestIndividualIsErrored(status: Int) = {
     stubFor(
       post(urlPathEqualTo("/individuals"))
         .willReturn(
