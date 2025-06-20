@@ -21,7 +21,7 @@ object AppDependencies {
     "uk.gov.hmrc"             %% "bootstrap-test-play-30"       % bootStrapVersion,
     "org.jsoup"               %  "jsoup"                        % "1.8.1",
     "org.mockito"             %% "mockito-scala-scalatest"      % "1.17.30",
-    "uk.gov.hmrc"             %% "ui-test-runner"               % "0.45.0"
+    "uk.gov.hmrc"             %% "ui-test-runner"               % "0.46.0"
   ).map(_ % "test")
 }
 
