@@ -23,11 +23,8 @@
 @import uk.gov.hmrc.testuser.models.NavLink
 @import uk.gov.hmrc.testuser.views.html.components.siteHelper
 @import uk.gov.hmrc.testuser.views.html.partials.headerNavLinks
-@import uk.gov.hmrc.testuser.views.FooterLinks
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcTrackingConsentSnippet
 @import uk.gov.hmrc.govukfrontend.views.html.components.GovukLayout
-@import uk.gov.hmrc.testuser.views.html.includes.FeedbackBannerView
-@import uk.gov.hmrc.testuser.models.views.FeedbackBanner
 @import uk.gov.hmrc.testuser.config.ApplicationConfig
 @import views.html.helper.CSPNonce
 
@@ -36,9 +33,7 @@
         hmrcHeader: HmrcHeader,
         hmrcFooter: HmrcFooter,
         siteHelper: siteHelper,
-        footerLinks: FooterLinks,
-        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
-        feedbackBannerView: FeedbackBannerView
+        hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet
 )
 @(
         pageTitle: Option[String] = None,
@@ -49,8 +44,7 @@
         footerBlock: Option[Html] = None,
         footerItems: Seq[FooterItem] = Seq.empty,
         bodyEndBlock: Option[Html] = None,
-        scriptsBlock: Option[Html] = None,
-        feedbackBanner: Option[FeedbackBanner] = None
+        scriptsBlock: Option[Html] = None
 )(contentBlock: Html)(implicit messages: Messages, config: ApplicationConfig, requestHeader: RequestHeader)
 
 @head = {
