@@ -107,9 +107,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       document.getElementById("Individual").hasAttr("checked") shouldBe false
       document.getElementById("Organisation").hasAttr("checked") shouldBe false
 
-      elementExistsById(document, "feedback") shouldBe true
-      elementExistsById(document, "show-survey") shouldBe true
-      document.getElementById("feedback-title").text() shouldBe "Your feedback helps us improve our service"
+      elementExistsById(document, "feedback-banner") shouldBe true
+      document.getElementById("feedback-title").text() shouldBe "Your feedback (opens in new tab) will help us to improve this service."
     }
 
     "display the logged in navigation links" in new Setup {
@@ -168,9 +167,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       val page: String      = contentAsString(execute(underTest.createUser(), individualRequest))
       val document          = Jsoup.parse(page)
 
-      elementExistsById(document, "feedback") shouldBe true
-      elementExistsById(document, "show-survey") shouldBe true
-      document.getElementById("feedback-title").text() shouldBe "Your feedback helps us improve our service"
+      elementExistsById(document, "feedback-banner") shouldBe true
+      document.getElementById("feedback-title").text() shouldBe "Your feedback (opens in new tab) will help us to improve this service."
     }
 
     "display the page without the links when retrieving the links fail" in new Setup {
