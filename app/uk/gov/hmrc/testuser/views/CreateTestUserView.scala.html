@@ -60,7 +60,7 @@
         Test users can be reused, so we recommend checking if you have any unused test users before creating a new one.
     </p>
     <p class="govuk-body">
-        Test users that have not been tested against within a 3-month period will be automatically deleted.
+        Test users that have not been used in testing for 90 days will be deleted.
     </p>
 
     @helper.form(action = uk.gov.hmrc.testuser.controllers.routes.TestUserController.createUser()) {
