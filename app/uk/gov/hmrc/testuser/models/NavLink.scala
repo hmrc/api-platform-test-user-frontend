@@ -16,16 +16,20 @@
 
 package uk.gov.hmrc.testuser.models
 
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.servicenavigation.ServiceNavigationItem
+
 case class NavLink(label: String, href: String, truncate: Boolean = false, openInNewWindow: Boolean = false)
 
 case object StaticNavLinks {
 
   def apply() = {
     Seq(
-      NavLink("Documentation", "/api-documentation/docs/using-the-hub"),
-      NavLink("Applications", "/developer/applications"),
-      NavLink("Support", "/developer/support"),
-      NavLink("Service availability", "https://api-platform-status.production.tax.service.gov.uk/", openInNewWindow = true)
+      ServiceNavigationItem(Text("Getting started"), "/api-documentation/docs/using-the-hub"),
+      ServiceNavigationItem(Text("API documentation"), "/api-documentation/docs/api"),
+      ServiceNavigationItem(Text("Applications"), "/developer/applications"),
+      ServiceNavigationItem(Text("Support"), "/devhub-support"),
+      ServiceNavigationItem(Text("Service availability"), "https://api-platform-status.production.tax.service.gov.uk/", attributes = Map("target" -> "_blank"))
     )
   }
 }
