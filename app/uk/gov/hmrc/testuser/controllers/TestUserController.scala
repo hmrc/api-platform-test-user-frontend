@@ -25,7 +25,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.http.{BadRequestException, InternalServerException}
+import uk.gov.hmrc.http.InternalServerException
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -62,13 +62,15 @@ class TestUserController @Inject() (
         case Some(uType) =>
           EitherT(testUserService.createUser(uType)).fold(
             _ match {
-              case 429 =>
+              case TOO_MANY_REQUESTS =>
                 TooManyRequests(errorTemplate("Sorry, there is a problem with the service", "Too many Requests", "Please make sure you aren't using this for automated tests"))
-              case _   => throw new InternalServerException("Unknown Error Happened")
+              case _                 => throw new InternalServerException("Unknown Error Happened")
             },
             user => Ok(testUser(navLinks, user))
           )
-        case _           => Future.failed(new BadRequestException("Invalid request"))
+        case _           =>
+          logger.warn(s"Invalid create user request for user type ${form.userType}")
+          Future.successful(BadRequest("Invalid request"))
       }
     }
 
