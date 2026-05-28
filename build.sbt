@@ -1,8 +1,4 @@
-import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings._
-
-import scala.util.Properties
 
 lazy val appName = "api-platform-test-user-frontend"
 

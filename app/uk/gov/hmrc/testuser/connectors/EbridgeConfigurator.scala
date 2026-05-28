@@ -16,20 +16,20 @@
 
 package uk.gov.hmrc.testuser.connectors
 
-import play.api.http.HeaderNames
 import uk.gov.hmrc.http.client.RequestBuilder
 
 object EbridgeConfigurator {
 
-  def configure(bearerToken: String)(requestBuilder: RequestBuilder): RequestBuilder =
-    requestBuilder
-      .withProxy
-      .setHeader(buildHeaders(bearerToken): _*)
+  val API_KEY_HEADER_NAME = "x-api-key"
 
-  private def buildHeaders(bearerToken: String): Seq[(String, String)] = {
-    Seq(
-      HeaderNames.AUTHORIZATION -> s"Bearer $bearerToken",
-      HeaderNames.ACCEPT        -> "application/hmrc.vnd.1.0+json"
-    )
+  def configure(useProxy: Boolean, apiKey: String): RequestBuilder => RequestBuilder = (requestBuilder) => {
+    val apiKeyHeader = if (apiKey.isEmpty) Seq.empty[(String, String)] else Seq(API_KEY_HEADER_NAME -> apiKey)
+
+    if (useProxy)
+      requestBuilder
+        .withProxy
+        .setHeader(apiKeyHeader: _*)
+    else
+      requestBuilder
   }
 }

@@ -43,14 +43,15 @@ class ApiPlatformTestUserConnector @Inject() (
   ) extends ApplicationLogger {
   private val serviceKey = "api-platform-test-user"
 
-  private val bearerToken = servicesConfig.getConfString(s"$serviceKey.bearer-token", "")
+  private val useProxy = servicesConfig.getConfBool(s"$serviceKey.use-proxy", false)
+  private val apiKey   = servicesConfig.getConfString(s"$serviceKey.api-key", "")
 
   private def configureEbridge(requestBuilder: RequestBuilder): RequestBuilder =
-    EbridgeConfigurator.configure(bearerToken)(requestBuilder)
+    EbridgeConfigurator.configure(useProxy, apiKey)(requestBuilder)
 
   val serviceUrl: String = {
     val context = servicesConfig.getConfString(s"$serviceKey.context", "")
-    if (context.length > 0) s"${servicesConfig.baseUrl(serviceKey)}/$context"
+    if (context.nonEmpty) s"${servicesConfig.baseUrl(serviceKey)}/$context"
     else servicesConfig.baseUrl(serviceKey)
   }
 
