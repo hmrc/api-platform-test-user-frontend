@@ -61,7 +61,7 @@ class TestUserController @Inject() (
       UserTypes.from(form.userType.getOrElse("")) match {
         case Some(uType) =>
           EitherT(testUserService.createUser(uType)).fold(
-            _ match {
+            {
               case TOO_MANY_REQUESTS =>
                 TooManyRequests(errorTemplate("Sorry, there is a problem with the service", "Too many Requests", "Please make sure you aren't using this for automated tests"))
               case _                 => throw new InternalServerException("Unknown Error Happened")

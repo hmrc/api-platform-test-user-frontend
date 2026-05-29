@@ -62,15 +62,18 @@ trait BaseSpec
   }
 
   override def beforeAll(): Unit = {
+    super.beforeAll()
     wireMockServer.start()
     WireMock.configureFor(stubHost, stubPort)
   }
 
   override def afterAll(): Unit = {
     wireMockServer.stop()
+    super.afterAll()
   }
 
   override def beforeEach(): Unit = {
+    super.beforeEach()
     startBrowser()
     Driver.instance.manage().deleteAllCookies()
     WireMock.reset()
@@ -78,6 +81,7 @@ trait BaseSpec
 
   override def afterEach(): Unit = {
     quitBrowser()
+    super.afterEach()
   }
 
   def isCurrentPage(page: WebPage): Unit = {
