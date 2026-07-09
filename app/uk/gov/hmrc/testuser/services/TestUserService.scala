@@ -17,13 +17,15 @@
 package uk.gov.hmrc.testuser.services
 
 import javax.inject.Inject
+import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
 
+import play.api.http.Status.NOT_IMPLEMENTED
 import uk.gov.hmrc.http.HeaderCarrier
 
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
-import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION, UserType}
-import uk.gov.hmrc.testuser.models.{Service, TestUser}
+import uk.gov.hmrc.testuser.models.UserType.{Individual, Organisation}
+import uk.gov.hmrc.testuser.models.{Service, TestUser, UserType}
 
 class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUserConnector)(implicit ec: ExecutionContext) {
 
@@ -37,8 +39,9 @@ class TestUserService @Inject() (apiPlatformTestUserConnector: ApiPlatformTestUs
 
   private def createUserWithServices(userType: UserType, services: Seq[Service])(implicit hc: HeaderCarrier): Future[Either[Int, TestUser]] = {
     userType match {
-      case INDIVIDUAL   => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(INDIVIDUAL, services))
-      case ORGANISATION => apiPlatformTestUserConnector.createOrganisation(serviceKeysForUserType(ORGANISATION, services))
+      case Individual   => apiPlatformTestUserConnector.createIndividual(serviceKeysForUserType(Individual, services))
+      case Organisation => apiPlatformTestUserConnector.createOrganisation(serviceKeysForUserType(Organisation, services))
+      case _            => successful(Left(NOT_IMPLEMENTED))
     }
   }
 

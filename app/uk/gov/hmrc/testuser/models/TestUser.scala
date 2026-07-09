@@ -18,7 +18,7 @@ package uk.gov.hmrc.testuser.models
 
 import scala.collection.immutable
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class Field(key: String, label: String, value: String)
 
@@ -67,13 +67,19 @@ class TestOrganisationJsonMapper(fieldDefinitions: Seq[FieldDefinition]) extends
   }
 }
 
-object UserTypes extends Enumeration {
-  type UserType = Value
-  val INDIVIDUAL   = Value("INDIVIDUAL")
-  val ORGANISATION = Value("ORGANISATION")
-  val AGENT        = Value("AGENT")
+enum UserType {
+  case Individual
+  case Organisation
+  case Agent
+}
 
-  def from(userType: String) = UserTypes.values.find(e => e.toString == userType.toUpperCase)
+object UserType {
+  def apply(text: String): Option[UserType] = UserType.values.find(_.toString.equalsIgnoreCase(text))
+
+  import play.api.libs.json.Format
+  import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
+
+  given Format[UserType] = SimpleEnumJsonFormatting.createEnumFormatFor[UserType]("UserType", apply)
 }
 
 case class CreateUserRequest(serviceNames: Seq[String])

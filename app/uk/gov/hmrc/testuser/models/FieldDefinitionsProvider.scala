@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.testuser.models
 
-import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION, UserType}
+import uk.gov.hmrc.testuser.models.UserType.{Individual, Organisation}
 
 case class FieldDefinition(key: String, name: String, allowedUserTypes: Seq[UserType])
 
@@ -25,21 +25,21 @@ object FieldDefinitions {
   // I'm pushing the field definitions out to here from elsewhere, essentially they were originally in the view.
   // eventually they'll be pushed over to api-platform-test-user
   def get(): Seq[FieldDefinition] = Seq(
-    FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("nino", "National Insurance Number (NINO)", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("vrn", "VAT Registration Number", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("empRef", "Employer Reference", Seq(ORGANISATION)),
-    FieldDefinition("ctUtr", "Corporation Tax UTR", Seq(ORGANISATION)),
-    FieldDefinition("eoriNumber", "Economic Operator Registration and Identification (EORI) number", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("userFullName", "Full Name", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("emailAddress", "Email Address", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("mtdItId", "Making Tax Digital Income Tax ID", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("vatRegistrationDate", "VAT Registration Date", Seq(INDIVIDUAL, ORGANISATION)),
-    FieldDefinition("lisaManagerReferenceNumber", "LISA Manager Reference Number", Seq(ORGANISATION)),
-    FieldDefinition("secureElectronicTransferReferenceNumber", "Secure Electronic Transfer reference number", Seq(ORGANISATION)),
-    FieldDefinition("pensionSchemeAdministratorIdentifier", "Pension Scheme Administrator Identifier", Seq(ORGANISATION)),
+    FieldDefinition("saUtr", "Self Assessment UTR", Seq(Individual, Organisation)),
+    FieldDefinition("nino", "National Insurance Number (NINO)", Seq(Individual, Organisation)),
+    FieldDefinition("vrn", "VAT Registration Number", Seq(Individual, Organisation)),
+    FieldDefinition("empRef", "Employer Reference", Seq(Organisation)),
+    FieldDefinition("ctUtr", "Corporation Tax UTR", Seq(Organisation)),
+    FieldDefinition("eoriNumber", "Economic Operator Registration and Identification (EORI) number", Seq(Individual, Organisation)),
+    FieldDefinition("userFullName", "Full Name", Seq(Individual, Organisation)),
+    FieldDefinition("emailAddress", "Email Address", Seq(Individual, Organisation)),
+    FieldDefinition("mtdItId", "Making Tax Digital Income Tax ID", Seq(Individual, Organisation)),
+    FieldDefinition("vatRegistrationDate", "VAT Registration Date", Seq(Individual, Organisation)),
+    FieldDefinition("lisaManagerReferenceNumber", "LISA Manager Reference Number", Seq(Organisation)),
+    FieldDefinition("secureElectronicTransferReferenceNumber", "Secure Electronic Transfer reference number", Seq(Organisation)),
+    FieldDefinition("pensionSchemeAdministratorIdentifier", "Pension Scheme Administrator Identifier", Seq(Organisation)),
     FieldDefinition("organisationDetails", "Organisation Details", Seq()),
     FieldDefinition("individualDetails", "Individual Details", Seq()),
-    FieldDefinition("groupIdentifier", "Group Identifier", Seq(INDIVIDUAL, ORGANISATION))
+    FieldDefinition("groupIdentifier", "Group Identifier", Seq(Individual, Organisation))
   )
 }

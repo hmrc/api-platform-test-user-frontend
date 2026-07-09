@@ -24,7 +24,7 @@
 
 @this(govUkWrapper: govuk_wrapper)
 
-@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+@(navLinks: Seq[NavLink], user: TestUser)(implicit request: Request[?], messages: Messages, config: ApplicationConfig)
 
 @title = {Generated @user.label.toLowerCase}
 

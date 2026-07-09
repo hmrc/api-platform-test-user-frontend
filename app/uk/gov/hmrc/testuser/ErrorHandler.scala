@@ -119,7 +119,7 @@ trait ErrorAuditing extends HttpAuditEvent {
         request,
         Map(TransactionFailureReason -> ex.getMessage)
       )(
-        HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+        using HeaderCarrierConverter.fromRequestAndSession(request, request.session)
       )
     )
   }
@@ -140,7 +140,7 @@ trait ErrorAuditing extends HttpAuditEvent {
             request,
             Map(TransactionFailureReason -> message)
           )(
-            HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+            using HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           )
         )
       case BAD_REQUEST =>
@@ -151,7 +151,7 @@ trait ErrorAuditing extends HttpAuditEvent {
             request,
             Map(TransactionFailureReason -> message)
           )(
-            HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+            using HeaderCarrierConverter.fromRequestAndSession(request, request.session)
           )
         )
       case _           =>

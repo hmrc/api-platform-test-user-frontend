@@ -18,7 +18,7 @@ package uk.gov.hmrc.testuser.controllers
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future.{failed, successful}
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 import org.apache.pekko.stream.Materializer
 import org.jsoup.Jsoup
@@ -28,7 +28,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.UpstreamErrorResponse
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
@@ -36,8 +36,8 @@ import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.config.ApplicationConfig
 import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
-import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
-import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.models.*
+import uk.gov.hmrc.testuser.models.UserType.*
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, ErrorTemplate, TestUserView}
 
@@ -62,16 +62,15 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     when(config.feedbackSurveyUrl).thenReturn("#")
 
     val navLinks         = Seq(NavLink("sign-in", "http://sign-in"))
-    val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(INDIVIDUAL, ORGANISATION)))
+    val fieldDefinitions = Seq(FieldDefinition("fieldDef1", "Field Def 1", Seq(Individual, Organisation)))
 
     val mcc                = app.injector.instanceOf[MessagesControllerComponents]
     val createTestUserView = app.injector.instanceOf[CreateTestUserView]
     val testUserView       = app.injector.instanceOf[TestUserView]
     val errorTemplate      = app.injector.instanceOf[ErrorTemplate]
 
-    val mockTestUserService              = mock[TestUserService]
-    val mockNavigationService            = mock[NavigationService]
-    val mockApiPlatformTestUserConnector = mock[ApiPlatformTestUserConnector]
+    val mockTestUserService   = mock[TestUserService]
+    val mockNavigationService = mock[NavigationService]
 
     implicit val appConfig: ApplicationConfig = config
 
@@ -79,16 +78,15 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
       app.injector.instanceOf[MessagesApi],
       mockTestUserService,
       mockNavigationService,
-      mockApiPlatformTestUserConnector,
       mcc,
       createTestUserView,
       testUserView,
       errorTemplate
     )
 
-    when(mockTestUserService.createUser(eqTo(INDIVIDUAL))(*)).thenReturn(successful(Right(individual)))
-    when(mockTestUserService.createUser(eqTo(ORGANISATION))(*)).thenReturn(successful(Right(organisation)))
-    when(mockNavigationService.headerNavigation()(*)).thenReturn(successful(navLinks))
+    when(mockTestUserService.createUser(eqTo(Individual))(using *)).thenReturn(successful(Right(individual)))
+    when(mockTestUserService.createUser(eqTo(Organisation))(using *)).thenReturn(successful(Right(organisation)))
+    when(mockNavigationService.headerNavigation()(using *)).thenReturn(successful(navLinks))
 
     def elementExistsById(doc: Document, id: String): Boolean = doc.select(s"#$id").asScala.nonEmpty
 
@@ -118,8 +116,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     }
 
     "displays the page without the links when retrieving the links fail" in new Setup {
-      withSuppressedLoggingFrom(logger, "expected test error") { suppressedLogs =>
-        when(mockNavigationService.headerNavigation()(*))
+      withSuppressedLoggingFrom(logger, "expected test error") { _ =>
+        when(mockNavigationService.headerNavigation()(using *))
           .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
         val result = execute(underTest.showCreateUserPage())
@@ -151,7 +149,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
 
       val result = execute(underTest.createUser(), request)
 
-      contentAsString(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey)(Lang.defaultLang))
+      contentAsString(result) should include(underTest.messagesApi(FormKeys.createUserTypeNoChoiceKey)(using Lang.defaultLang))
     }
 
     "display the logged in navigation links" in new Setup {
@@ -174,8 +172,8 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     "display the page without the links when retrieving the links fail" in new Setup {
       val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
-      withSuppressedLoggingFrom(logger, "expected test error") { suppressedLogs =>
-        when(mockNavigationService.headerNavigation()(*))
+      withSuppressedLoggingFrom(logger, "expected test error") { _ =>
+        when(mockNavigationService.headerNavigation()(using *))
           .thenReturn(failed(UpstreamErrorResponse("expected test error", 500)))
 
         val result = execute(underTest.createUser(), individualRequest)

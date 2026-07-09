@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.testuser
 
-import uk.gov.hmrc.testuser.models._
-import uk.gov.hmrc.testuser.pages._
-import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub._
+import uk.gov.hmrc.testuser.models.*
+import uk.gov.hmrc.testuser.pages.*
+import uk.gov.hmrc.testuser.stubs.ApiPlatformTestUserStub.*
 import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNavigationLinks
 
 class CreateTestUserSpec extends BaseSpec {
@@ -37,7 +37,7 @@ class CreateTestUserSpec extends BaseSpec {
   private val organisationCtUtr = "1555369054"
 
   val userNavigationLinks = Seq(NavLink("sign-in", "/sign-in"))
-  val services            = Seq(Service("service1", "Service 1", Seq(UserTypes.INDIVIDUAL)), Service("service2", "Service 2", Seq(UserTypes.ORGANISATION)))
+  val services            = Seq(Service("service1", "Service 1", Seq(UserType.Individual)), Service("service2", "Service 2", Seq(UserType.Organisation)))
 
   Feature("Create a test user") {
     Scenario("Create a test individual") {
