@@ -33,6 +33,8 @@ import uk.gov.hmrc.testuser.models.JsonFormatters._
 import uk.gov.hmrc.testuser.models._
 import uk.gov.hmrc.testuser.wiring.AppConfig
 
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+
 class ApiPlatformTestUserConnector @Inject() (
     httpClient: HttpClientV2,
     appConfig: AppConfig,

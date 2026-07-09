@@ -85,7 +85,7 @@ class TestUserController @Inject() (
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie => hc.withExtraHeaders(COOKIE -> cookie) }
-      navigationService.headerNavigation()(newHc) flatMap { navLinks =>
+      navigationService.headerNavigation()(using newHc) flatMap { navLinks =>
         f(request)(navLinks)
       } recoverWith { case ex =>
         logger.error("User navigation links can not be rendered due to service call failure", ex)
@@ -102,6 +102,6 @@ object CreateUserForm {
   val form: Form[CreateUserForm] = Form(
     mapping(
       "userType" -> optional(text).verifying(FormKeys.createUserTypeNoChoiceKey, s => s.isDefined)
-    )(CreateUserForm.apply)(CreateUserForm.unapply)
+    )(CreateUserForm.apply)(r => Some(r.userType))
   )
 }
