@@ -22,25 +22,21 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import play.api.http.Status.{CREATED, OK}
 import play.api.libs.json.Json
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.JsonBodyWritables
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse, _}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, UpstreamErrorResponse, *}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import uk.gov.hmrc.testuser.ApplicationLogger
-import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models._
-import uk.gov.hmrc.testuser.wiring.AppConfig
+import uk.gov.hmrc.testuser.models.*
+import uk.gov.hmrc.testuser.models.JsonFormatters.{given_OFormat_CreateUserRequest, given_OFormat_Service}
 
 class ApiPlatformTestUserConnector @Inject() (
     httpClient: HttpClientV2,
-    appConfig: AppConfig,
-    configuration: Configuration,
-    environment: Environment,
     servicesConfig: ServicesConfig
   )(implicit ec: ExecutionContext
-  ) extends ApplicationLogger {
+  ) extends ApplicationLogger with JsonBodyWritables {
   private val serviceKey = "api-platform-test-user"
 
   private val useProxy = servicesConfig.getConfBool(s"$serviceKey.use-proxy", false)

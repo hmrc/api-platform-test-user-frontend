@@ -19,20 +19,17 @@ package uk.gov.hmrc.testuser.connectors
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
-import uk.gov.hmrc.http.{HeaderCarrier, _}
+import uk.gov.hmrc.http.{HeaderCarrier, *}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_NavLink
 import uk.gov.hmrc.testuser.models.NavLink
 
 @Singleton
 class ThirdPartyDeveloperFrontendConnector @Inject() (
     httpClient: HttpClientV2,
-    runModeConfiguration: Configuration,
-    environment: Environment,
     servicesConfig: ServicesConfig
   )(implicit ec: ExecutionContext
   ) {

@@ -22,17 +22,16 @@ import scala.concurrent.{ExecutionContext, Future}
 import cats.data.EitherT
 
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.http.InternalServerException
 import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.config.ApplicationConfig
-import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
-import uk.gov.hmrc.testuser.models.{NavLink, UserTypes}
+import uk.gov.hmrc.testuser.models.{NavLink, UserType}
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}
 import uk.gov.hmrc.testuser.views.html.{CreateTestUserView, ErrorTemplate, TestUserView}
 
@@ -40,7 +39,6 @@ class TestUserController @Inject() (
     override val messagesApi: MessagesApi,
     testUserService: TestUserService,
     navigationService: NavigationService,
-    apiPlatformTestUserConnector: ApiPlatformTestUserConnector,
     messagesControllerComponents: MessagesControllerComponents,
     createTestUser: CreateTestUserView,
     testUser: TestUserView,
@@ -58,7 +56,7 @@ class TestUserController @Inject() (
 
   def createUser() = headerNavigation { implicit request => navLinks =>
     def validForm(form: CreateUserForm): Future[Result] = {
-      UserTypes.from(form.userType.getOrElse("")) match {
+      UserType.apply(form.userType.getOrElse("")) match {
         case Some(uType) =>
           EitherT(testUserService.createUser(uType)).fold(
             {
@@ -85,7 +83,7 @@ class TestUserController @Inject() (
     Action.async { implicit request =>
       // We use a non-standard cookie which doesn't get propagated in the header carrier
       val newHc = request.headers.get(COOKIE).fold(hc) { cookie => hc.withExtraHeaders(COOKIE -> cookie) }
-      navigationService.headerNavigation()(newHc) flatMap { navLinks =>
+      navigationService.headerNavigation()(using newHc) flatMap { navLinks =>
         f(request)(navLinks)
       } recoverWith { case ex =>
         logger.error("User navigation links can not be rendered due to service call failure", ex)
@@ -102,6 +100,6 @@ object CreateUserForm {
   val form: Form[CreateUserForm] = Form(
     mapping(
       "userType" -> optional(text).verifying(FormKeys.createUserTypeNoChoiceKey, s => s.isDefined)
-    )(CreateUserForm.apply)(CreateUserForm.unapply)
+    )(CreateUserForm.apply)(r => Some(r.userType))
   )
 }

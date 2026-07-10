@@ -18,10 +18,10 @@ package uk.gov.hmrc.testuser.connectors
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.{Application, Configuration, Environment}
@@ -30,8 +30,8 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import uk.gov.hmrc.testuser.models.JsonFormatters._
-import uk.gov.hmrc.testuser.models._
+import uk.gov.hmrc.testuser.models.*
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_Service
 import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
@@ -62,9 +62,6 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
 
     val underTest = new ApiPlatformTestUserConnector(
       app.injector.instanceOf[HttpClientV2],
-      app.injector.instanceOf[AppConfig],
-      app.injector.instanceOf[Configuration],
-      app.injector.instanceOf[Environment],
       app.injector.instanceOf[ServicesConfig]
     ) {
       override val serviceUrl: String = wireMockUrl
@@ -174,7 +171,7 @@ class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar 
   "getServices" when {
     "api-platform-test-user returns a 200 OK response" should {
       "return the services from api-platform-test-user" in new Setup {
-        val services = Seq(Service("service-1", "Service One", Seq(UserTypes.INDIVIDUAL)))
+        val services = Seq(Service("service-1", "Service One", Seq(UserType.Individual)))
 
         stubFor(
           get(urlEqualTo("/services"))

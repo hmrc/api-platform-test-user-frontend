@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.models
 import play.api.libs.json.Json
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+import uk.gov.hmrc.testuser.models.UserType.*
 
 class TestUserSpec extends AsyncHmrcSpec {
 
@@ -49,8 +49,8 @@ class TestUserSpec extends AsyncHmrcSpec {
                                          |  "vrn":"vrn"
                                          |}""".stripMargin)
 
-      val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)))
-      val testUser         = Json.fromJson[TestIndividual](jsonIndividual)(new TestIndividualJsonMapper(fieldDefinitions).testIndividualReads).get
+      val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(Individual, Organisation)))
+      val testUser         = Json.fromJson[TestIndividual](jsonIndividual)(using new TestIndividualJsonMapper(fieldDefinitions).testIndividualReads).get
     }
 
     "set userId" in new TestIndividualFromJson {
@@ -94,9 +94,9 @@ class TestUserSpec extends AsyncHmrcSpec {
                                   |  "vrn":"vrn"
                                   |}""".stripMargin)
 
-      val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(INDIVIDUAL, ORGANISATION)))
+      val fieldDefinitions = Seq(FieldDefinition("saUtr", "Self Assessment UTR", Seq(Individual, Organisation)))
 
-      val testUser = Json.fromJson[TestOrganisation](jsonOrg)(new TestOrganisationJsonMapper(fieldDefinitions).testOrganisationReads).get
+      val testUser = Json.fromJson[TestOrganisation](jsonOrg)(using new TestOrganisationJsonMapper(fieldDefinitions).testOrganisationReads).get
     }
 
     "set userId" in new TestOrganisationFromJson {

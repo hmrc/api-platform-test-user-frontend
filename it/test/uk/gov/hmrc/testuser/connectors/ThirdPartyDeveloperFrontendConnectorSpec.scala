@@ -18,10 +18,10 @@ package uk.gov.hmrc.testuser.connectors
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-import play.api.http.Status._
+import play.api.http.Status.*
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json.{stringify, toJson}
 import play.api.{Application, Configuration, Environment}
@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_NavLink
 import uk.gov.hmrc.testuser.models.NavLink
 
 class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
@@ -45,8 +45,6 @@ class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with Wiremo
 
     val underTest = new ThirdPartyDeveloperFrontendConnector(
       app.injector.instanceOf[HttpClientV2],
-      app.injector.instanceOf[Configuration],
-      app.injector.instanceOf[Environment],
       app.injector.instanceOf[ServicesConfig]
     ) {
       override lazy val serviceUrl = wireMockUrl

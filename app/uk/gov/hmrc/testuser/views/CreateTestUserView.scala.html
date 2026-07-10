@@ -18,14 +18,13 @@
 @import uk.gov.hmrc.testuser.controllers.CreateUserForm
 @import uk.gov.hmrc.testuser.views.html.includes._
 @import uk.gov.hmrc.testuser.models.FieldDefinitions
-@import uk.gov.hmrc.testuser.models.UserTypes.{INDIVIDUAL, ORGANISATION}
+@import uk.gov.hmrc.testuser.models.UserType.{Individual, Organisation}
 @import uk.gov.hmrc.testuser.views.html.govuk_wrapper
 @import uk.gov.hmrc.testuser.config.ApplicationConfig
 
-
 @this(govUkWrapper: govuk_wrapper)
 
-@(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[_], messages: Messages, config: ApplicationConfig)
+@(navLinks: Seq[NavLink], form: Form[CreateUserForm])(implicit request: Request[?], messages: Messages, config: ApplicationConfig)
 
 @govUkWrapper(pageTitle = Some("Create test user - HMRC Developer Hub - GOV.UK"), navLinks = navLinks) {
     <h1 class="govuk-heading-xl">Create a test user</h1>
@@ -75,7 +74,7 @@
                 @fieldError(form.errors, "userType")
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="Individual" value="INDIVIDUAL" name="userType" type="radio" aria-describedby="individual-type-hint">
+                        <input class="govuk-radios__input" id="Individual" value="Individual" name="userType" type="radio" aria-describedby="individual-type-hint">
                         <label class="govuk-label govuk-radios__label" for="Individual" data-type="individual">
                             <b>Individual</b>
                         </label>
@@ -89,7 +88,7 @@
                                     <ul class="govuk-list govuk-list--bullet">
                                         <li>User ID</li>
                                         <li>Password</li>
-                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(INDIVIDUAL)).map { field =>
+                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(Individual)).map { field =>
                                             <li>@field.name</li>
                                         }
                                     </ul>
@@ -103,7 +102,7 @@
                         </div>
                     </div>
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="Organisation" value="ORGANISATION" name="userType" type="radio" aria-describedby="organisation-type-hint">
+                        <input class="govuk-radios__input" id="Organisation" value="Organisation" name="userType" type="radio" aria-describedby="organisation-type-hint">
                         <label class="govuk-label govuk-radios__label" for="Organisation" data-type="organisation">
                             <b>Organisation</b>
                         </label>
@@ -117,7 +116,7 @@
                                     <ul class="govuk-list govuk-list--bullet">
                                         <li>User ID</li>
                                         <li>Password</li>
-                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(ORGANISATION)).map { field =>
+                                        @FieldDefinitions.get().filter(field => field.allowedUserTypes.contains(Organisation)).map { field =>
                                             <li>@field.name</li>
                                         }
                                     </ul>

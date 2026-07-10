@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.testuser.stubs
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 
 import play.api.http.Status.OK
 import play.api.libs.json.Json.{stringify, toJson}
 
-import uk.gov.hmrc.testuser.models.JsonFormatters._
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_NavLink
 import uk.gov.hmrc.testuser.models.NavLink
 
 object ThirdPartyDeveloperFrontendStub {
