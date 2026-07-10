@@ -79,7 +79,7 @@ object UserType {
   import play.api.libs.json.Format
   import uk.gov.hmrc.apiplatform.modules.common.domain.services.SimpleEnumJsonFormatting
 
-  given Format[UserType] = SimpleEnumJsonFormatting.createEnumFormatFor[UserType]("UserType", apply)
+  given Format[UserType] = SimpleEnumJsonFormatting.createStringFormatFor[UserType]("UserType", apply, _.toString.toUpperCase())
 }
 
 case class CreateUserRequest(serviceNames: Seq[String])
