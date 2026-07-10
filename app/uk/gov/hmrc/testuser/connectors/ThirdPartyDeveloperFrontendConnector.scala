@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, *}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-import uk.gov.hmrc.testuser.models.JsonFormatters.*
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_NavLink
 import uk.gov.hmrc.testuser.models.NavLink
 
 @Singleton

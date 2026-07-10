@@ -4,8 +4,7 @@ import play.sbt.PlayImport._
 object AppDependencies {
   def apply() = compile ++ test
   
-  lazy val bootStrapVersion     = "10.7.0"
-  // lazy val seleniumVersion      = "4.14.1"
+  lazy val bootStrapVersion     = "10.7.1"
   lazy val mockitoScalaVersion  = "2.2.1"
 
   lazy  val compile = Seq(

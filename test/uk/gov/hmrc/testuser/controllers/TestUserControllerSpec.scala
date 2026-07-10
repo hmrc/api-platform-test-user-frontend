@@ -35,7 +35,6 @@ import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 import uk.gov.hmrc.testuser.ApplicationLogger
 import uk.gov.hmrc.testuser.common.LogSuppressing
 import uk.gov.hmrc.testuser.config.ApplicationConfig
-import uk.gov.hmrc.testuser.connectors.ApiPlatformTestUserConnector
 import uk.gov.hmrc.testuser.models.*
 import uk.gov.hmrc.testuser.models.UserType.*
 import uk.gov.hmrc.testuser.services.{NavigationService, TestUserService}

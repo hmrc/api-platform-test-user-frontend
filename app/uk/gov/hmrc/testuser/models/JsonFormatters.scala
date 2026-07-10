@@ -19,7 +19,7 @@ package uk.gov.hmrc.testuser.models
 import play.api.libs.json.*
 
 object JsonFormatters {
-  implicit val formatNavLinks: OFormat[NavLink]                            = Json.format[NavLink]
-  implicit val formatCreateUserServicesRequest: OFormat[CreateUserRequest] = Json.format[CreateUserRequest]
-  implicit val formatService: OFormat[Service]                             = Json.format[Service]
+  given OFormat[NavLink]           = Json.format[NavLink]
+  given OFormat[CreateUserRequest] = Json.format[CreateUserRequest]
+  given OFormat[Service]           = Json.format[Service]
 }

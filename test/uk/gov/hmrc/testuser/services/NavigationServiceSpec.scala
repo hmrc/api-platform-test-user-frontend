@@ -40,7 +40,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec {
     "return the navigation links" in new Setup {
       val navLinks = Seq(NavLink("sign-in", "/sign-in"))
 
-      when(connector.fetchNavLinks()(*)).thenReturn(successful(navLinks))
+      when(connector.fetchNavLinks()(using *)).thenReturn(successful(navLinks))
       when(configuration.getOptional[String]("third-party-developer-frontend.host")).thenReturn(None)
 
       val result = await(underTest.headerNavigation())
@@ -51,7 +51,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec {
     "prefix the links with local environment when it is set" in new Setup {
       val navLinks = Seq(NavLink("sign-in", "/sign-in"))
 
-      when(connector.fetchNavLinks()(*)).thenReturn(successful(navLinks))
+      when(connector.fetchNavLinks()(using *)).thenReturn(successful(navLinks))
       when(configuration.getOptional[String]("third-party-developer-frontend.host")).thenReturn(Some("http://localhost:1111"))
 
       val result = await(underTest.headerNavigation())
@@ -61,7 +61,7 @@ class NavigationServiceSpec extends AsyncHmrcSpec {
 
     "fail when the links can not be retrieved" in new Setup {
 
-      when(connector.fetchNavLinks()(*)).thenReturn(failed(new RuntimeException("test failure")))
+      when(connector.fetchNavLinks()(using *)).thenReturn(failed(new RuntimeException("test failure")))
 
       intercept[RuntimeException] { await(underTest.headerNavigation()) }
     }

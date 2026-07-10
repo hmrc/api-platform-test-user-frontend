@@ -21,7 +21,7 @@ import org.apache.http.HttpStatus.{SC_CREATED, SC_OK}
 
 import play.api.libs.json.Json
 
-import uk.gov.hmrc.testuser.models.JsonFormatters.*
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_Service
 import uk.gov.hmrc.testuser.models.Service
 
 object ApiPlatformTestUserStub {

@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
 import uk.gov.hmrc.testuser.models.*
-import uk.gov.hmrc.testuser.models.JsonFormatters.*
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_Service
 import uk.gov.hmrc.testuser.wiring.AppConfig
 
 class ApiPlatformTestUserConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {

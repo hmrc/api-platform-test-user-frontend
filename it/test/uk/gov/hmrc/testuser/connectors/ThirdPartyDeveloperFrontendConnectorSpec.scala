@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.test.utils.AsyncHmrcSpec
 
-import uk.gov.hmrc.testuser.models.JsonFormatters.*
+import uk.gov.hmrc.testuser.models.JsonFormatters.given_OFormat_NavLink
 import uk.gov.hmrc.testuser.models.NavLink
 
 class ThirdPartyDeveloperFrontendConnectorSpec extends AsyncHmrcSpec with WiremockSugar with GuiceOneAppPerSuite {
