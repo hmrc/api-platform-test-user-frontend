@@ -1,6 +1,6 @@
 $govuk-assets-path: "/api-test-user/assets/lib/govuk-frontend/dist/govuk/assets/";
 $hmrc-assets-path: "/api-test-user/assets/lib/hmrc-frontend/hmrc/";
 
-@import "lib/govuk-frontend/dist/govuk/all";
+@import "lib/govuk-frontend/dist/govuk/index";
 @import "lib/hmrc-frontend/hmrc/all";
 @import "ad-hoc";
