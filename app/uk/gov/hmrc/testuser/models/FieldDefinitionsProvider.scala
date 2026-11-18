@@ -38,6 +38,24 @@ object FieldDefinitions {
     FieldDefinition("lisaManagerReferenceNumber", "LISA Manager Reference Number", Seq(Organisation)),
     FieldDefinition("secureElectronicTransferReferenceNumber", "Secure Electronic Transfer reference number", Seq(Organisation)),
     FieldDefinition("pensionSchemeAdministratorIdentifier", "Pension Scheme Administrator Identifier", Seq(Organisation)),
+    FieldDefinition(
+      "capitalGainsTaxOnUKPropertyReference",
+      "Capital Gains Tax on UK Property Reference",
+      Seq(Individual, Organisation)
+    ),
+    FieldDefinition(
+      "plasticPackagingTaxRegistrationNumber",
+      "Plastic Packaging Tax Registration Number",
+      Seq(Individual, Organisation)
+    ),
+    FieldDefinition(
+      "plasticPackagingTaxRegistrationDate",
+      "PPT Registration Date",
+      Seq(Individual, Organisation)
+    ),
+    FieldDefinition("countryByCountryReportingId", "Country by Country Reporting Identifier", Seq(Organisation)),
+    FieldDefinition("trustsUniqueTaxpayerReference", "Trusts Unique Taxpayer Reference (UTR)", Seq(Organisation)),
+    FieldDefinition("trustsUniqueReferenceNumber", "Trusts Unique Reference Number (URN)", Seq(Organisation)),
     FieldDefinition("organisationDetails", "Organisation Details", Seq()),
     FieldDefinition("individualDetails", "Individual Details", Seq()),
     FieldDefinition("groupIdentifier", "Group Identifier", Seq(Individual, Organisation))

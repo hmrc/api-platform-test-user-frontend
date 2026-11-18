@@ -34,4 +34,8 @@ object ShowOrganisationPage extends AbstractShowUserPage {
   def getVrn(): String = {
     getByCssSelector("data-vrn")
   }
+
+  def getPptRegistrationDate(): String = {
+    getByCssSelector("data-plasticpackagingtaxregistrationdate")
+  }
 }
