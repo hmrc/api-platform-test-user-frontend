@@ -34,7 +34,8 @@ lazy val microservice = Project(appName, file("."))
   )
   .settings(
     scalacOptions ++= Seq(
-      "-Wconf:cat=unused&src=views/.*\\.scala:s",
+      // suppress warnings in generated Twirl files
+      "-Wconf:src=views/.*\\.scala:s",
       // https://www.scala-lang.org/2021/01/12/configuring-and-suppressing-warnings.html
       // suppress warnings in generated routes files
       "-Wconf:src=routes/.*:s"

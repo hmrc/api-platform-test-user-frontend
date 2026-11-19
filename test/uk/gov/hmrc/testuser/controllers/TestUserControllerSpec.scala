@@ -128,7 +128,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
 
   "createUser" should {
     "create an individual when the user type is INDIVIDUAL" in new Setup {
-      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
+      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withMethod(POST).withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
       val result = execute(underTest.createUser(), request)
 
@@ -136,7 +136,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     }
 
     "create an organisation when the user type is ORGANISATION" in new Setup {
-      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", "ORGANISATION"))
+      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withMethod(POST).withFormUrlEncodedBody(("userType", "ORGANISATION"))
 
       val result = execute(underTest.createUser(), request)
 
@@ -144,7 +144,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     }
 
     "display an error message when the user type is not defined" in new Setup {
-      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(("userType", ""))
+      val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withMethod(POST).withFormUrlEncodedBody(("userType", ""))
 
       val result = execute(underTest.createUser(), request)
 
@@ -152,7 +152,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     }
 
     "display the logged in navigation links" in new Setup {
-      val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
+      val individualRequest = FakeRequest().withMethod(POST).withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
       val result = execute(underTest.createUser(), individualRequest)
 
@@ -160,7 +160,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     }
 
     "display the feedback banner" in new Setup {
-      val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
+      val individualRequest = FakeRequest().withMethod(POST).withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
       val page: String      = contentAsString(execute(underTest.createUser(), individualRequest))
       val document          = Jsoup.parse(page)
 
@@ -169,7 +169,7 @@ class TestUserControllerSpec extends AsyncHmrcSpec with GuiceOneAppPerSuite with
     }
 
     "display the page without the links when retrieving the links fail" in new Setup {
-      val individualRequest = FakeRequest().withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
+      val individualRequest = FakeRequest().withMethod(POST).withFormUrlEncodedBody(("userType", "INDIVIDUAL"))
 
       withSuppressedLoggingFrom(logger, "expected test error") { _ =>
         when(mockNavigationService.headerNavigation()(using *))
