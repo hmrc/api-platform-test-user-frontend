@@ -26,7 +26,7 @@ import play.api.data.Forms.*
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.*
 import uk.gov.hmrc.http.InternalServerException
-import uk.gov.hmrc.play.bootstrap.controller.WithUrlEncodedOnlyFormBinding
+import uk.gov.hmrc.play.bootstrap.controller.WithUnsafeDefaultFormBinding
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import uk.gov.hmrc.testuser.ApplicationLogger
@@ -48,7 +48,7 @@ class TestUserController @Inject() (
   ) extends FrontendController(messagesControllerComponents)
     with I18nSupport
     with ApplicationLogger
-    with WithUrlEncodedOnlyFormBinding {
+    with WithUnsafeDefaultFormBinding {
 
   def showCreateUserPage() = headerNavigation { implicit request => navLinks =>
     Future.successful(Ok(createTestUser(navLinks, CreateUserForm.form)))
