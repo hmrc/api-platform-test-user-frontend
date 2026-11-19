@@ -132,6 +132,7 @@ class TestUserSpec extends AsyncHmrcSpec {
         "capitalGainsTaxOnUKPropertyReference"  -> "Capital Gains Tax on UK Property Reference",
         "plasticPackagingTaxRegistrationNumber" -> "Plastic Packaging Tax Registration Number",
         "plasticPackagingTaxRegistrationDate"   -> "PPT Registration Date",
+        "pillar2RegistrationDate"               -> "Pillar-2 Registration Date",
         "countryByCountryReportingId"           -> "Country by Country Reporting Identifier",
         "trustsUniqueTaxpayerReference"         -> "Trusts Unique Taxpayer Reference (UTR)",
         "trustsUniqueReferenceNumber"           -> "Trusts Unique Reference Number (URN)"

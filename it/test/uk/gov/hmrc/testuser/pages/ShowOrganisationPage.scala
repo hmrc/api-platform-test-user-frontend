@@ -38,4 +38,8 @@ object ShowOrganisationPage extends AbstractShowUserPage {
   def getPptRegistrationDate(): String = {
     getByCssSelector("data-plasticpackagingtaxregistrationdate")
   }
+
+  def getPillar2RegistrationDate(): String = {
+    getByCssSelector("data-pillar2registrationdate")
+  }
 }

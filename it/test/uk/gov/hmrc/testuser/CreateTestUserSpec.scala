@@ -23,12 +23,13 @@ import uk.gov.hmrc.testuser.stubs.ThirdPartyDeveloperFrontendStub.givenTheUserNa
 
 class CreateTestUserSpec extends BaseSpec {
 
-  private val individualUserId    = "individual"
-  private val individualPassword  = "pwd"
-  private val individualSaUtr     = "1555369052"
-  private val individualNino      = "CC333333C"
-  private val vrn                 = "999902541"
-  private val pptRegistrationDate = "2021-03-04"
+  private val individualUserId        = "individual"
+  private val individualPassword      = "pwd"
+  private val individualSaUtr         = "1555369052"
+  private val individualNino          = "CC333333C"
+  private val vrn                     = "999902541"
+  private val pptRegistrationDate     = "2021-03-04"
+  private val pillar2RegistrationDate = "2020-02-03"
 
   private val organisationId       = "organisation"
   private val organisationPassword = "pws2"
@@ -92,7 +93,8 @@ class CreateTestUserSpec extends BaseSpec {
                                           |  "empRef":"$empRef",
                                           |  "ctUtr":"$organisationCtUtr",
                                           |  "vrn":"$vrn",
-                                          |  "plasticPackagingTaxRegistrationDate":"$pptRegistrationDate"
+                                          |  "plasticPackagingTaxRegistrationDate":"$pptRegistrationDate",
+                                          |  "pillar2RegistrationDate":"$pillar2RegistrationDate"
                                           |}
         """.stripMargin)
 
@@ -109,6 +111,7 @@ class CreateTestUserSpec extends BaseSpec {
       ShowOrganisationPage.getEmpRef() shouldBe empRef
       ShowOrganisationPage.getVrn() shouldBe vrn
       ShowOrganisationPage.getPptRegistrationDate() shouldBe pptRegistrationDate
+      ShowOrganisationPage.getPillar2RegistrationDate() shouldBe pillar2RegistrationDate
     }
   }
 

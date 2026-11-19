@@ -53,6 +53,7 @@ object FieldDefinitions {
       "PPT Registration Date",
       Seq(Individual, Organisation)
     ),
+    FieldDefinition("pillar2RegistrationDate", "Pillar-2 Registration Date", Seq(Organisation)),
     FieldDefinition("countryByCountryReportingId", "Country by Country Reporting Identifier", Seq(Organisation)),
     FieldDefinition("trustsUniqueTaxpayerReference", "Trusts Unique Taxpayer Reference (UTR)", Seq(Organisation)),
     FieldDefinition("trustsUniqueReferenceNumber", "Trusts Unique Reference Number (URN)", Seq(Organisation)),
