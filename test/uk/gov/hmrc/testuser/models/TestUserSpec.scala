@@ -123,4 +123,20 @@ class TestUserSpec extends AsyncHmrcSpec {
       testUser.fields.find(f => f.key == "password") shouldBe empty
     }
   }
+
+  "Organisation profile field definitions" should {
+    val labelsByKey = FieldDefinitions.get().map(definition => definition.key -> definition.name).toMap
+
+    "provide readable labels for invitation identifiers and known facts" in {
+      labelsByKey should contain allOf (
+        "capitalGainsTaxOnUKPropertyReference"  -> "Capital Gains Tax on UK Property Reference",
+        "plasticPackagingTaxRegistrationNumber" -> "Plastic Packaging Tax Registration Number",
+        "plasticPackagingTaxRegistrationDate"   -> "PPT Registration Date",
+        "pillar2RegistrationDate"               -> "Pillar-2 Registration Date",
+        "countryByCountryReportingId"           -> "Country by Country Reporting Identifier",
+        "trustsUniqueTaxpayerReference"         -> "Trusts Unique Taxpayer Reference (UTR)",
+        "trustsUniqueReferenceNumber"           -> "Trusts Unique Reference Number (URN)"
+      )
+    }
+  }
 }

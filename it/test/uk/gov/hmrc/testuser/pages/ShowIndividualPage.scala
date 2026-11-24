@@ -36,4 +36,8 @@ object ShowIndividualPage extends AbstractShowUserPage {
     getByCssSelector("data-nino")
   }
 
+  def getPptRegistrationDate(): String = {
+    getByCssSelector("data-plasticpackagingtaxregistrationdate")
+  }
+
 }
